@@ -1,6 +1,5 @@
 package fr.projet.app.model;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -63,7 +62,7 @@ public class Candidat
 	private String adresse2;
 	
 	@Column(name="salaire_cdt", nullable=true)
-	private BigDecimal salaire;
+	private int salaire;
 	
 	@Column(name="marital_cdt", nullable=true)
 	private Byte maritalStatus;
@@ -82,6 +81,9 @@ public class Candidat
 	
 	@Column(name="dispo_cdt", nullable=true)
 	private Boolean disponible;
+	
+	@Column(name="info_cdt", nullable=true, length=500)
+	private String info;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
@@ -167,6 +169,14 @@ public class Candidat
 		this.adresse2 = adresse2;
 	}
 
+	public int getSalaire() {
+		return salaire;
+	}
+
+	public void setSalaire(int salaire) {
+		this.salaire = salaire;
+	}
+	
 	public Byte getMaritalStatus() {
 		return maritalStatus;
 	}
@@ -235,6 +245,14 @@ public class Candidat
 		return disponible;
 	}
 	
+	public String getInfo() {
+		return info;
+	}
+
+	public void setInfo(String info) {
+		this.info = info;
+	}
+
 	public Set<Education> getEducations() {
 		return educations;
 	}
@@ -262,13 +280,6 @@ public class Candidat
 		this.experiences.add(experience);
 	}
 
-	public BigDecimal getSalaire() {
-		return salaire;
-	}
-
-	public void setSalaire(BigDecimal salaire) {
-		this.salaire = salaire;
-	}
 
 	public Set<Document> getDocuments() {
 		return documents;
