@@ -70,7 +70,7 @@ public class Diplome
 
 	@Override
 	public int hashCode() {
-		return Objects.hash(label, niveau);
+		return Objects.hash(label/*, niveau*/);
 	}
 
 	@Override
@@ -82,6 +82,6 @@ public class Diplome
 		if (getClass() != obj.getClass())
 			return false;
 		Diplome other = (Diplome) obj;
-		return Objects.equals(label, other.label) && niveau == other.niveau;
+		return Objects.equals(label, other.label) /*&& niveau == other.niveau*/;
 	}
 }
