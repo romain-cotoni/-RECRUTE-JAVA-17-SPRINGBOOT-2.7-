@@ -34,9 +34,8 @@ public class Specialite
 	
 	@OneToMany(mappedBy = "specialite", fetch = FetchType.EAGER)
 	@JsonIgnore
-	private Set<Education> educations  = new HashSet<Education>();
+	private Set<Education> educations = new HashSet<Education>();
 	
-
 
 	public int getIdSpecialite() {
 		return idSpecialite;
@@ -46,12 +45,12 @@ public class Specialite
 		return label;
 	}
 
-	public void setLabel(String label) {
-		this.label = label;
-	}
-
 	public Set<Education> getEducations() {
 		return educations;
+	}
+	
+	public void setLabel(String label) {
+		this.label = label;
 	}
 
 	public void setEducations(Set<Education> educations) {

@@ -36,19 +36,19 @@ public class DiplomeService
 	
 	
 	@Transactional
-	public Diplome updateDiplome(Diplome diplome)
+	public Diplome updateDiplome(Diplome oldDpl, Diplome newDpl)
 	{
-		Optional<Diplome> optionalDpl = diplomeRepository.findAll().stream().filter(d -> d.equals(diplome)).findFirst();
+		if(oldDpl.getEducations().size() <= 1) 
+		{
+			this.deleteDiplome(oldDpl.getIdDiplome());			
+		}
+		Optional<Diplome> optionalDpl = diplomeRepository.findAll().stream().filter(d -> d.equals(newDpl)).findFirst();
 		if(optionalDpl.isPresent())
 		{
 			Diplome existDpl = optionalDpl.get();
 			if(existDpl != null) return existDpl;
-			else return diplomeRepository.save(diplome);
 		}
-		else
-		{
-			return diplomeRepository.save(diplome);			
-		}
+		return diplomeRepository.save(newDpl);		
 	}
 
 	

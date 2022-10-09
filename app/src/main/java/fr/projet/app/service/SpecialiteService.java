@@ -36,19 +36,19 @@ public class SpecialiteService
 	
 	
 	@Transactional
-	public Specialite updateSpecialite(Specialite specialite)
+	public Specialite updateSpecialite(Specialite oldSpl, Specialite newSpl)
 	{
-		Optional<Specialite> optionalSpl = specialiteRepository.findAll().stream().filter(s -> s.equals(specialite)).findFirst();
+		if(oldSpl.getEducations().size() <= 1)
+		{
+			this.deleteSpecialite(oldSpl.getIdSpecialite());			
+		}
+		Optional<Specialite> optionalSpl = specialiteRepository.findAll().stream().filter(s -> s.equals(newSpl)).findFirst();
 		if(optionalSpl.isPresent())
 		{
 			Specialite existSpl = optionalSpl.get();
 			if(existSpl != null) return existSpl;
-			else return specialiteRepository.save(specialite);
 		}
-		else
-		{
-			return specialiteRepository.save(specialite);
-		}
+		return specialiteRepository.save(newSpl);
 	}
 
 	

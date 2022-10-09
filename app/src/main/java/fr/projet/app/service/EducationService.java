@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import fr.projet.app.model.Candidat;
 import fr.projet.app.model.Diplome;
 import fr.projet.app.model.Education;
 import fr.projet.app.model.Specialite;
@@ -37,10 +38,11 @@ public class EducationService
 
 	
 	@Transactional
-	public Education createEducation(Education edc) throws Exception
+	public Education createEducation(Candidat cdt, Education edc) throws Exception
 	{
 		try
 		{
+			edc.setCandidat(cdt);
 			Specialite specialite = specialiteService.createSpecialite(edc.getSpecialite());
 			if(specialite != null) edc.setSpecialite(specialite);
 			
@@ -71,13 +73,24 @@ public class EducationService
 			education.setFin(edc.getFin());
 			education.setInfo(edc.getInfo());
 			
-			Specialite specialite = specialiteService.updateSpecialite(edc.getSpecialite());
-			education.setSpecialite(specialite);
-			 
-			 
-			Diplome diplome = diplomeService.updateDiplome(edc.getDiplome());
-			education.setDiplome(diplome);
-
+			Specialite oldSpl = education.getSpecialite();
+			Specialite rqtSpl = edc.getSpecialite();
+			if(!rqtSpl.equals(oldSpl))
+			{	
+				education.setSpecialite(null);
+				Specialite newSpl = specialiteService.updateSpecialite(oldSpl, rqtSpl);
+				education.setSpecialite(newSpl);
+			}
+			
+			Diplome oldDpl = education.getDiplome();
+			Diplome rqtDpl = edc.getDiplome();
+			if(!rqtDpl.equals(oldDpl))
+			{
+				education.setDiplome(null);
+				Diplome newDpl = diplomeService.updateDiplome(oldDpl, rqtDpl);
+				education.setDiplome(newDpl);
+			}
+			
 			return educationRepository.save(education);
 		}
 		catch(Exception excep)
@@ -87,7 +100,7 @@ public class EducationService
 	}
 	
 	
-	//@Transactional
+	@Transactional
 	public void deleteEducation(int idEducation) 
 	{
 		Optional<Education> optionalEdc = educationRepository.findById(idEducation);
@@ -121,7 +134,6 @@ public class EducationService
 				}
 			}
 			System.out.println("resultat : "+idEducation +" - "+idSpl+" - "+idDpl);
-	
 		}
 	}
 }

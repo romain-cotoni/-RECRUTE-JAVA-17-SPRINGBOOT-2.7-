@@ -1,7 +1,6 @@
 package fr.projet.app.model;
 
 import java.sql.Date;
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -13,6 +12,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.validator.constraints.Length;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -45,12 +46,17 @@ public class Education
 	@Length(max=500)
 	private String info;
 	
-	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_spl", nullable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_cdt", nullable = true)
+	@JsonIgnore
+	private Candidat candidat;
+	
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_spl", nullable = true)
 	private Specialite specialite;
 	
-	@ManyToOne(cascade = { CascadeType.MERGE, CascadeType.PERSIST }, fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_dpl", nullable = false)
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_dpl", nullable = true)
 	private Diplome diplome;
 
 	public int getIdEducation() {
@@ -81,6 +87,10 @@ public class Education
 		return info;
 	}
 
+	public Candidat getCandidat() {
+		return candidat;
+	}
+	
 	public Specialite getSpecialite() {
 		return specialite;
 	}
@@ -113,6 +123,10 @@ public class Education
 		this.info = info;
 	}
 
+	public void setCandidat(Candidat candidat) {
+		this.candidat = candidat;
+	}
+	
 	public void setSpecialite(Specialite specialite) {
 		this.specialite = specialite;
 	}
@@ -120,5 +134,4 @@ public class Education
 	public void setDiplome(Diplome diplome) {
 		this.diplome = diplome;
 	}
-	
 }

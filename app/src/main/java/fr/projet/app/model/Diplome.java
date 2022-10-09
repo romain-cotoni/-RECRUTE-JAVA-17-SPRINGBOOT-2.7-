@@ -52,16 +52,16 @@ public class Diplome
 		return niveau;
 	}
 
+	public Set<Education> getEducations() {
+		return educations;
+	}
+	
 	public void setLabel(String label) {
 		this.label = label;
 	}
 
 	public void setNiveau(int niveau) {
 		this.niveau = niveau;
-	}
-	
-	public Set<Education> getEducations() {
-		return educations;
 	}
 
 	public void setEducations(Set<Education> educations) {

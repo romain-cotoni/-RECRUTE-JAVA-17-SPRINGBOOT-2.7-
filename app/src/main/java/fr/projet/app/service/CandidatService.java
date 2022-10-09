@@ -13,7 +13,6 @@ import fr.projet.app.model.Experience;
 import fr.projet.app.repository.CandidatRepository;
 import fr.projet.app.repository.CandidatRepositoryCustom;
 import fr.projet.app.repository.DocumentRepository;
-//import fr.projet.app.repository.EducationRepository;
 import fr.projet.app.repository.ExperienceRepository;
 
 @Service
@@ -21,9 +20,6 @@ public class CandidatService
 {
 	@Autowired
 	private CandidatRepository candidatRepository;
-
-	//@Autowired
-	//private EducationRepository educationRepository;
 	
 	@Autowired
 	private DocumentRepository documentRepository;
@@ -44,15 +40,18 @@ public class CandidatService
 		return candidatRepository.findAll();
 	}
 
+	
 	public Candidat findCandidatById(int id) 
 	{
 		return candidatRepository.findById(id).orElseThrow();
 	}
 
+	
 	public Candidat findCandidatByName(Candidat candidat) 
 	{
 		return candidatRepository.findByName(candidat.getPrenom(),candidat.getNom());
 	}
+	
 	
 	public Candidat createCandidat(Candidat candidat)
 	{
@@ -61,6 +60,7 @@ public class CandidatService
 		return candidatInserted;
 	}
 
+	
 	public void deleteCandidatById(int id) 
 	{
 		candidatRepository.deleteById(id);
@@ -80,11 +80,15 @@ public class CandidatService
 	{
 		try
 		{
-			Education education       = educationService.createEducation(edc);
-			Candidat candidat         = candidatRepository.findById(idCandidat).orElseThrow();
-			Set<Education> educations = candidat.getEducations();
-			educations.add(education);
-			return education;
+			Candidat candidat = candidatRepository.findById(idCandidat).orElseThrow();
+			if(candidat != null)
+			{
+				Education education = educationService.createEducation(candidat, edc);
+				candidat.getEducations().add(education);
+				candidatRepository.save(candidat);
+				return education;
+			}
+			else return null;
 		}
 		catch(Exception excep)
 		{
