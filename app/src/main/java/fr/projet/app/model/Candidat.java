@@ -62,7 +62,7 @@ public class Candidat
 	private String adresse2;
 	
 	@Column(name="salaire_cdt", nullable=true)
-	private int salaire;
+	private Integer salaire;
 	
 	@Column(name="marital_cdt", nullable=true)
 	private Byte maritalStatus;
@@ -169,11 +169,11 @@ public class Candidat
 		this.adresse2 = adresse2;
 	}
 
-	public int getSalaire() {
+	public Integer getSalaire() {
 		return salaire;
 	}
 
-	public void setSalaire(int salaire) {
+	public void setSalaire(Integer salaire) {
 		this.salaire = salaire;
 	}
 	
