@@ -98,8 +98,8 @@ public class Candidat
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
 	@JsonIgnore
-	private Set<Document> documents = new HashSet<>();
-	
+	private Set<Document> documents = new HashSet<Document>();
+
 	
 	public int getIdCandidat() {
 		 return idCandidat;

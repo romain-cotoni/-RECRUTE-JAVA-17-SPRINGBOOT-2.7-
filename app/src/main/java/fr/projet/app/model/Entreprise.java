@@ -1,14 +1,14 @@
 package fr.projet.app.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
+
+import java.util.HashSet;
+import java.util.Objects;
+import java.util.Set;
 
 @Entity
 @Table(name="entreprise")
@@ -47,7 +47,33 @@ public class Entreprise
 	@Column(name="adr2_etp", nullable=true, length=150)
 	@Length(min=1, max=150)
 	private String adresse2;
-	
+
+	@OneToMany(mappedBy = "entreprise", fetch = FetchType.EAGER)
+	@JsonIgnore
+	private Set<Experience> experiences = new HashSet<Experience>();
+
+	@OneToMany(mappedBy = "entreprise", fetch = FetchType.EAGER)
+	@JsonIgnore
+	private Set<Document> documents = new HashSet<Document>();
+
+
+	public Entreprise()
+	{
+
+	}
+
+	public Entreprise(String raisonSociale, String siret, String email, String mob, String fixe, String adresse, String adresse2, Set<Experience> experiences, Set<Document> documents)
+	{
+		this.raisonSociale = raisonSociale;
+		this.siret = siret;
+		this.email = email;
+		this.mob = mob;
+		this.fixe = fixe;
+		this.adresse = adresse;
+		this.adresse2 = adresse2;
+		this.experiences = experiences;
+		this.documents = documents;
+	}
 
 	public int getIdEntreprise() {
 		return idEntreprise;
@@ -108,6 +134,19 @@ public class Entreprise
 	public void setAdresse2(String adresse2) {
 		this.adresse2 = adresse2;
 	}
-	
-	
+
+	@Override
+	public boolean equals(Object o)
+	{
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Entreprise that = (Entreprise) o;
+		return Objects.equals(raisonSociale, that.raisonSociale);
+	}
+
+	@Override
+	public int hashCode()
+	{
+		return Objects.hash(raisonSociale);
+	}
 }

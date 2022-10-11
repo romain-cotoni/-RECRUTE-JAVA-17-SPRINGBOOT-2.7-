@@ -16,6 +16,8 @@ import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import java.util.Objects;
+
 @Entity
 @Table(name="document")
 public class Document 
@@ -31,17 +33,42 @@ public class Document
 	private String label;
 	
 	@Column(name="path_doc", nullable = true, length=250)
-	@Length(min = 1, max = 250)
+	@Length(max = 250)
 	private String path;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_cat", nullable = false)
-	@JsonIgnore
+	//@JsonIgnore
 	private Categorie categorie;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_cdt", nullable = true)
+	//@JsonIgnore
+	private Candidat candidat;
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_etp", nullable = true)
+	//@JsonIgnore
+	private Entreprise entreprise;
+
+	public Document()
+	{
+
+	}
+
+	public Document(String label, String path, Categorie categorie, Candidat candidat, Entreprise entreprise)
+	{
+		this.label = label;
+		this.path = path;
+		this.categorie = categorie;
+		this.candidat = candidat;
+		this.entreprise = entreprise;
+	}
 
 	public int getIdDocument() {
 		return idDocument;
 	}
+
 
 	public String getLabel() {
 		return label;
@@ -65,5 +92,34 @@ public class Document
 
 	public void setCategorie(Categorie categorie) {
 		this.categorie = categorie;
+	}
+
+	public Candidat getCandidat() {
+		return candidat;
+	}
+
+	public void setCandidat(Candidat candidat) {
+		this.candidat = candidat;
+	}
+
+	public Entreprise getEntreprise() {
+		return entreprise;
+	}
+
+	public void setEntreprise(Entreprise entreprise) {
+		this.entreprise = entreprise;
+	}
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Document document = (Document) o;
+		return Objects.equals(label, document.label) && Objects.equals(path, document.path) && Objects.equals(categorie, document.categorie);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(label, path, categorie);
 	}
 }

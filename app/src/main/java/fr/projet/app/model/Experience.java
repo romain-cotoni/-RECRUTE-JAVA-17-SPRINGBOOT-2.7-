@@ -32,10 +32,18 @@ public class Experience
 	@Column(name="fin_xpr", nullable=true)
 	private Date fin;
 
+	@Column(name="lieu_xpr", length=50)
+	private String lieuXpr;
+
 	@Column(name="info_xpr", nullable=true, length=500)
 	@Length(max=500)
 	private String info;
-	
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_cdt", nullable = true)
+	@JsonIgnore
+	private Candidat candidat;
+
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
 	@JoinColumn(name = "id_msn", nullable = false)
 	@JsonIgnore
@@ -45,18 +53,21 @@ public class Experience
 	@JoinColumn(name = "id_etp", nullable = true)
 	@JsonIgnore
 	private Entreprise entreprise;
-	
-	
-	public Experience(Date debut, Date fin, @Length(max = 500) String info, Mission mission, Entreprise entreprise) 
+
+	public Experience()
 	{
+
+	}
+
+	public Experience(Date debut, Date fin, String lieuXpr, String info, Mission mission, Entreprise entreprise) {
 		this.debut = debut;
 		this.fin = fin;
+		this.lieuXpr = lieuXpr;
 		this.info = info;
 		this.mission = mission;
 		this.entreprise = entreprise;
 	}
 
-	
 	public int getIdExperience() {
 		return IdExperience;
 	}
@@ -67,6 +78,11 @@ public class Experience
 
 	public Date getFin() {
 		return fin;
+	}
+
+	public String getLieuXpr()
+	{
+		return lieuXpr;
 	}
 
 	public String getInfo() {
@@ -85,8 +101,14 @@ public class Experience
 		this.debut = debut;
 	}
 
-	public void setFin(Date fin) {
+	public void setFin(Date fin)
+	{
 		this.fin = fin;
+	}
+
+	public void setLieuXpr(String lieuXpr)
+	{
+		this.lieuXpr = lieuXpr;
 	}
 
 	public void setInfo(String info) {
