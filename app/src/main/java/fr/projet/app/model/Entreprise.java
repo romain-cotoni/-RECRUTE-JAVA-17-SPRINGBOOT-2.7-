@@ -48,6 +48,8 @@ public class Entreprise
 	@Length(max=150)
 	private String adresse2;
 
+
+
 	@OneToMany(mappedBy = "entreprise", fetch = FetchType.EAGER)
 	@JsonIgnore
 	private Set<Experience> experiences = new HashSet<Experience>();
@@ -56,13 +58,17 @@ public class Entreprise
 	@JsonIgnore
 	private Set<Document> documents = new HashSet<Document>();
 
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_vil", nullable = true)
+	@JsonIgnore
+	private Ville ville;
 
 	public Entreprise()
 	{
 
 	}
 
-	public Entreprise(String raisonSociale, String siret, String email, String mob, String fixe, String adresse, String adresse2, Set<Experience> experiences, Set<Document> documents) {
+	public Entreprise(String raisonSociale, String siret, String email, String mob, String fixe, String adresse, String adresse2, Set<Experience> experiences, Set<Document> documents, Ville ville) {
 		this.raisonSociale = raisonSociale;
 		this.siret = siret;
 		this.email = email;
@@ -72,7 +78,10 @@ public class Entreprise
 		this.adresse2 = adresse2;
 		this.experiences = experiences;
 		this.documents = documents;
+		this.ville = ville;
 	}
+
+
 
 	public int getIdEntreprise() {
 		return idEntreprise;
@@ -148,6 +157,14 @@ public class Entreprise
 
 	public void setDocuments(Set<Document> documents) {
 		this.documents = documents;
+	}
+
+	public Ville getVille() {
+		return ville;
+	}
+
+	public void setVille(Ville ville) {
+		this.ville = ville;
 	}
 
 	@Override
