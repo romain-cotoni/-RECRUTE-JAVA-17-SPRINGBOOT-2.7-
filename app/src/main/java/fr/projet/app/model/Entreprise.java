@@ -21,7 +21,7 @@ public class Entreprise
 	
 	@Column(name="raison_etp", nullable=false, length=150)
 	@NotNull
-	@Length(min=1, max=150)
+	@Length(max=150)
 	private String raisonSociale;
 	
 	@Column(name="siret_etp", nullable=true, length=150)
@@ -29,23 +29,23 @@ public class Entreprise
 	private String siret;
 	
 	@Column(name="email_etp", nullable=true, length=350)
-	@Length(min=1, max=350)
+	@Length(max=350)
 	private String email;
 	
 	@Column(name="mob_etp", nullable=true, length=50)
-	@Length(min=1, max=50)
+	@Length(max=50)
 	private String mob;
 	
 	@Column(name="fixe_etp", nullable=true, length=50)
-	@Length(min=1, max=50)
+	@Length(max=50)
 	private String fixe;
 	
 	@Column(name="adr_etp", nullable=true, length=150)
-	@Length(min=1, max=150)
+	@Length(max=150)
 	private String adresse;
 
 	@Column(name="adr2_etp", nullable=true, length=150)
-	@Length(min=1, max=150)
+	@Length(max=150)
 	private String adresse2;
 
 	@OneToMany(mappedBy = "entreprise", fetch = FetchType.EAGER)

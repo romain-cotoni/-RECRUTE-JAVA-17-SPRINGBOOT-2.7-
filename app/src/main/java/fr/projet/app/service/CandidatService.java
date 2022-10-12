@@ -13,7 +13,6 @@ import fr.projet.app.model.Experience;
 import fr.projet.app.repository.CandidatRepository;
 import fr.projet.app.repository.CandidatRepositoryCustom;
 import fr.projet.app.repository.DocumentRepository;
-import fr.projet.app.repository.ExperienceRepository;
 
 @Service
 public class CandidatService 
@@ -24,8 +23,6 @@ public class CandidatService
 	@Autowired
 	private DocumentRepository documentRepository;
 
-	@Autowired
-	private ExperienceRepository experienceRepository;
 
 	@Autowired
 	private CandidatRepositoryCustom candidatRepositoryCustom;
