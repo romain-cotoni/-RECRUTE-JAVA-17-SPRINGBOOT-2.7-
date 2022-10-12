@@ -59,8 +59,7 @@ public class CandidatService
 	public Candidat createCandidat(Candidat candidat)
 	{
 		int id = candidatRepositoryCustom.createCandidat(candidat);
-		Candidat candidatInserted = findCandidatById(id);
-		return candidatInserted;
+		return findCandidatById(id);
 	}
 
 	
@@ -93,9 +92,9 @@ public class CandidatService
 			}
 			else return null;
 		}
-		catch(Exception excep)
+		catch(Exception exception)
 		{
-			throw new Exception("Erreur CandidatService - addEducation(): " + excep);
+			throw new Exception("Erreur CandidatService - addEducation(): " + exception);
 		}
 	}
 	

@@ -1,22 +1,10 @@
 package fr.projet.app.model;
 
-import java.sql.Date;
-import java.util.Objects;
-
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.validator.constraints.Length;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import javax.persistence.*;
+import java.sql.Date;
 
 @Entity
 @Table(name="experience")
@@ -47,12 +35,12 @@ public class Experience
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_msn", nullable = false)
-	@JsonIgnore
+	//@JsonIgnore
 	private Mission mission;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_etp", nullable = true)
-	@JsonIgnore
+	//@JsonIgnore
 	private Entreprise entreprise;
 
 	public Experience()
@@ -132,7 +120,7 @@ public class Experience
 		this.entreprise = entreprise;
 	}
 
-	@Override
+	/*@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
@@ -143,5 +131,5 @@ public class Experience
 	@Override
 	public int hashCode() {
 		return Objects.hash(debut, fin, lieu, info, candidat, mission, entreprise);
-	}
+	}*/
 }

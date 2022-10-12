@@ -25,11 +25,11 @@ public class Mission
 	private String profession;
 
 	@OneToMany(mappedBy="mission", fetch=FetchType.EAGER)
-	@JsonIgnore
+	//@JsonIgnore
 	private Set<Profil> profils = new HashSet<Profil>();
 
 	@OneToMany(mappedBy="mission", fetch=FetchType.EAGER)
-	@JsonIgnore
+	//@JsonIgnore
 	private Set<Experience> experiences = new HashSet<Experience>();
 
 	public Mission()
@@ -72,12 +72,23 @@ public class Mission
 		this.experiences = experiences;
 	}
 
-	@Override
+	/*@Override
 	public boolean equals(Object o) {
 		if (this == o) return true;
 		if (o == null || getClass() != o.getClass()) return false;
 		Mission mission = (Mission) o;
 		return Objects.equals(profession, mission.profession);
+	}*/
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Mission other = (Mission) obj;
+		return Objects.equals(profession, other.profession);
 	}
 
 	@Override
