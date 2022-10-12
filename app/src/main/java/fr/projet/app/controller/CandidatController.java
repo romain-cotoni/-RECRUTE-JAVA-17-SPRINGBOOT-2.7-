@@ -107,11 +107,24 @@ public class CandidatController
 		return candidatService.findExperiencesByCandidatId(id);
 	}
 
+	@PostMapping("candidat/{id}/experiences")
+	@RolesAllowed({ "vador", "yoda", "jedi", "padawan" })
+	public Experience addExperience(@PathVariable("id") int id, @RequestBody Experience experience) throws Exception
+	{
+		return candidatService.addExperience(id, experience);
+	}
+	/*@GetMapping("/candidat/{id}/experiences")
+	@RolesAllowed({ "vador", "yoda", "jedi", "padawan" })
+	public Set<Experience> getExperiences(@PathVariable("id") int id)
+	{
+		return candidatService.findExperiencesByCandidatId(id);
+	}
+
 	@PostMapping("/candidat/{id}/experiences")
 	@RolesAllowed({ "vador", "yoda", "jedi", "padawan" })
 	public Experience createExperience(@PathVariable("id") int id, @RequestBody Experience experience)
 	{
 		return candidatService.createExperience(id, experience);
-	}
+	}*/
 	
 }

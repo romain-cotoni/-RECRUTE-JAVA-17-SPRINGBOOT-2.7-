@@ -32,6 +32,9 @@ public class CandidatService
 	
 	@Autowired
 	private EducationService educationService;
+
+	@Autowired
+	private ExperienceService experienceService;
 	
 	
 //Candidat
@@ -92,7 +95,7 @@ public class CandidatService
 		}
 		catch(Exception excep)
 		{
-			throw new Exception("Erreur CandidatService - createEducation(): " + excep);
+			throw new Exception("Erreur CandidatService - addEducation(): " + excep);
 		}
 	}
 	
@@ -116,7 +119,35 @@ public class CandidatService
 
 
 //Experience
-	public Set<Experience> findExperiencesByCandidatId(int id) 
+	@Transactional
+	public Set<Experience> findExperiencesByCandidatId(int id)
+	{
+		return candidatRepository.findExperiencesByCandidatId(id);
+	}
+
+
+	@Transactional
+	public Experience addExperience(int idCandidat, Experience exp) throws Exception
+	{
+		try
+		{
+			Candidat candidat = candidatRepository.findById(idCandidat).orElseThrow();
+			if(candidat != null)
+			{
+				Experience experience = experienceService.createExperience(candidat, exp);
+				candidat.getExperiences().add(experience);
+				candidatRepository.save(candidat);
+				return experience;
+			}
+			else return null;
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Erreur CandidatService - addExperience(): " + exception);
+		}
+	}
+
+	/*public Set<Experience> findExperiencesByCandidatId(int id)
 	{
 		return candidatRepository.findExperiencesByCandidatId(id);
 	}
@@ -129,5 +160,5 @@ public class CandidatService
 		Experience newExperience    = experienceRepository.save(experience);
 		experiences.add(newExperience);
 		return experiences.stream().filter(e -> e.equals(experience)).findFirst().get();
-	}
+	}*/
 }

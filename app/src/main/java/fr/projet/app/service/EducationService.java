@@ -49,13 +49,11 @@ public class EducationService
 			Diplome diplome = diplomeService.createDiplome(edc.getDiplome());
 			if(diplome != null) edc.setDiplome(diplome);				
 			
-			Education education = educationRepository.save(edc);
-			
-			return education;
+			return educationRepository.save(edc);
 		}
-		catch(Exception excep)
+		catch(Exception exception)
 		{
-			throw new Exception("Erreur EducationService - createEducation() : " + excep);
+			throw new Exception("Erreur EducationService - createEducation() : " + exception);
 		}
 	}
 
@@ -93,9 +91,9 @@ public class EducationService
 			
 			return educationRepository.save(education);
 		}
-		catch(Exception excep)
+		catch(Exception exception)
 		{
-			throw new Exception("Erreur EducationService - updateEducation(): " + excep);
+			throw new Exception("Erreur EducationService - updateEducation(): " + exception);
 		}
 	}
 	

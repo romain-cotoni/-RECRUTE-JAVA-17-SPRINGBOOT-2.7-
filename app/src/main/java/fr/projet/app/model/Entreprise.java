@@ -62,8 +62,7 @@ public class Entreprise
 
 	}
 
-	public Entreprise(String raisonSociale, String siret, String email, String mob, String fixe, String adresse, String adresse2, Set<Experience> experiences, Set<Document> documents)
-	{
+	public Entreprise(String raisonSociale, String siret, String email, String mob, String fixe, String adresse, String adresse2, Set<Experience> experiences, Set<Document> documents) {
 		this.raisonSociale = raisonSociale;
 		this.siret = siret;
 		this.email = email;
@@ -83,56 +82,72 @@ public class Entreprise
 		return raisonSociale;
 	}
 
-	public String getSiret() {
-		return siret;
-	}
-
-	public String getEmail() {
-		return email;
-	}
-
-	public String getMob() {
-		return mob;
-	}
-
-	public String getFixe() {
-		return fixe;
-	}
-
-	public String getAdresse() {
-		return adresse;
-	}
-
-	public String getAdresse2() {
-		return adresse2;
-	}
-
 	public void setRaisonSociale(String raisonSociale) {
 		this.raisonSociale = raisonSociale;
+	}
+
+	public String getSiret() {
+		return siret;
 	}
 
 	public void setSiret(String siret) {
 		this.siret = siret;
 	}
 
+	public String getEmail() {
+		return email;
+	}
+
 	public void setEmail(String email) {
 		this.email = email;
+	}
+
+	public String getMob() {
+		return mob;
 	}
 
 	public void setMob(String mob) {
 		this.mob = mob;
 	}
 
+	public String getFixe() {
+		return fixe;
+	}
+
 	public void setFixe(String fixe) {
 		this.fixe = fixe;
+	}
+
+	public String getAdresse() {
+		return adresse;
 	}
 
 	public void setAdresse(String adresse) {
 		this.adresse = adresse;
 	}
 
+	public String getAdresse2() {
+		return adresse2;
+	}
+
 	public void setAdresse2(String adresse2) {
 		this.adresse2 = adresse2;
+	}
+
+	public Set<Experience> getExperiences() {
+		return experiences;
+	}
+
+	public void setExperiences(Set<Experience> experiences) {
+		this.experiences = experiences;
+	}
+
+	public Set<Document> getDocuments() {
+		return documents;
+	}
+
+	public void setDocuments(Set<Document> documents) {
+		this.documents = documents;
 	}
 
 	@Override

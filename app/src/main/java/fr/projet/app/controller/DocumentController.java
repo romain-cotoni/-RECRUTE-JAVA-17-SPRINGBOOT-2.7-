@@ -3,14 +3,13 @@ package fr.projet.app.controller;
 import javax.annotation.security.RolesAllowed;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.*;
 
 import fr.projet.app.model.Document;
 import fr.projet.app.service.DocumentService;
 
+@CrossOrigin(origins = "http://localhost:4200/", allowCredentials = "true", maxAge=3600)
+@RestController
 public class DocumentController 
 {
 	@Autowired

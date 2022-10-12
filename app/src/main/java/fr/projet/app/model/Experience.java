@@ -1,6 +1,7 @@
 package fr.projet.app.model;
 
 import java.sql.Date;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -33,7 +34,7 @@ public class Experience
 	private Date fin;
 
 	@Column(name="lieu_xpr", length=50)
-	private String lieuXpr;
+	private String lieu;
 
 	@Column(name="info_xpr", nullable=true, length=500)
 	@Length(max=500)
@@ -44,12 +45,12 @@ public class Experience
 	@JsonIgnore
 	private Candidat candidat;
 
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_msn", nullable = false)
 	@JsonIgnore
 	private Mission mission;
 	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY, optional = true)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_etp", nullable = true)
 	@JsonIgnore
 	private Entreprise entreprise;
@@ -59,11 +60,13 @@ public class Experience
 
 	}
 
-	public Experience(Date debut, Date fin, String lieuXpr, String info, Mission mission, Entreprise entreprise) {
+	public Experience(Date debut, Date fin, String lieu, String info, Candidat candidat, Mission mission, Entreprise entreprise)
+	{
 		this.debut = debut;
 		this.fin = fin;
-		this.lieuXpr = lieuXpr;
+		this.lieu = lieu;
 		this.info = info;
+		this.candidat = candidat;
 		this.mission = mission;
 		this.entreprise = entreprise;
 	}
@@ -72,56 +75,73 @@ public class Experience
 		return IdExperience;
 	}
 
+
 	public Date getDebut() {
 		return debut;
-	}
-
-	public Date getFin() {
-		return fin;
-	}
-
-	public String getLieuXpr()
-	{
-		return lieuXpr;
-	}
-
-	public String getInfo() {
-		return info;
-	}
-
-	public Mission getMission() {
-		return mission;
-	}
-
-	public Entreprise getEntreprise() {
-		return entreprise;
 	}
 
 	public void setDebut(Date debut) {
 		this.debut = debut;
 	}
 
-	public void setFin(Date fin)
-	{
+	public Date getFin() {
+		return fin;
+	}
+
+	public void setFin(Date fin) {
 		this.fin = fin;
 	}
 
-	public void setLieuXpr(String lieuXpr)
-	{
-		this.lieuXpr = lieuXpr;
+	public String getLieu() {
+		return lieu;
+	}
+
+	public void setLieu(String lieu) {
+		this.lieu = lieu;
+	}
+
+	public String getInfo() {
+		return info;
 	}
 
 	public void setInfo(String info) {
 		this.info = info;
 	}
 
+	public Candidat getCandidat() {
+		return candidat;
+	}
+
+	public void setCandidat(Candidat candidat) {
+		this.candidat = candidat;
+	}
+
+	public Mission getMission() {
+		return mission;
+	}
+
 	public void setMission(Mission mission) {
 		this.mission = mission;
+	}
+
+	public Entreprise getEntreprise() {
+		return entreprise;
 	}
 
 	public void setEntreprise(Entreprise entreprise) {
 		this.entreprise = entreprise;
 	}
-	
-	
+
+	@Override
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || getClass() != o.getClass()) return false;
+		Experience that = (Experience) o;
+		return Objects.equals(debut, that.debut) && Objects.equals(fin, that.fin) && Objects.equals(lieu, that.lieu) && Objects.equals(info, that.info) && Objects.equals(candidat, that.candidat) && Objects.equals(mission, that.mission) && Objects.equals(entreprise, that.entreprise);
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(debut, fin, lieu, info, candidat, mission, entreprise);
+	}
 }
