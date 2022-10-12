@@ -19,7 +19,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 @Table(name="experience")
-public class Experience 
+public class Experience
 {
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
