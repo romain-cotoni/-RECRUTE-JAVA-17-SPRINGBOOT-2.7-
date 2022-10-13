@@ -56,7 +56,7 @@ public class Candidat
 	private Integer salaire;
 	
 	@Column(name="marital_cdt", nullable=true)
-	private Byte maritalStatus;
+	private Byte marital;
 	
 	@Column(name="handi_cdt", nullable=true)
 	private Boolean handicape;
@@ -92,12 +92,18 @@ public class Candidat
 	private Set<Document> documents = new HashSet<Document>();
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_vil", nullable = true)
+	@JoinColumn(name = "id_vil")
 	private Ville ville;
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_pys", nullable = true)
+	@JoinColumn(name = "id_pys")
 	private Pays pays;
+
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "id_mbl")
+	private Mobilite mobilite;
+
+
 
 	public Candidat()
 	{
@@ -180,12 +186,12 @@ public class Candidat
 		this.salaire = salaire;
 	}
 	
-	public Byte getMaritalStatus() {
-		return maritalStatus;
+	public Byte getMarital() {
+		return marital;
 	}
 	
-	public void setMaritalStatus(Byte maritalStatus) {
-		this.maritalStatus = maritalStatus;
+	public void setMarital(Byte marital) {
+		this.marital = marital;
 	}
 	
 	public Boolean getPermis() {
@@ -295,5 +301,29 @@ public class Candidat
 	public void addDocument(Document document)
 	{
 		this.documents.add(document);
+	}
+
+	public Ville getVille() {
+		return ville;
+	}
+
+	public void setVille(Ville ville) {
+		this.ville = ville;
+	}
+
+	public Pays getPays() {
+		return pays;
+	}
+
+	public void setPays(Pays pays) {
+		this.pays = pays;
+	}
+
+	public Mobilite getMobilite() {
+		return mobilite;
+	}
+
+	public void setMobilite(Mobilite mobilite) {
+		this.mobilite = mobilite;
 	}
 }

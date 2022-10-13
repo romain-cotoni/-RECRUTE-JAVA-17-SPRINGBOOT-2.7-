@@ -59,7 +59,6 @@ public class Entreprise
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_vil", nullable = true)
-	@JsonIgnore
 	private Ville ville;
 
 	public Entreprise()
