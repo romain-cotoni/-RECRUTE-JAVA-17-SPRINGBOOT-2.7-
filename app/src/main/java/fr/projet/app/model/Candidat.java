@@ -58,29 +58,28 @@ public class Candidat
 	@Column(name="marital_cdt", nullable=true)
 	private Byte marital;
 	
-	@Column(name="handi_cdt", nullable=true)
+	@Column(name="handi_cdt")
 	private Boolean handicape;
 	
-	@Column(name="permis_cdt", nullable=true)
+	@Column(name="permis_cdt")
 	private Boolean permis;
 	
-	@Column(name="vehicule_cdt", nullable=true)
+	@Column(name="vehicule_cdt")
 	private Boolean vehicule;
 
-	@Column(name="teletrvl_cdt", nullable=true)
+	@Column(name="teletrvl_cdt")
 	private Boolean teletravail;
 	
-	@Column(name="dispo_cdt", nullable=true)
+	@Column(name="dispo_cdt")
 	private Boolean disponible;
 	
-	@Column(name="info_cdt", nullable=true, length=500)
+	@Column(name="info_cdt", length=500)
 	private String info;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
 	@JsonIgnore
 	private Set<Education> educations = new HashSet<>();
-
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
