@@ -80,6 +80,11 @@ public class Candidat
 	@JoinColumn(name = "id_cdt")
 	@JsonIgnore
 	private Set<Education> educations = new HashSet<>();
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@JoinColumn(name = "id_psd")
+	@JsonIgnore
+	private Set<Pseudo> pseudos = new HashSet<Pseudo>();
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")

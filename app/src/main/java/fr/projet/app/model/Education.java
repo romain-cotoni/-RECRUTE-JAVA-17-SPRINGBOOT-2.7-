@@ -42,21 +42,21 @@ public class Education
 	@Column(name="fin_edc", nullable=true)
 	private Date fin;
 
-	@Column(name="info_edc", nullable=true, length=500)
+	@Column(name="info_edc", length=500)
 	@Length(max=500)
 	private String info;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_cdt", nullable = true)
+	@JoinColumn(name = "id_cdt")
 	@JsonIgnore
 	private Candidat candidat;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_spl", nullable = true)
+	@JoinColumn(name = "id_spl")
 	private Specialite specialite;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_dpl", nullable = true)
+	@JoinColumn(name = "id_dpl")
 	private Diplome diplome;
 
 	public int getIdEducation() {
