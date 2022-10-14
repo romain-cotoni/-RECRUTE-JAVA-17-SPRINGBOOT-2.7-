@@ -81,8 +81,9 @@ public class Candidat
 	@JsonIgnore
 	private Set<Education> educations = new HashSet<>();
 
+
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	@JoinColumn(name = "id_psd")
+	@JoinColumn(name = "id_cdt")
 	@JsonIgnore
 	private Set<Pseudo> pseudos = new HashSet<Pseudo>();
 	
@@ -330,5 +331,13 @@ public class Candidat
 
 	public void setMobilite(Mobilite mobilite) {
 		this.mobilite = mobilite;
+	}
+
+	public Set<Pseudo> getPseudos() {
+		return pseudos;
+	}
+
+	public void setPseudos(Set<Pseudo> pseudos) {
+		this.pseudos = pseudos;
 	}
 }

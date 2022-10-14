@@ -29,10 +29,39 @@ public class Pseudo {
 
     }
 
+    public Pseudo(String pseudo, Candidat candidat, Reseau reseau) {
+        this.pseudo = pseudo;
+        this.candidat = candidat;
+        this.reseau = reseau;
+    }
+
     public Integer getIdPseudo() {
         return idPseudo;
     }
 
+    public String getPseudo() {
+        return pseudo;
+    }
+
+    public void setPseudo(String pseudo) {
+        this.pseudo = pseudo;
+    }
+
+    public Candidat getCandidat() {
+        return candidat;
+    }
+
+    public void setCandidat(Candidat candidat) {
+        this.candidat = candidat;
+    }
+
+    public Reseau getReseau() {
+        return reseau;
+    }
+
+    public void setReseau(Reseau reseau) {
+        this.reseau = reseau;
+    }
 
 
 }
