@@ -20,22 +20,23 @@ public class Reseau {
 
     @OneToMany(mappedBy = "reseau", fetch = FetchType.EAGER)
     @JsonIgnore
-    private Set<Reseau> reseaux = new HashSet<Reseau>();
+    private Set<Pseudo> pseudos = new HashSet<Pseudo>();
 
     public Reseau()
     {
 
     }
 
-    public Reseau(String reseau, Set<Reseau> reseaux)
+    public Reseau(String reseau, Set<Pseudo> pseudos)
     {
         this.reseau = reseau;
-        this.reseaux = reseaux;
+        this.pseudos = pseudos;
     }
 
     public Integer getIdReseau() {
         return idReseau;
     }
+
 
     public String getReseau() {
         return reseau;
@@ -45,24 +46,26 @@ public class Reseau {
         this.reseau = reseau;
     }
 
-    public Set<Reseau> getReseaux() {
-        return reseaux;
+    public Set<Pseudo> getPseudos() {
+        return pseudos;
     }
 
-    public void setReseaux(Set<Reseau> reseaux) {
-        this.reseaux = reseaux;
+    public void setPseudos(Set<Pseudo> pseudos) {
+        this.pseudos = pseudos;
     }
 
     @Override
-    public boolean equals(Object o) {
+    public boolean equals(Object o)
+    {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reseau reseau1 = (Reseau) o;
-        return Objects.equals(reseau, reseau1.reseau);
+        return Objects.equals(idReseau, reseau1.idReseau) && Objects.equals(reseau, reseau1.reseau) && Objects.equals(pseudos, reseau1.pseudos);
     }
 
     @Override
-    public int hashCode() {
+    public int hashCode()
+    {
         return Objects.hash(reseau);
     }
 }

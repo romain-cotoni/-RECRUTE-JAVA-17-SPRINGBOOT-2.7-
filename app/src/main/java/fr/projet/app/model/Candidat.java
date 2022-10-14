@@ -78,22 +78,28 @@ public class Candidat
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
-	@JsonIgnore
+	//@JsonIgnore
 	private Set<Education> educations = new HashSet<>();
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@JoinColumn(name = "id_cdt")
+	//@JsonIgnore
+	private Set<Pseudo> pseudos = new HashSet<Pseudo>();
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@JoinColumn(name = "id_cdt")
+	//@JsonIgnore
+	private Set<Projet> projets = new HashSet<Projet>();
+
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
-	@JsonIgnore
-	private Set<Pseudo> pseudos = new HashSet<Pseudo>();
-	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	@JoinColumn(name = "id_cdt")
-	@JsonIgnore
+	//@JsonIgnore
 	private Set<Experience> experiences = new HashSet<>();
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
-	@JsonIgnore
+	//@JsonIgnore
 	private Set<Document> documents = new HashSet<Document>();
 
 	@ManyToOne(fetch = FetchType.EAGER)
@@ -106,6 +112,7 @@ public class Candidat
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_mbl")
+	//@JsonIgnore
 	private Mobilite mobilite;
 
 
@@ -338,5 +345,13 @@ public class Candidat
 
 	public void setPseudos(Set<Pseudo> pseudos) {
 		this.pseudos = pseudos;
+	}
+
+	public Set<Projet> getProjets() {
+		return projets;
+	}
+
+	public void setProjets(Set<Projet> projets) {
+		this.projets = projets;
 	}
 }

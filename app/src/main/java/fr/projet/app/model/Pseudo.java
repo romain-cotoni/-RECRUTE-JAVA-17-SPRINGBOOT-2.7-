@@ -12,7 +12,7 @@ public class Pseudo {
     @Column(name = "id_psd", nullable = false)
     private Integer idPseudo;
 
-    @Column(name="pseudo_psd", length=500)
+    @Column(name="pseudo_psd", length=50)
     private String pseudo;
 
     @ManyToOne(fetch = FetchType.EAGER)
