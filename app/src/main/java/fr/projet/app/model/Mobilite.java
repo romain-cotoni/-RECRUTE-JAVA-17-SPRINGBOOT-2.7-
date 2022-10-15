@@ -20,7 +20,7 @@ public class Mobilite {
     @Column(name="rayon_mbl")
     private Integer rayon;
 
-    @OneToMany(mappedBy = "mobilite", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "mobilite", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Candidat> candidats = new HashSet<Candidat>();
 

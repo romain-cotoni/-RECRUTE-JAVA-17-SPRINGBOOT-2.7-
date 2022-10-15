@@ -29,7 +29,7 @@ public class Pays
     @JsonIgnore
     private Set<Ville> villes = new HashSet<Ville>();
 
-    @OneToMany(mappedBy="pays",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="pays",fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Candidat> candidats = new HashSet<Candidat>();
 

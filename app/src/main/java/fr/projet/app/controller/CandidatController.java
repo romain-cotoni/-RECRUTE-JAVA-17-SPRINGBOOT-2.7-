@@ -27,7 +27,7 @@ public class CandidatController
 {
 	private CandidatService candidatService;
 
-	@Autowired
+	//@Autowired
 	public CandidatController(CandidatService candidatService)
 	{
 		this.candidatService = candidatService;

@@ -86,19 +86,19 @@ public class Candidat
 	@JoinColumn(name = "id_cdt")
 	private Set<Document> documents = new HashSet<Document>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
 	private Set<Pseudo> pseudos = new HashSet<Pseudo>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
 	private Set<Projet> projets = new HashSet<Projet>();
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
 	private Set<Entretien> entretiens = new HashSet<Entretien>();
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_vil")
 	private Ville ville;
 
@@ -110,13 +110,13 @@ public class Candidat
 	@JoinColumn(name = "id_mbl")
 	private Mobilite mobilite;
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
 	@JoinTable(name = "candidat_competence",
 			joinColumns        = { @JoinColumn(name = "id_cdt") },
 			inverseJoinColumns = { @JoinColumn(name = "id_cpt") })
 	private Set<Competence> competences = new HashSet<Competence>();
 
-	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.LAZY)
 	@JoinTable(name = "candidat_langue",
 			joinColumns        = { @JoinColumn(name = "id_cdt") },
 			inverseJoinColumns = { @JoinColumn(name = "id_lng") })

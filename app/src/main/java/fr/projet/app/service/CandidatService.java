@@ -1,11 +1,5 @@
 package fr.projet.app.service;
 
-import java.util.List;
-import java.util.Set;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import fr.projet.app.model.Candidat;
 import fr.projet.app.model.Document;
 import fr.projet.app.model.Education;
@@ -13,26 +7,29 @@ import fr.projet.app.model.Experience;
 import fr.projet.app.repository.CandidatRepository;
 import fr.projet.app.repository.CandidatRepositoryCustom;
 import fr.projet.app.repository.DocumentRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Set;
 
 @Service
 public class CandidatService 
 {
-	@Autowired
 	private CandidatRepository candidatRepository;
-	
-	@Autowired
 	private DocumentRepository documentRepository;
-
-
-	@Autowired
 	private CandidatRepositoryCustom candidatRepositoryCustom;
-	
-	@Autowired
 	private EducationService educationService;
-
-	@Autowired
 	private ExperienceService experienceService;
-	
+
+	public CandidatService(CandidatRepository candidatRepository, DocumentRepository documentRepository, CandidatRepositoryCustom candidatRepositoryCustom, EducationService educationService, ExperienceService experienceService)
+	{
+		this.candidatRepository = candidatRepository;
+		this.documentRepository = documentRepository;
+		this.candidatRepositoryCustom = candidatRepositoryCustom;
+		this.educationService = educationService;
+		this.experienceService = experienceService;
+	}
 	
 //Candidat
 	public List<Candidat> findAllCandidats() 
