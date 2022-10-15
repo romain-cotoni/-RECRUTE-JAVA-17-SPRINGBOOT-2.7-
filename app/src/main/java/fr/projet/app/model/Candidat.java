@@ -1,15 +1,13 @@
 package fr.projet.app.model;
 
-import java.sql.Date;
-import java.util.HashSet;
-import java.util.Set;
+import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
-import org.hibernate.validator.constraints.Length;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import java.sql.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "candidat")	
@@ -25,37 +23,37 @@ public class Candidat
 	@Length(min=1, max = 50)
 	private String nom;
 	
-	@Column(name="prenom_cdt", nullable=true, length=50)
+	@Column(name="prenom_cdt", length=50)
 	@Length(max = 50)
 	private String prenom;
 	
-	@Column(name="ne_cdt", nullable=true, length=50)
+	@Column(name="ne_cdt", length=50)
 	private Date naissance;
 	
-	@Column(name="email_cdt", nullable=true, length=350)
+	@Column(name="email_cdt", length=350)
 	@Email
 	private String email;
 	
-	@Column(name="fixe_cdt", nullable=true, length=50)
+	@Column(name="fixe_cdt", length=50)
 	@Length(max = 50)
 	private String fixe;
 	
-	@Column(name="mob_cdt", nullable=true, length=50)
+	@Column(name="mob_cdt", length=50)
 	@Length(max = 50)
 	private String mob;
 	
-	@Column(name="adrs_cdt", nullable=true, length=50)
+	@Column(name="adrs_cdt", length=50)
 	@Length(max = 150)
 	private String adresse;
 	
-	@Column(name="adrs2_cdt", nullable=true, length=50)
+	@Column(name="adrs2_cdt", length=50)
 	@Length(max = 150)
 	private String adresse2;
 	
-	@Column(name="salaire_cdt", nullable=true)
+	@Column(name="salaire_cdt")
 	private Integer salaire;
 	
-	@Column(name="marital_cdt", nullable=true)
+	@Column(name="marital_cdt")
 	private Byte marital;
 	
 	@Column(name="handi_cdt")
@@ -78,29 +76,27 @@ public class Candidat
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
-	//@JsonIgnore
 	private Set<Education> educations = new HashSet<>();
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@JoinColumn(name = "id_cdt")
+	private Set<Experience> experiences = new HashSet<>();
+
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@JoinColumn(name = "id_cdt")
+	private Set<Document> documents = new HashSet<Document>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
-	//@JsonIgnore
 	private Set<Pseudo> pseudos = new HashSet<Pseudo>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
-	//@JsonIgnore
 	private Set<Projet> projets = new HashSet<Projet>();
 
-
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
+	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
-	//@JsonIgnore
-	private Set<Experience> experiences = new HashSet<>();
-	
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
-	@JoinColumn(name = "id_cdt")
-	//@JsonIgnore
-	private Set<Document> documents = new HashSet<Document>();
+	private Set<Entretien> entretiens = new HashSet<Entretien>();
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_vil")
@@ -112,9 +108,19 @@ public class Candidat
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_mbl")
-	//@JsonIgnore
 	private Mobilite mobilite;
 
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+	@JoinTable(name = "candidat_competence",
+			joinColumns        = { @JoinColumn(name = "id_cdt") },
+			inverseJoinColumns = { @JoinColumn(name = "id_cpt") })
+	private Set<Competence> competences = new HashSet<Competence>();
+
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
+	@JoinTable(name = "candidat_langue",
+			joinColumns        = { @JoinColumn(name = "id_cdt") },
+			inverseJoinColumns = { @JoinColumn(name = "id_lng") })
+	private Set<Langue> langues = new HashSet<Langue>();
 
 
 	public Candidat()
@@ -125,7 +131,6 @@ public class Candidat
 	public int getIdCandidat() {
 		 return idCandidat;
 	 }
-	 
 	public String getNom() {
 		return nom;
 	}
@@ -133,7 +138,6 @@ public class Candidat
 	public void setNom(String nom) {
 		this.nom = nom;
 	}
-
 	public String getPrenom() {
 		return prenom;
 	}
@@ -273,7 +277,6 @@ public class Candidat
 	public void setInfo(String info) {
 		this.info = info;
 	}
-
 	public Set<Education> getEducations() {
 		return educations;
 	}
@@ -282,12 +285,6 @@ public class Candidat
 	{
 		this.educations = educations; 
 	}
-	
-	public void addEducation(Education education)
-	{
-		this.educations.add(education);
-	}
-	
 	public Set<Experience> getExperiences() {
 		return experiences;
 	}
@@ -295,24 +292,12 @@ public class Candidat
 	public void setExperiences(Set<Experience> experiences) {
 		this.experiences = experiences;
 	}
-	
-	public void addExperience(Experience experience)
-	{
-		this.experiences.add(experience);
-	}
-
-
 	public Set<Document> getDocuments() {
 		return documents;
 	}
 
 	public void setDocuments(Set<Document> documents) {
 		this.documents = documents;
-	}
-	
-	public void addDocument(Document document)
-	{
-		this.documents.add(document);
 	}
 
 	public Ville getVille() {
@@ -354,4 +339,47 @@ public class Candidat
 	public void setProjets(Set<Projet> projets) {
 		this.projets = projets;
 	}
+
+	public Set<Entretien> getEntretiens() {
+		return entretiens;
+	}
+
+	public void setEntretiens(Set<Entretien> entretiens) {
+		this.entretiens = entretiens;
+	}
+
+	public Set<Competence> getCompetences() {
+		return competences;
+	}
+
+	public void setCompetences(Set<Competence> competences) {
+		this.competences = competences;
+	}
+
+	public Set<Langue> getLangues() {
+		return langues;
+	}
+
+	public void setLangues(Set<Langue> langues) {
+		this.langues = langues;
+	}
+
+
+
+
+	public void addEducation(Education education)
+	{
+		this.educations.add(education);
+	}
+
+	public void addExperience(Experience experience)
+	{
+		this.experiences.add(experience);
+	}
+
+	public void addDocument(Document document)
+	{
+		this.documents.add(document);
+	}
+
 }

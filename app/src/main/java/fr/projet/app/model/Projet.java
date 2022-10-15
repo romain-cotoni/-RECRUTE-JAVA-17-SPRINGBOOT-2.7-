@@ -43,7 +43,8 @@ public class Projet {
 
     }
 
-    public Projet(String nom, Integer type, Date debut, Date fin, String info, Candidat candidat, Activite activite) {
+    public Projet(String nom, Integer type, Date debut, Date fin, String info, Candidat candidat, Activite activite)
+    {
         this.nom = nom;
         this.type = type;
         this.debut = debut;

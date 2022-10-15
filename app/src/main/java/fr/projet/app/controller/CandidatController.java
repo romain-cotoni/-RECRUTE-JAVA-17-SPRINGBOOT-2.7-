@@ -25,8 +25,14 @@ import fr.projet.app.service.CandidatService;
 @RestController
 public class CandidatController
 {
-	@Autowired
 	private CandidatService candidatService;
+
+	@Autowired
+	public CandidatController(CandidatService candidatService)
+	{
+		this.candidatService = candidatService;
+	}
+
 
 	
 	@GetMapping("/candidats")
@@ -94,7 +100,6 @@ public class CandidatController
 	@RolesAllowed({ "vador", "yoda", "jedi", "padawan" })
 	public Document createDocument(@PathVariable("id") int id, @RequestBody Document document)
 	{
-		//System.out.println("id : "+id);
 		return candidatService.createDocument(id, document);
 	}
 	
