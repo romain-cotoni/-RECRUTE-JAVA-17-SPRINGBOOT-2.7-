@@ -29,23 +29,20 @@ public class Document
 	@Length(min = 2, max = 50)
 	private String label;
 	
-	@Column(name="path_doc", nullable = true, length=250)
+	@Column(name="path_doc", length=250)
 	@Length(max = 250)
 	private String path;
 	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_cat", nullable = false)
-	//@JsonIgnore
 	private Categorie categorie;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_cdt", nullable = true)
-	//@JsonIgnore
+	@JoinColumn(name = "id_cdt")
 	private Candidat candidat;
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "id_etp", nullable = true)
-	//@JsonIgnore
+	@JoinColumn(name = "id_etp")
 	private Entreprise entreprise;
 
 	public Document()

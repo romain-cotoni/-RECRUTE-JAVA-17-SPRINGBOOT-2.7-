@@ -18,7 +18,7 @@ public class Reseau {
     @Column(name="reseau_res", length=50)
     private String reseau;
 
-    @OneToMany(mappedBy = "reseau", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "reseau", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Pseudo> pseudos = new HashSet<Pseudo>();
 

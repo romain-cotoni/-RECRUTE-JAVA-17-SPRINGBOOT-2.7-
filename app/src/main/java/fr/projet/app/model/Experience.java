@@ -15,32 +15,31 @@ public class Experience
 	@Column(name="id_xpr")
 	private int IdExperience;
 	
-	@Column(name="debut_xpr", nullable=true)
+	@Column(name="debut_xpr")
 	private Date debut;
 
-	@Column(name="fin_xpr", nullable=true)
+	@Column(name="fin_xpr")
 	private Date fin;
 
 	@Column(name="lieu_xpr", length=50)
+	@Length(max=50)
 	private String lieu;
 
-	@Column(name="info_xpr", nullable=true, length=500)
+	@Column(name="info_xpr",length=500)
 	@Length(max=500)
 	private String info;
 
-	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_cdt", nullable = true)
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "id_cdt")
 	@JsonIgnore
 	private Candidat candidat;
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_msn", nullable = false)
-	//@JsonIgnore
 	private Mission mission;
 	
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_etp", nullable = true)
-	//@JsonIgnore
+	@JoinColumn(name = "id_etp")
 	private Entreprise entreprise;
 
 	public Experience()

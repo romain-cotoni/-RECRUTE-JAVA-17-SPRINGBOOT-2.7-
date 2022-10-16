@@ -18,7 +18,7 @@ public class Activite {
     @Column(name="nom_act", length=50)
     private String nom;
 
-    @OneToMany(mappedBy = "activite", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "activite", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Projet> projets = new HashSet<Projet>();
 

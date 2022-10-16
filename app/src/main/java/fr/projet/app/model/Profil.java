@@ -14,19 +14,19 @@ public class Profil
     @Column(name="id_prf")
     private int idProfil;
 
-    @Column(name="nom_prf", nullable = true, length=50)
+    @Column(name="nom_prf", length=50)
     @Length(max=50)
     private String nom;
 
-    @Column(name="expmin_prf", nullable = true)
+    @Column(name="expmin_prf")
     private Integer expMin;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="id_etp", nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="id_etp")
     private Entreprise entreprise;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name="id_msn", nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="id_msn")
     private Mission mission;
 
     public Profil()

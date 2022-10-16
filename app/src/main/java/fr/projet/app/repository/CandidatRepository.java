@@ -15,13 +15,14 @@ import fr.projet.app.model.Experience;
 @Repository
 public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 {
-	//@Query("SELECT t FROM Candidat t WHERE t.idCandidat=?1")
-	//public Candidat findById(int id);
-
-	@Query("SELECT t FROM Candidat t WHERE t.prenom=?1 AND t.nom=?2")
+	@Query("SELECT c FROM Candidat c WHERE c.prenom=?1 AND c.nom=?2")
 	public Candidat findByName(String prenom, String nom);
 
-	public List<Candidat> findByNom(String nom);
+	@Query("SELECT DISTINCT c.prenom FROM Candidat c")
+	public List<String> findAllPrenoms();
+
+	@Query("SELECT DISTINCT c.nom FROM Candidat c")
+	public List<String> findAllNoms();
 	
 	/**
 	 * delete a candidat found by it's id given in parameter
@@ -34,12 +35,10 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 	@Query("SELECT c.educations FROM Candidat c WHERE c.idCandidat=?1")
 			//inner join c.education e inner join e.specialite s inner join e.diplome d"
 	public Set<Education> findEducationsByCandidatId(int id);
-	
+	@Query("SELECT c.experiences FROM Candidat c WHERE c.idCandidat=?1")
+	public Set<Experience> findExperiencesByCandidatId(int id);
 	@Query("SELECT c.documents FROM Candidat c WHERE c.idCandidat=?1")
 	public Set<Document> findDocumentsByCandidatId(int id);
 
-	@Query("SELECT c.experiences FROM Candidat c WHERE c.idCandidat=?1")
-	public Set<Experience> findExperiencesByCandidatId(int id);
-	
-	
+
 }

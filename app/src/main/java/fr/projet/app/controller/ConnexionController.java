@@ -47,7 +47,7 @@ public class ConnexionController
     	// If credential is valid, it uses the JwtTokenUtil class to generate a new access token, which is then attached to the response object of type AuthResponse.
     	try
     	{
-    		/*Authentication authentication =*/ authManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword()));
+			authManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getUsername(), authRequest.getPassword())); //Authentication authentication =//
     		UserDetails utilisateur       = jwtUserDetailsService.loadUserByUsername(authRequest.getUsername());
     		String token                  = jwtTokenUtil.generateToken(utilisateur);
     		JwtResponse response          = new JwtResponse(utilisateur.getUsername(), token);

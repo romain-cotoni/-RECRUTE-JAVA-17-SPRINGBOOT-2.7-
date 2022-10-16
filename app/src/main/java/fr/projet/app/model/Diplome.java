@@ -32,10 +32,10 @@ public class Diplome
 	@Length(min = 2, max = 50)
 	private String label;
 	
-	@Column(name="niveau_dpl", nullable=true)
+	@Column(name="niveau_dpl")
 	private int niveau;
 	
-	@OneToMany(mappedBy = "diplome", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "diplome", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Set<Education> educations = new HashSet<Education>();
 	

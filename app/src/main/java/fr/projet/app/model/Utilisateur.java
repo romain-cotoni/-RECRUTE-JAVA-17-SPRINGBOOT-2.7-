@@ -37,7 +37,7 @@ public class Utilisateur
 	@Column(name="pass_utl", nullable = false, length=250)
 	private String password;
 	
-	@ManyToMany(fetch = FetchType.EAGER , cascade = { CascadeType.PERSIST, CascadeType.MERGE })
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)
 	@JoinTable(name = "utilisateur_role", 
 	           joinColumns        = { @JoinColumn(name = "id_utl", referencedColumnName = "id_utl") }, 
 	           inverseJoinColumns = { @JoinColumn(name = "id_rle", referencedColumnName = "id_rle") })
@@ -50,11 +50,9 @@ public class Utilisateur
 	public void setUsername(String username) {
 		this.username = username;
 	}
-
 	public String getPassword() {
 		return password;
 	}
-
 	public void setPassword(String password) {
 		this.password = password;
 	}

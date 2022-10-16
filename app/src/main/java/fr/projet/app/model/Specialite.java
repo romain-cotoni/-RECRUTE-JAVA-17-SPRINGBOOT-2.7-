@@ -32,7 +32,7 @@ public class Specialite
 	@Length(min = 2, max = 50)
 	private String label;
 	
-	@OneToMany(mappedBy = "specialite", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "specialite", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Set<Education> educations = new HashSet<Education>();
 	
@@ -44,7 +44,6 @@ public class Specialite
 	public String getLabel() {
 		return label;
 	}
-
 	public Set<Education> getEducations() {
 		return educations;
 	}

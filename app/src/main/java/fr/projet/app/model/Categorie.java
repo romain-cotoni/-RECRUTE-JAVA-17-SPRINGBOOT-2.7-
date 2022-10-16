@@ -24,7 +24,7 @@ public class Categorie
 	@Length(min = 2, max = 50)
 	private String label;
 
-	@OneToMany(mappedBy = "categorie", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "categorie", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Set<Document> documents = new HashSet<Document>();
 

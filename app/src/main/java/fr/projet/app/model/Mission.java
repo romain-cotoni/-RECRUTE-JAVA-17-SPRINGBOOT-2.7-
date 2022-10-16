@@ -24,11 +24,11 @@ public class Mission
 	@Length(min=1, max=50)
 	private String profession;
 
-	@OneToMany(mappedBy="mission", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="mission", fetch=FetchType.LAZY)
 	@JsonIgnore
 	private Set<Profil> profils = new HashSet<Profil>();
 
-	@OneToMany(mappedBy="mission", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="mission", fetch=FetchType.LAZY)
 	@JsonIgnore
 	private Set<Experience> experiences = new HashSet<Experience>();
 

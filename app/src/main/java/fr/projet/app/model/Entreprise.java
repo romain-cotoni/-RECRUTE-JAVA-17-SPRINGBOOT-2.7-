@@ -24,41 +24,41 @@ public class Entreprise
 	@Length(max=150)
 	private String raisonSociale;
 
-	@Column(name="siret_etp", nullable=true, length=150)
+	@Column(name="siret_etp", length=150)
 	@Length(min=1, max=150)
 	private String siret;
 
-	@Column(name="email_etp", nullable=true, length=350)
+	@Column(name="email_etp", length=350)
 	@Length(max=350)
 	private String email;
 
-	@Column(name="mob_etp", nullable=true, length=50)
+	@Column(name="mob_etp", length=50)
 	@Length(max=50)
 	private String mob;
 
-	@Column(name="fixe_etp", nullable=true, length=50)
+	@Column(name="fixe_etp", length=50)
 	@Length(max=50)
 	private String fixe;
 
-	@Column(name="adr_etp", nullable=true, length=150)
+	@Column(name="adr_etp", length=150)
 	@Length(max=150)
 	private String adresse;
 
-	@Column(name="adr2_etp", nullable=true, length=150)
+	@Column(name="adr2_etp", length=150)
 	@Length(max=150)
 	private String adresse2;
 
 
-	@OneToMany(mappedBy = "entreprise", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "entreprise", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Set<Experience> experiences = new HashSet<Experience>();
 
-	@OneToMany(mappedBy = "entreprise", fetch = FetchType.EAGER)
+	@OneToMany(mappedBy = "entreprise", fetch = FetchType.LAZY)
 	@JsonIgnore
 	private Set<Document> documents = new HashSet<Document>();
 
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "id_vil", nullable = true)
+	@JoinColumn(name = "id_vil")
 	private Ville ville;
 
 	public Entreprise()

@@ -30,7 +30,7 @@ public class Recruteur {
     @Column(name="fixe_rct", length=50)
     private String fixe;
 
-    @OneToMany(mappedBy = "recruteur", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "recruteur", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Entretien> entretiens = new HashSet<Entretien>();
 

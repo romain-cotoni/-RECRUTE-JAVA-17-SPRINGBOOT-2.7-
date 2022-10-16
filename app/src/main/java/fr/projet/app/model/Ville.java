@@ -22,7 +22,7 @@ public class Ville
     @Column(name="postal_vil", length=50)
     private String postal;
 
-    @OneToMany(mappedBy = "ville", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "ville", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Candidat> candidats = new HashSet<Candidat>();
 
@@ -31,7 +31,7 @@ public class Ville
     private Set<Entreprise> entreprises = new HashSet<Entreprise>();
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_pys", nullable = true)
+    @JoinColumn(name = "id_pys")
     private Pays pays;
 
     public Ville()

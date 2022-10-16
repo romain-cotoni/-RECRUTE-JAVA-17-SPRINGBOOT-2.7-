@@ -29,7 +29,7 @@ public class Projet {
     @Column(name="info_prj", length=500)
     private String info;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cdt")
     @JsonIgnore
     private Candidat candidat;

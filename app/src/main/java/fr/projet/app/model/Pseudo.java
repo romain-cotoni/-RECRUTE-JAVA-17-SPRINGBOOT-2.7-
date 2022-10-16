@@ -15,7 +15,7 @@ public class Pseudo {
     @Column(name="pseudo_psd", length=50)
     private String pseudo;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cdt")
     @JsonIgnore
     private Candidat candidat;

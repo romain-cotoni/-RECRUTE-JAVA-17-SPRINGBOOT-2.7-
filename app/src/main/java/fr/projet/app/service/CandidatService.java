@@ -37,31 +37,31 @@ public class CandidatService
 		return candidatRepository.findAll();
 	}
 
-	
+
 	public Candidat findCandidatById(int id) 
 	{
 		return candidatRepository.findById(id).orElseThrow();
 	}
-
 	
 	public Candidat findCandidatByName(Candidat candidat) 
 	{
 		return candidatRepository.findByName(candidat.getPrenom(),candidat.getNom());
 	}
 	
-	
 	public Candidat createCandidat(Candidat candidat)
 	{
 		int id = candidatRepositoryCustom.createCandidat(candidat);
 		return findCandidatById(id);
 	}
-
 	
 	public void deleteCandidatById(int id) 
 	{
 		candidatRepository.deleteById(id);
 	}
 
+	public List<String> findAllCandidatsPrenoms() { return candidatRepository.findAllPrenoms(); }
+
+	public List<String> findAllCandidatsNoms() { return candidatRepository.findAllNoms(); }
 	
 //Education
 	@Transactional
@@ -69,7 +69,6 @@ public class CandidatService
 	{
 		return candidatRepository.findEducationsByCandidatId(id);
 	}
-
 	
 	@Transactional
 	public Education addEducation(int idCandidat, Education edc) throws Exception
@@ -91,24 +90,6 @@ public class CandidatService
 			throw new Exception("Erreur CandidatService - addEducation(): " + exception);
 		}
 	}
-	
-		
-	
-//Document
-	public Set<Document> findDocumentsByCandidatId(int id)
-	{
-		return candidatRepository.findDocumentsByCandidatId(id);
-	}
-
-	@Transactional
-	public Document createDocument(int id, Document document)
-	{
-		Candidat candidat       = candidatRepository.findById(id).orElseThrow();
-		Set<Document> documents = candidat.getDocuments();
-		Document newDocument    = documentRepository.save(document);
-		documents.add(newDocument);
-		return documents.stream().filter(e -> e.equals(document)).findFirst().get();
-	}
 
 
 //Experience
@@ -117,7 +98,6 @@ public class CandidatService
 	{
 		return candidatRepository.findExperiencesByCandidatId(id);
 	}
-
 
 	@Transactional
 	public Experience addExperience(int idCandidat, Experience exp) throws Exception
@@ -140,18 +120,21 @@ public class CandidatService
 		}
 	}
 
-	/*public Set<Experience> findExperiencesByCandidatId(int id)
+//Document
+	public Set<Document> findDocumentsByCandidatId(int id)
 	{
-		return candidatRepository.findExperiencesByCandidatId(id);
+		return candidatRepository.findDocumentsByCandidatId(id);
 	}
 
 	@Transactional
-	public Experience createExperience(int id, Experience experience) 
+	public Document addDocument(int id, Document document)
 	{
-		Candidat candidat           = candidatRepository.findById(id).orElseThrow();
-		Set<Experience> experiences = candidat.getExperiences();
-		Experience newExperience    = experienceRepository.save(experience);
-		experiences.add(newExperience);
-		return experiences.stream().filter(e -> e.equals(experience)).findFirst().get();
-	}*/
+		Candidat candidat       = candidatRepository.findById(id).orElseThrow();
+		Set<Document> documents = candidat.getDocuments();
+		Document newDocument    = documentRepository.save(document);
+		documents.add(newDocument);
+		return documents.stream().filter(e -> e.equals(document)).findFirst().get();
+	}
+
+
 }

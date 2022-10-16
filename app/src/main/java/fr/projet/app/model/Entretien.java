@@ -28,7 +28,7 @@ public class Entretien {
     @Column(name="resume_etr", length=500)
     private String resume;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_cdt")
     @JsonIgnore
     private Candidat candidat;

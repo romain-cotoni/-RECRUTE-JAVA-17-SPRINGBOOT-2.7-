@@ -25,28 +25,28 @@ public class Education
 	@Column(name="id_edc")
 	private int IdEducation;
 	
-	@Column(name="recu_edc", nullable=true)
+	@Column(name="recu_edc")
 	private Boolean recu;
 
-	@Column(name="lieu_edc", nullable=true, length=50)
+	@Column(name="lieu_edc", length=50)
 	@Length(max=50)
 	private String lieu;
 
-	@Column(name="ecole_edc", nullable=true, length=50)
+	@Column(name="ecole_edc", length=50)
 	@Length(max=50)
 	private String ecole;
 	
-	@Column(name="debut_edc", nullable=true)
+	@Column(name="debut_edc")
 	private Date debut;	
 
-	@Column(name="fin_edc", nullable=true)
+	@Column(name="fin_edc")
 	private Date fin;
 
 	@Column(name="info_edc", length=500)
 	@Length(max=500)
 	private String info;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_cdt")
 	@JsonIgnore
 	private Candidat candidat;
