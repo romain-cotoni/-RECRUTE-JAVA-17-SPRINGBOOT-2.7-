@@ -95,7 +95,12 @@ public class CandidatController
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
 	public List<Candidat> getCandidatsByParams(@RequestBody Candidat candidat)
 	{
-		return candidatService.findByCandidatsByParams(candidat);
+		List<Candidat> candidats = candidatService.findCandidatsByParams(candidat);
+		for(int i=0; i<candidats.size();i++)
+		{
+			System.out.println(candidats.get(i).getPrenom()+ " - "+candidats.get(i).getNom());
+		}
+		return candidats;
 	}
 
 

@@ -49,23 +49,24 @@ public class CandidatService
 	}
 
 	//String prenom, String nom, Boolean teletrvl, Boolean handi, Boolean dispo, Integer mobilite, String diplome, String specialite, String mission, String  raison, String competence, String  langue, String pseudo, String reseau
-	public List<Candidat> findByCandidatsByParams(Candidat candidat)
+	public List<Candidat> findCandidatsByParams(Candidat candidat)
 	{
 		String prenom = candidat.getPrenom();
-		String nom = candidat.getPrenom();
-		Boolean handi = candidat.getHandicape();
+		String nom = candidat.getNom();
+		/*Boolean handi = candidat.getHandicape();
 		Boolean teletrvl = candidat.getTeletravail();
 		Boolean dispo = candidat.isDisponible();
-		Integer mobilite = candidat.getMobilite().getZone();
+		//Integer mobilite = candidat.getMobilite().getZone();
 		String diplome = "";
 		String specialite = "";
 		String mission = "";
 		String  raison = "";
 		String competence = "";
 		String  langue = "";
-		String pseudo = candidat.getPseudos().stream().toList().get(0).getPseudo();
-		String reseau = "";
-		return candidatRepository.findByParams(prenom, nom, teletrvl, handi, dispo, mobilite, diplome, specialite, mission, raison, competence, langue, pseudo, reseau);
+		String pseudo = "";//candidat.getPseudos().stream().toList().get(0).getPseudo();
+		String reseau = "";*/
+		System.out.println("prenom service : "+prenom+" - "+nom);
+		return candidatRepository.findByParams(prenom, nom/*, teletrvl, handi, dispo, mobilite, diplome, specialite, mission, raison, competence, langue, pseudo, reseau*/);
 	}
 
 	public Candidat createCandidat(Candidat candidat)
