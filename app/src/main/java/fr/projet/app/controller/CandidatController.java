@@ -86,9 +86,16 @@ public class CandidatController
 	
 	@PostMapping("candidat/rechercher")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Candidat getCandidatById(@RequestBody Candidat candidat)
+	public Candidat getCandidatByName(@RequestBody Candidat candidat)
 	{
 		return candidatService.findCandidatByName(candidat);
+	}
+
+	@PostMapping("candidats/rechercher/parametres")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public List<Candidat> getCandidatsByParams(@RequestBody Candidat candidat)
+	{
+		return candidatService.findByCandidatsByParams(candidat);
 	}
 
 
