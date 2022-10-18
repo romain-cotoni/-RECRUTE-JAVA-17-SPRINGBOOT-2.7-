@@ -92,8 +92,7 @@ public class CandidatController
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
 	public List<Candidat> getCandidatsByParams(@RequestBody CandidatSearchQuery candidat)
 	{
-		List<Candidat> candidats = candidatService.findCandidatsByParams(candidat);
-		return candidats;
+		return candidatService.findCandidatsByParams(candidat);
 	}
 
 

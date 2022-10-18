@@ -17,6 +17,7 @@ public class CandidatSearchQuery
     private String langues;
     private String pseudos;
     private String reseaux;
+    private Integer mobilite;
 
     public CandidatSearchQuery()
     {
@@ -125,5 +126,13 @@ public class CandidatSearchQuery
 
     public void setReseaux(String reseaux) {
         this.reseaux = reseaux;
+    }
+
+    public Integer getMobilite() {
+        return mobilite;
+    }
+
+    public void setMobilite(Integer mobilite) {
+        this.mobilite = mobilite;
     }
 }

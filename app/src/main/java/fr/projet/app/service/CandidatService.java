@@ -9,7 +9,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class CandidatService 
@@ -53,18 +52,18 @@ public class CandidatService
 		String nom          = candidat.getNom();
 		Boolean teletravail = candidat.getTeletravail();
 		Boolean handicape   = candidat.getHandicape();
-		Boolean disponible  = candidat.isDisponible();
+		Boolean disponible  = candidat.getDisponible();
 		String diplomes     = candidat.getDiplomes();
 		String specialites  = candidat.getSpecialites();
-		Integer mobilite    = candidat.getMobilite().getZone();
 		String missions     = candidat.getMissions();
 		String entreprises  = candidat.getEntreprises();
 		String competences  = candidat.getCompetences();
 		String  langues     = candidat.getLangues();
 		String pseudos      = candidat.getPseudos();
 		String reseaux      = candidat.getReseaux();
+		Integer mobilite    = candidat.getMobilite();
 		System.out.println("prenom service in  : "+prenom+" - "+nom+" - "+diplomes+" - "+specialites+" - "+teletravail);
-		List<Candidat> candidats =	candidatRepository.findByParams(prenom, nom, diplomes, specialites, teletravail/*, handi, dispo, mobilite, mission, raison, competence, langue, pseudo, reseau*/);
+		List<Candidat> candidats =	candidatRepository.findByParams(prenom, nom, teletravail, handicape, disponible, diplomes, specialites, missions, entreprises, competences, langues, pseudos, reseaux, mobilite);
 		System.out.println("prenom service out");
 
 		return candidats;
