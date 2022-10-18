@@ -1,9 +1,6 @@
 package fr.projet.app.service;
 
-import fr.projet.app.model.Candidat;
-import fr.projet.app.model.Document;
-import fr.projet.app.model.Education;
-import fr.projet.app.model.Experience;
+import fr.projet.app.model.*;
 import fr.projet.app.repository.CandidatRepository;
 import fr.projet.app.repository.CandidatRepositoryCustom;
 import fr.projet.app.repository.DocumentRepository;
@@ -12,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 public class CandidatService 
@@ -49,24 +47,27 @@ public class CandidatService
 	}
 
 	//String prenom, String nom, Boolean teletrvl, Boolean handi, Boolean dispo, Integer mobilite, String diplome, String specialite, String mission, String  raison, String competence, String  langue, String pseudo, String reseau
-	public List<Candidat> findCandidatsByParams(Candidat candidat)
+	public List<Candidat> findCandidatsByParams(CandidatSearchQuery candidat)
 	{
-		String prenom = candidat.getPrenom();
-		String nom = candidat.getNom();
-		/*Boolean handi = candidat.getHandicape();
-		Boolean teletrvl = candidat.getTeletravail();
-		Boolean dispo = candidat.isDisponible();
-		//Integer mobilite = candidat.getMobilite().getZone();
-		String diplome = "";
-		String specialite = "";
-		String mission = "";
-		String  raison = "";
-		String competence = "";
-		String  langue = "";
-		String pseudo = "";//candidat.getPseudos().stream().toList().get(0).getPseudo();
-		String reseau = "";*/
-		System.out.println("prenom service : "+prenom+" - "+nom);
-		return candidatRepository.findByParams(prenom, nom/*, teletrvl, handi, dispo, mobilite, diplome, specialite, mission, raison, competence, langue, pseudo, reseau*/);
+		String prenom       = candidat.getPrenom();
+		String nom          = candidat.getNom();
+		Boolean teletravail = candidat.getTeletravail();
+		Boolean handicape   = candidat.getHandicape();
+		Boolean disponible  = candidat.isDisponible();
+		String diplomes     = candidat.getDiplomes();
+		String specialites  = candidat.getSpecialites();
+		Integer mobilite    = candidat.getMobilite().getZone();
+		String missions     = candidat.getMissions();
+		String entreprises  = candidat.getEntreprises();
+		String competences  = candidat.getCompetences();
+		String  langues     = candidat.getLangues();
+		String pseudos      = candidat.getPseudos();
+		String reseaux      = candidat.getReseaux();
+		System.out.println("prenom service in  : "+prenom+" - "+nom+" - "+diplomes+" - "+specialites+" - "+teletravail);
+		List<Candidat> candidats =	candidatRepository.findByParams(prenom, nom, diplomes, specialites, teletravail/*, handi, dispo, mobilite, mission, raison, competence, langue, pseudo, reseau*/);
+		System.out.println("prenom service out");
+
+		return candidats;
 	}
 
 	public Candidat createCandidat(Candidat candidat)

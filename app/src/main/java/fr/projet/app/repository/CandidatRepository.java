@@ -64,13 +64,43 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 	//@Query(value = "SELECT * FROM author WHERE first_name = :firstName", nativeQuery = true)
 	//    List<Author> findAuthorsByFirstName(@Param("firstName") String firstName);
 	//https://thorben-janssen.com/spring-data-jpa-query-annotation/
-	@Query("SELECT cd FROM Candidat AS cd "+
-		   "INNER JOIN Education           AS ed ON ed.candidat.idCandidat = cd.idCandidat " +
-		   "INNER JOIN Diplome             AS dp ON dp.idDiplome = ed.diplome.idDiplome " +
-	       "INNER JOIN Specialite          AS sp ON sp.idSpecialite = ed.specialite.idSpecialite " +
-			"WHERE (cd.prenom=?1 OR ?1 = '') AND cd.nom=?2 OR ?2='' ")
+	@Query( "SELECT DISTINCT cd FROM Candidat AS cd "                                                 +
+			"LEFT JOIN Education              AS ed ON ed.candidat.idCandidat = cd.idCandidat "       +
+			"LEFT JOIN Diplome                AS dp ON dp.idDiplome = ed.diplome.idDiplome "          +
+			"LEFT JOIN Specialite             AS sp ON sp.idSpecialite = ed.specialite.idSpecialite " +
 
-	public List<Candidat> findByParams(String prenom, String nom);
+			"LEFT JOIN Experience             AS xp ON xp.IdExperience = cd.idCandidat "              +
+			"LEFT JOIN Mission                AS ms ON ms.idMission    = xp.mission.idMission "       +
+			"LEFT JOIN Entreprise             AS et ON et.idEntreprise = xp.entreprise.idEntreprise " +
+
+			//"INNER JOIN Candidat_Competence AS cc ON cc.idC = cd.id_cdt " + //nativeQuery=true
+			//"INNER JOIN cd.competences     AS cp " +
+
+			/*"INNER JOIN candidat_langue     AS cl ON cl.id_cdt = cd.id_cdt " +
+			"INNER JOIN langue              AS ln ON ln.id_lng = cl.id_lng " +*/
+
+			"INNER JOIN Pseudo              AS ps ON ps.candidat.idCandidat = cd.idCandidat "        +
+			"INNER JOIN Reseau              AS rs ON rs.idReseau = ps.reseau.idReseau "              +
+
+			"INNER JOIN Mobilite            AS mb ON mb.idMobilite = cd.mobilite.idMobilite "        +
+
+			"WHERE (:prenom    LIKE CONCAT('%',cd.prenom,'%')         OR :prenom       = '') "       +
+			"AND (:nom         LIKE CONCAT('%',cd.nom,'%')            OR :nom          = '') "       +
+			"AND (cd.teletravail = :teletrvl                          OR :teletrvl is null) "        +
+			"AND (cd.handicape   = :handicap                          OR :handicap is null) "        +
+			"AND (cd.disponible  = :dispo                             OR :dispo    is null) "        +
+
+			"AND (:diplomes    LIKE CONCAT('%',dp.label,'%')          OR :diplomes     = '') " 		 +
+			"AND (:specialites LIKE CONCAT('%',sp.label,'%')          OR :specialites  = '') " 		 +
+
+			"AND (:missions    LIKE CONCAT('%',ms.profession,'%')     OR :missions     = '') " 		 +
+			"AND (:entreprises LIKE CONCAT('%',et.raisonSociale,'%')  OR :entreprises  = '') " 		 +
+
+			"AND (:pseudos     LIKE CONCAT('%',ps.pseudo,'%')         OR :pseudos      = '') " 		 +
+			"AND (:reseaux     LIKE CONCAT('%',rs.reseau,'%')         OR :reseaux      = '') " 		 +
+			"ORDER BY cd.nom, cd.prenom"
+		  ) //https://stackoverflow.com/questions/52416899/convert-sql-query-that-use-manytomany-relationship-to-jpql-query
+	public List<Candidat> findByParams(String prenom, String nom, Boolean teletrvl, Boolean handicap, Boolean dispo, String diplomes, String specialites, String missions, String entreprises, String pseudos, String reseaux);
 
 	/**
 	 * delete a candidat found by it's id given in parameter

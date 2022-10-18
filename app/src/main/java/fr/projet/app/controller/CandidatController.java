@@ -1,9 +1,6 @@
 package fr.projet.app.controller;
 
-import fr.projet.app.model.Candidat;
-import fr.projet.app.model.Document;
-import fr.projet.app.model.Education;
-import fr.projet.app.model.Experience;
+import fr.projet.app.model.*;
 import fr.projet.app.service.CandidatService;
 import org.springframework.web.bind.annotation.*;
 
@@ -93,13 +90,9 @@ public class CandidatController
 
 	@PostMapping("candidats/rechercher/parametres")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public List<Candidat> getCandidatsByParams(@RequestBody Candidat candidat)
+	public List<Candidat> getCandidatsByParams(@RequestBody CandidatSearchQuery candidat)
 	{
 		List<Candidat> candidats = candidatService.findCandidatsByParams(candidat);
-		for(int i=0; i<candidats.size();i++)
-		{
-			System.out.println(candidats.get(i).getPrenom()+ " - "+candidats.get(i).getNom());
-		}
 		return candidats;
 	}
 

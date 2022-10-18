@@ -1,24 +1,22 @@
 package fr.projet.app.repository;
 
-import java.util.List;
-import javax.persistence.EntityManager;
-import org.springframework.beans.factory.annotation.Autowired;
+import fr.projet.app.model.Candidat;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.projet.app.model.Candidat;
+import javax.persistence.EntityManager;
 
 @Repository
 public class CandidatRepositoryCustom
 {
 
-	private CandidatRepository candidatRepository;
+	//private CandidatRepository candidatRepository;
     private EntityManager entityManager;
 
-	public CandidatRepositoryCustom(EntityManager entityManager, CandidatRepository candidatRepository)
+	public CandidatRepositoryCustom(EntityManager entityManager/*, CandidatRepository candidatRepository*/)
 	{
 		this.entityManager = entityManager;
-		this.candidatRepository = candidatRepository;
+		//this.candidatRepository = candidatRepository;
 	}
 
 	@Transactional
