@@ -21,10 +21,6 @@ public class CandidatRepositoryCustom
 		this.candidatRepository = candidatRepository;
 	}
 
-
-
-
-
 	@Transactional
 	public int createCandidat(Candidat candidat)
 	{
