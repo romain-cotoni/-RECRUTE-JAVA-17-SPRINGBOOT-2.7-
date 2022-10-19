@@ -1,44 +1,46 @@
 package fr.projet.app.service;
 
+import fr.projet.app.model.Candidat;
+import fr.projet.app.model.Entreprise;
+import fr.projet.app.model.Experience;
+import fr.projet.app.model.Mission;
+import fr.projet.app.repository.ExperienceRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.List;
 import java.util.Optional;
-
-import fr.projet.app.model.*;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
-import fr.projet.app.repository.ExperienceRepository;
-import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class ExperienceService 
 {
-	@Autowired
 	ExperienceRepository experienceRepository;
-
-	@Autowired
 	MissionService missionService;
-
-	@Autowired
 	EntrepriseService entrepriseService;
+
+	public ExperienceService(ExperienceRepository experienceRepository, MissionService missionService, EntrepriseService entrepriseService)
+	{
+		this.experienceRepository = experienceRepository;
+		this.entrepriseService = entrepriseService;
+		this.missionService = missionService;
+	}
 
 	public List<Experience> findAllExperiences()
 	{
 		return experienceRepository.findAll();
 	}
 
-
 	public Experience getExperience(int idExperience)
 	{
 		return experienceRepository.findById(idExperience).get();
 	}
-
 
 	@Transactional
 	public Experience createExperience(Candidat cdt, Experience exp) throws Exception
 	{
 		try
 		{
+			System.out.println("experienceService-createExperience try : "+cdt+" - "+exp);
 			exp.setCandidat(cdt);
 			Mission mission = missionService.createMission(exp.getMission());
 			if(mission != null) exp.setMission(mission);
@@ -50,10 +52,10 @@ public class ExperienceService
 		}
 		catch(Exception exception)
 		{
+			System.out.println("experienceService-createExperience catch : "+cdt+" - "+exp);
 			throw new Exception("Erreur ExperienceService - createExperience() : " + exception);
 		}
 	}
-
 
 	@Transactional
 	public Experience updateExperience(int idExperience, Experience exp) throws Exception
@@ -126,9 +128,7 @@ public class ExperienceService
 					entrepriseService.deleteEntreprise(idEtp);
 				}
 			}
-			System.out.println("" +
-					"" +
-					"resultat : "+idExperience +" - "+idMsn+" - "+idEtp);
+			System.out.println("" +"" +"resultat : "+idExperience +" - "+idMsn+" - "+idEtp);
 		}
 	}
 	/*public Experience updateExperience(int id, Experience experience)

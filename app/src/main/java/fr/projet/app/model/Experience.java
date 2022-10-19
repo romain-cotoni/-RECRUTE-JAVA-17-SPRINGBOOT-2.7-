@@ -49,12 +49,12 @@ public class Experience
 
 	public Experience(Date debut, Date fin, String lieu, String info, Candidat candidat, Mission mission, Entreprise entreprise)
 	{
-		this.debut = debut;
-		this.fin = fin;
-		this.lieu = lieu;
-		this.info = info;
-		this.candidat = candidat;
-		this.mission = mission;
+		this.debut      = debut;
+		this.fin        = fin;
+		this.lieu       = lieu;
+		this.info       = info;
+		this.candidat   = candidat;
+		this.mission    = mission;
 		this.entreprise = entreprise;
 	}
 

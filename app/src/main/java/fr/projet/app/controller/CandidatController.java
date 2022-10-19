@@ -128,6 +128,9 @@ public class CandidatController
 		return candidatService.addExperience(id, experience);
 	}
 
+
+
+
 	//Document
 	@GetMapping("/candidat/{id}/documents")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })

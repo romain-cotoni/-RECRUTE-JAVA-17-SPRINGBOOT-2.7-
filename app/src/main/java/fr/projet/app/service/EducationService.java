@@ -1,42 +1,38 @@
 package fr.projet.app.service;
 
-import java.util.List;
-import java.util.Optional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import fr.projet.app.model.Candidat;
 import fr.projet.app.model.Diplome;
 import fr.projet.app.model.Education;
 import fr.projet.app.model.Specialite;
 import fr.projet.app.repository.EducationRepository;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EducationService 
 {
-	@Autowired
 	EducationRepository educationRepository;
-	
-	@Autowired
 	DiplomeService diplomeService;
-	
-	@Autowired
 	SpecialiteService specialiteService;
-	
-	
+
+	public EducationService(EducationRepository educationRepository, DiplomeService diplomeService, SpecialiteService specialiteService)
+	{
+		this.educationRepository = educationRepository;
+		this.diplomeService = diplomeService;
+		this.specialiteService = specialiteService;
+	}
+
 	public List<Education> findAllEducations()
 	{
 		return educationRepository.findAll();
 	}
-	
-	
 	public Education getEducation(int idEducation) 
 	{
 		return educationRepository.findById(idEducation).get();
 	}
-
-	
 	@Transactional
 	public Education createEducation(Candidat cdt, Education edc) throws Exception
 	{

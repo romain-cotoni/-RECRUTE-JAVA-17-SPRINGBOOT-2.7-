@@ -130,6 +130,7 @@ public class CandidatService
 	{
 		try
 		{
+			System.out.println("candidatService-addExperience : "+idCandidat+" - "+exp);
 			Candidat candidat = candidatRepository.findById(idCandidat).orElseThrow();
 			if(candidat != null)
 			{

@@ -79,11 +79,10 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 
 	/**
 	 * delete a candidat found by it's id given in parameter
-	 * @param id
+	 * @param int id
 	 * @return void
 	*/
 	public void deleteById(int id);
-
 	@Query("SELECT c.educations FROM Candidat c WHERE c.idCandidat=?1")
 	public Set<Education> findEducationsByCandidatId(int id);
 	@Query("SELECT c.experiences FROM Candidat c WHERE c.idCandidat=?1")
