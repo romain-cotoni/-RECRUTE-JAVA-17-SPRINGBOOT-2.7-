@@ -5,6 +5,7 @@ import org.hibernate.validator.constraints.Length;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
+//import javax.validation.constraints.Pattern;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -21,6 +22,7 @@ public class Candidat
 	@Column(name="nom_cdt", nullable=false, length=50)
 	@NotNull
 	@Length(min=1, max = 50)
+	//@Pattern(regexp = "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$")
 	private String nom;
 	
 	@Column(name="prenom_cdt", length=50)

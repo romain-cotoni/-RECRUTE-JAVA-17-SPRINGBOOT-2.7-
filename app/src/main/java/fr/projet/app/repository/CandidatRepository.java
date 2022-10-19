@@ -25,89 +25,57 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 	public List<String> findAllNoms();
 
 	/**
-	 *
-	 * @return
+	 * Method to fetch a list of candidats in the database by a list of optional parameters
+	 * @param CandidatSearchQuery candidat
+	 * @return List<Candidat>
 	 */
-	/*@Query("SELECT cd "                    +
-			"FROM       Candidat            AS cd "                          +
-			"INNER JOIN education           AS ed ON ed.id_cdt = cd.id_cdt " +
-			"INNER JOIN diplome             AS dp ON dp.id_dpl = ed.id_dpl " +
-			"INNER JOIN specialite          AS sp ON sp.id_spl = ed.id_spl " +
-			"INNER JOIN experience          AS xp ON xp.id_cdt = cd.id_cdt " +
-			"INNER JOIN mission             AS ms ON ms.id_msn = xp.id_msn " +
-			"INNER JOIN entreprise          AS et ON et.id_etp = xp.id_etp " +
-			"INNER JOIN candidat_competence AS cc ON cc.id_cdt = cd.id_cdt " +
-			"INNER JOIN competence          AS cp ON cp.id_cpt = cc.id_cpt " +
-			"INNER JOIN candidat_langue     AS cl ON cl.id_cdt = cd.id_cdt " +
-			"INNER JOIN langue              AS ln ON ln.id_lng = cl.id_lng " +
-			"INNER JOIN pseudo              AS ps ON ps.id_cdt = cd.id_cdt " +
-			"INNER JOIN reseau              AS rs ON rs.id_res = ps.id_res " +
-			"INNER JOIN mobilite            AS mb ON mb.id_mbl = cd.id_cdt " +
-			"WHERE cd.nom=?1 "               +
-			"AND (cd.prenom   = ?2  OR ?2 = '') ")            +
-			"AND (cd.teletrvl_cdt = ?3               OR ?3 is null) "        +
-			"AND (cd.handi_cdt    = ?4               OR ?4 is null) "        +
-			"AND (cd.dispo_cdt    = ?5               OR ?5 is null) "        +
-			"AND (mb.zone_mbl     = ?6               OR ?6  = '') "          +
-			"AND (?7  LIKE '%' + dp.label_dpl  + '%' OR ?7  = '') "          +
-			"AND (?8  LIKE '%' + sp.label_spl  + '%' OR ?8  = '') "          +
-			"AND (?9  LIKE '%' + ms.prof_msn   + '%' OR ?9  = '') "          +
-			"AND (?10 LIKE '%' + et.raison_etp + '%' OR ?10 = '') "          +
-			"AND (?11 LIKE '%' + cp.nom_cpt    + '%' OR ?11 = '') "          +
-			"AND (?12 LIKE '%' + ln.nom_lng    + '%' OR ?12 = '') "          +
-			"AND (?13 LIKE '%' + ps.pseudo_psd + '%' OR ?13 = '') "          +
-			"AND (?14 LIKE '%' + rs.reseau_res + '%' OR ?14 = '') "          +
-			"GROUP BY cd.id_cdt, cd.prenom_cdt, cd.nom_cdt "                 +
-			"ORDER BY cd.nom_cdt, cd.prenom_cdt")*/
-	//public List<Candidat> findByParams(String prenom, String nom/*, Boolean teletrvl, Boolean handi, Boolean dispo, Integer mobilite, String diplome, String specialite, String mission, String  raison, String competence, String  langue, String pseudo, String reseau*/);
-	//prenom, nom, teletrvl, handi, dispo, mobilite, diplome, specialite, mission, entreprise, competence, langue, pseudo, reseau
-	//@Query(value = "SELECT * FROM author WHERE first_name = :firstName", nativeQuery = true)
-	//    List<Author> findAuthorsByFirstName(@Param("firstName") String firstName);
-	//https://thorben-janssen.com/spring-data-jpa-query-annotation/
-	@Query( "SELECT DISTINCT cd FROM Candidat AS cd "                                                 +
-			"LEFT JOIN Education              AS ed ON ed.candidat.idCandidat = cd.idCandidat "       +
-			"LEFT JOIN Diplome                AS dp ON dp.idDiplome = ed.diplome.idDiplome "          +
-			"LEFT JOIN Specialite             AS sp ON sp.idSpecialite = ed.specialite.idSpecialite " +
+	@Query( "SELECT DISTINCT cd FROM Candidat AS cd "                                                          +
+			"LEFT JOIN Education              AS ed ON ed.candidat.idCandidat = cd.idCandidat "                +
+			"LEFT JOIN Diplome                AS dp ON dp.idDiplome = ed.diplome.idDiplome "                   +
+			"LEFT JOIN Specialite             AS sp ON sp.idSpecialite = ed.specialite.idSpecialite "          +
 
-			"LEFT JOIN Experience             AS xp ON xp.IdExperience = cd.idCandidat "              +
-			"LEFT JOIN Mission                AS ms ON ms.idMission    = xp.mission.idMission "       +
-			"LEFT JOIN Entreprise             AS et ON et.idEntreprise = xp.entreprise.idEntreprise " +
+			"LEFT JOIN Experience             AS xp ON xp.IdExperience = cd.idCandidat "                       +
+			"LEFT JOIN Mission                AS ms ON ms.idMission    = xp.mission.idMission "                +
+			"LEFT JOIN Entreprise             AS et ON et.idEntreprise = xp.entreprise.idEntreprise "          +
 
-			//"INNER JOIN Candidat_Competence AS cc ON cc.idC = cd.id_cdt " + //nativeQuery=true
-			"LEFT JOIN cd.competences        AS cp " +
+			"LEFT JOIN cd.competences         AS cp "                                                          +
 
-			//"INNER JOIN candidat_langue     AS cl ON cl.id_cdt = cd.id_cdt " +
-			"LEFT JOIN cd.langues            AS ln " +
+			"LEFT JOIN cd.langues             AS ln "                                                          +
 
-			"LEFT JOIN Pseudo                AS ps ON ps.candidat.idCandidat = cd.idCandidat "        +
-			"LEFT JOIN Reseau                AS rs ON rs.idReseau = ps.reseau.idReseau "              +
+			"LEFT JOIN Pseudo                 AS ps ON ps.candidat.idCandidat = cd.idCandidat "                +
 
-			"LEFT JOIN Mobilite              AS mb ON mb.idMobilite = cd.mobilite.idMobilite "        +
+			"LEFT JOIN Ville                  AS vl ON vl.IdVille = cd.ville.IdVille "                         +
 
-			"WHERE (:prenom    LIKE CONCAT('%',cd.prenom,'%')         OR :prenom       = '') "        +
-			"AND (:nom         LIKE CONCAT('%',cd.nom,'%')            OR :nom          = '') "        +
-			"AND (cd.teletravail = :teletrvl                          OR :teletrvl is null) "         +
-			"AND (cd.handicape   = :handicap                          OR :handicap is null) "         +
-			"AND (cd.disponible  = :dispo                             OR :dispo    is null) "         +
+			"LEFT JOIN Mobilite               AS mb ON mb.idMobilite = cd.mobilite.idMobilite "                +
 
-			"AND (:diplomes    LIKE CONCAT('%',dp.label,'%')          OR :diplomes     = '') " 		  +
-			"AND (:specialites LIKE CONCAT('%',sp.label,'%')          OR :specialites  = '') " 		  +
+			"WHERE (:prenom    LIKE CONCAT('%',cd.prenom,'%')         OR :prenom       = '') "                 +
+			"AND (:nom         LIKE CONCAT('%',cd.nom,'%')            OR :nom          = '') "                 +
+			"AND (:telephone   LIKE CONCAT('%',cd.mob,'%')"                                                    +
+			" OR  :telephone   LIKE CONCAT('%',cd.fixe,'%')           OR :telephone    = '') "                 +
+			"AND (:email       LIKE CONCAT('%',cd.email,'%')          OR :email        = '') "                 +
+			"AND (cd.teletravail = :teletrvl                          OR :teletrvl IS NULL) "                  +
+			"AND (cd.handicape   = :handicap                          OR :handicap IS NULL) "                  +
+			"AND (cd.disponible  = :dispo                             OR :dispo    IS NULL) "                  +
 
-			"AND (:missions    LIKE CONCAT('%',ms.profession,'%')     OR :missions     = '') " 		  +
-			"AND (:entreprises LIKE CONCAT('%',et.raisonSociale,'%')  OR :entreprises  = '') " 		  +
+			"AND (:diplomes    LIKE CONCAT('%',dp.label,'%')          OR :diplomes     = '') " 		           +
+			"AND (:specialites LIKE CONCAT('%',sp.label,'%')          OR :specialites  = '') " 		           +
 
-			"AND (:competences LIKE CONCAT('%',cp.nom,'%')            OR :competences  = '') " 		  +
+			"AND (:missions    LIKE CONCAT('%',ms.profession,'%')     OR :missions     = '') " 		           +
+			"AND (:entreprises LIKE CONCAT('%',et.raisonSociale,'%')  OR :entreprises  = '') " 		           +
 
-			"AND (:langues     LIKE CONCAT('%',ln.nom,'%')            OR :langues      = '') " 		  +
+			"AND (:competences LIKE CONCAT('%',cp.nom,'%')            OR :competences  = '') " 		           +
 
-			"AND (:pseudos     LIKE CONCAT('%',ps.pseudo,'%')         OR :pseudos      = '') " 		  +
-			"AND (:reseaux     LIKE CONCAT('%',rs.reseau,'%')         OR :reseaux      = '') " 		  +
+			"AND (:langues     LIKE CONCAT('%',ln.nom,'%')            OR :langues      = '') " 		           +
 
-			"AND (mb.zone = :mobilite                                 OR :mobilite = 0) "     		  +
+			"AND (:pseudos     LIKE CONCAT('%',ps.pseudo,'%')         OR :pseudos      = '') " 		           +
+
+			"AND (:ville       LIKE CONCAT('%',vl.ville,'%')          OR :ville        = '') "                 +
+
+			"AND (mb.zone = :mobilite                                 OR :mobilite = 0 OR :mobilite IS NULL) " +
 
 			"ORDER BY cd.nom, cd.prenom"
 		  )
-	public List<Candidat> findByParams(String prenom, String nom, Boolean teletrvl, Boolean handicap, Boolean dispo, String diplomes, String specialites, String missions, String entreprises, String competences, String langues, String pseudos, String reseaux, Integer mobilite);
+	public List<Candidat> findByParams(String prenom, String nom, String telephone, String email, Boolean teletrvl, Boolean handicap, Boolean dispo, String diplomes, String specialites, String missions, String entreprises, String competences, String langues, String pseudos, String ville, Integer mobilite);
 
 	/**
 	 * delete a candidat found by it's id given in parameter
@@ -116,9 +84,7 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 	*/
 	public void deleteById(int id);
 
-	//@Query("SELECT DISTINCT b FROM Brand b JOIN b.categories c WHERE c.name LIKE %?1%")
 	@Query("SELECT c.educations FROM Candidat c WHERE c.idCandidat=?1")
-			//inner join c.education e inner join e.specialite s inner join e.diplome d"
 	public Set<Education> findEducationsByCandidatId(int id);
 	@Query("SELECT c.experiences FROM Candidat c WHERE c.idCandidat=?1")
 	public Set<Experience> findExperiencesByCandidatId(int id);

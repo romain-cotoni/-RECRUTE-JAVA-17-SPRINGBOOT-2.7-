@@ -6,6 +6,8 @@ public class CandidatSearchQuery
 {
     private String prenom;
     private String nom;
+    private String telephone;
+    private String email;
     private Boolean teletravail;
     private Boolean handicape;
     private Boolean disponible;
@@ -16,7 +18,7 @@ public class CandidatSearchQuery
     private String competences;
     private String langues;
     private String pseudos;
-    private String reseaux;
+    private String ville;
     private Integer mobilite;
 
     public CandidatSearchQuery()
@@ -38,6 +40,22 @@ public class CandidatSearchQuery
 
     public void setNom(String nom) {
         this.nom = nom;
+    }
+
+    public String getTelephone() {
+        return telephone;
+    }
+
+    public void setTelephone(String telephone) {
+        this.telephone = telephone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public Boolean getTeletravail() {
@@ -120,19 +138,19 @@ public class CandidatSearchQuery
         this.pseudos = pseudos;
     }
 
-    public String getReseaux() {
-        return reseaux;
-    }
-
-    public void setReseaux(String reseaux) {
-        this.reseaux = reseaux;
-    }
-
     public Integer getMobilite() {
         return mobilite;
     }
 
     public void setMobilite(Integer mobilite) {
         this.mobilite = mobilite;
+    }
+
+    public String getVille() {
+        return ville;
+    }
+
+    public void setVille(String ville) {
+        this.ville = ville;
     }
 }

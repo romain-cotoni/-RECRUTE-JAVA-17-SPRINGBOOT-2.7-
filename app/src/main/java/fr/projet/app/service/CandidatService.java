@@ -45,11 +45,17 @@ public class CandidatService
 		return candidatRepository.findByName(candidat.getPrenom(),candidat.getNom());
 	}
 
-	//String prenom, String nom, Boolean teletrvl, Boolean handi, Boolean dispo, Integer mobilite, String diplome, String specialite, String mission, String  raison, String competence, String  langue, String pseudo, String reseau
+	/***
+	 *
+	 * @param CandidatsearchQuery candidat
+	 * @return
+	 */
 	public List<Candidat> findCandidatsByParams(CandidatSearchQuery candidat)
 	{
 		String prenom       = candidat.getPrenom();
 		String nom          = candidat.getNom();
+		String telephone    = candidat.getTelephone();
+		String email        = candidat.getEmail();
 		Boolean teletravail = candidat.getTeletravail();
 		Boolean handicape   = candidat.getHandicape();
 		Boolean disponible  = candidat.getDisponible();
@@ -60,11 +66,10 @@ public class CandidatService
 		String competences  = candidat.getCompetences();
 		String  langues     = candidat.getLangues();
 		String pseudos      = candidat.getPseudos();
-		String reseaux      = candidat.getReseaux();
+		String ville        = candidat.getVille();
 		Integer mobilite    = candidat.getMobilite();
-		System.out.println("prenom service in  : "+prenom+" - "+nom+" - "+diplomes+" - "+specialites+" - "+teletravail);
-		List<Candidat> candidats =	candidatRepository.findByParams(prenom, nom, teletravail, handicape, disponible, diplomes, specialites, missions, entreprises, competences, langues, pseudos, reseaux, mobilite);
-		System.out.println("prenom service out");
+		System.out.println("prenom service in  : "+prenom+" - "+nom+" - "+telephone+" - "+email+" - "+teletravail+" - "+handicape+" - "+disponible+" - "+diplomes+" - "+specialites+" - "+missions+" - "+entreprises+" - "+competences+" - "+langues+" - "+ville+" - "+mobilite);
+		List<Candidat> candidats =	candidatRepository.findByParams(prenom, nom, telephone, email, teletravail, handicape, disponible, diplomes, specialites, missions, entreprises, competences, langues, pseudos, ville, mobilite);
 
 		return candidats;
 	}

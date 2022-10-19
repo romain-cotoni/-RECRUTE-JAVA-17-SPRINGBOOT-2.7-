@@ -5,6 +5,7 @@ import fr.projet.app.service.CandidatService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.security.RolesAllowed;
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
@@ -61,7 +62,7 @@ public class CandidatController
 	 */
 	@PostMapping("/candidat")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Candidat createCandidat(@RequestBody Candidat candidat)
+	public Candidat createCandidat(@Valid @RequestBody Candidat candidat)
 	{
 		return candidatService.createCandidat(candidat);
 	}
