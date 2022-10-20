@@ -29,7 +29,7 @@ public class Candidat
 	@Length(max = 50)
 	private String prenom;
 	
-	@Column(name="ne_cdt", length=50)
+	@Column(name="ne_cdt")
 	private Date naissance;
 	
 	@Column(name="email_cdt", length=350)

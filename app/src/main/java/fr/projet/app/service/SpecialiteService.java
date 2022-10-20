@@ -12,7 +12,7 @@ public class SpecialiteService
 {
 	private SpecialiteRepository specialiteRepository;
 
-	public SpecialiteService()
+	public SpecialiteService(SpecialiteRepository specialiteRepository)
 	{
 		this.specialiteRepository = specialiteRepository;
 	}

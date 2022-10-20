@@ -1,29 +1,29 @@
 package fr.projet.app.service;
 
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Service;
-
 import fr.projet.app.model.Role;
 import fr.projet.app.model.Utilisateur;
 import fr.projet.app.repository.RoleRepository;
 import fr.projet.app.repository.UtilisateurRepository;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 
 @Service
 public class UtilisateurService 
 {
-	@Autowired
 	private UtilisateurRepository utilisateurRepository; 
-	
-	@Autowired
 	private RoleRepository roleRepository;
-	
-	@Autowired
 	private BCryptPasswordEncoder bcryptEncoder;
-	
+
+	public UtilisateurService(UtilisateurRepository utilisateurRepository, RoleRepository roleRepository, BCryptPasswordEncoder bcryptEncoder)
+	{
+		this.utilisateurRepository = utilisateurRepository;
+		this.roleRepository = roleRepository;
+		this.bcryptEncoder = bcryptEncoder;
+	}
+
 	
 	public Utilisateur findUtilisateurById(int id)
 	{

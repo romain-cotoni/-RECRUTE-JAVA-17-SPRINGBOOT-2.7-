@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.*;
 import javax.annotation.security.RolesAllowed;
 import java.util.List;
 
+@CrossOrigin(origins = "http://localhost:4200/", allowCredentials = "true", maxAge=3600)
+@RestController
 public class EntretienController
 {
     private EntretienService entretienService;

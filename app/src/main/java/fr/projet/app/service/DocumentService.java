@@ -1,18 +1,21 @@
 package fr.projet.app.service;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import fr.projet.app.model.Document;
 import fr.projet.app.repository.DocumentRepository;
+import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 public class DocumentService
 {
-	@Autowired
-	DocumentRepository documentRepository;
+	private DocumentRepository documentRepository;
+
+	public DocumentService(DocumentRepository documentRepository)
+	{
+		this.documentRepository = documentRepository;
+	}
+
 	
 	public Document updateDocument(int id, Document documentRequest) 
 	{
