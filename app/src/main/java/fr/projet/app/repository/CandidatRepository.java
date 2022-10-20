@@ -3,14 +3,10 @@ package fr.projet.app.repository;
 import java.util.List;
 import java.util.Set;
 
+import fr.projet.app.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import fr.projet.app.model.Candidat;
-import fr.projet.app.model.Document;
-import fr.projet.app.model.Education;
-import fr.projet.app.model.Experience;
 
 @Repository
 public interface CandidatRepository extends JpaRepository<Candidat,Integer>
@@ -83,12 +79,22 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 	 * @return void
 	*/
 	public void deleteById(int id);
+
 	@Query("SELECT c.educations FROM Candidat c WHERE c.idCandidat=?1")
 	public Set<Education> findEducationsByCandidatId(int id);
+
 	@Query("SELECT c.experiences FROM Candidat c WHERE c.idCandidat=?1")
 	public Set<Experience> findExperiencesByCandidatId(int id);
+
+	@Query("SELECT c.projets FROM Candidat c WHERE c.idCandidat=?1")
+	public Set<Projet> findProjetsByCandidatId(int id);
+
+	@Query("SELECT c.entretiens FROM Candidat c WHERE c.idCandidat=?1")
+	public Set<Entretien> findEntretiensByCandidatId(int id);
+
+	@Query("SELECT c.pseudos FROM Candidat c WHERE c.idCandidat=?1")
+	public Set<Pseudo> findPseudosByCandidatId(int id);
+
 	@Query("SELECT c.documents FROM Candidat c WHERE c.idCandidat=?1")
 	public Set<Document> findDocumentsByCandidatId(int id);
-
-
 }

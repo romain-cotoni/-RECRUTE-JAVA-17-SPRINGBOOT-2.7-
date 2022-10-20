@@ -14,18 +14,24 @@ import java.util.Set;
 public class CandidatService 
 {
 	private CandidatRepository candidatRepository;
-	private DocumentRepository documentRepository;
 	private CandidatRepositoryCustom candidatRepositoryCustom;
 	private EducationService educationService;
 	private ExperienceService experienceService;
+	private ProjetService projetService;
+	private EntretienService entretienService;
+	private PseudoService pseudoService;
+	private DocumentRepository documentRepository;
 
-	public CandidatService(CandidatRepository candidatRepository, DocumentRepository documentRepository, CandidatRepositoryCustom candidatRepositoryCustom, EducationService educationService, ExperienceService experienceService)
+	public CandidatService(CandidatRepository candidatRepository, CandidatRepositoryCustom candidatRepositoryCustom, EducationService educationService, ExperienceService experienceService, ProjetService projetService, EntretienService entretienService, PseudoService pseudoService, DocumentRepository documentRepository)
 	{
 		this.candidatRepository = candidatRepository;
-		this.documentRepository = documentRepository;
 		this.candidatRepositoryCustom = candidatRepositoryCustom;
 		this.educationService = educationService;
 		this.experienceService = experienceService;
+		this.projetService = projetService;
+		this.entretienService = entretienService;
+		this.pseudoService = pseudoService;
+		this.documentRepository = documentRepository;
 	}
 	
 //Candidat
@@ -33,7 +39,6 @@ public class CandidatService
 	{
 		return candidatRepository.findAll();
 	}
-
 
 	public Candidat findCandidatById(int id) 
 	{
@@ -45,7 +50,7 @@ public class CandidatService
 		return candidatRepository.findByName(candidat.getPrenom(),candidat.getNom());
 	}
 
-	/***
+	/**
 	 *
 	 * @param CandidatsearchQuery candidat
 	 * @return
@@ -68,7 +73,7 @@ public class CandidatService
 		String pseudos      = candidat.getPseudos();
 		String ville        = candidat.getVille();
 		Integer mobilite    = candidat.getMobilite();
-		System.out.println("prenom service in  : "+prenom+" - "+nom+" - "+telephone+" - "+email+" - "+teletravail+" - "+handicape+" - "+disponible+" - "+diplomes+" - "+specialites+" - "+missions+" - "+entreprises+" - "+competences+" - "+langues+" - "+ville+" - "+mobilite);
+		//System.out.println("prenom service in  : "+prenom+" - "+nom+" - "+telephone+" - "+email+" - "+teletravail+" - "+handicape+" - "+disponible+" - "+diplomes+" - "+specialites+" - "+missions+" - "+entreprises+" - "+competences+" - "+langues+" - "+ville+" - "+mobilite);
 		List<Candidat> candidats =	candidatRepository.findByParams(prenom, nom, telephone, email, teletravail, handicape, disponible, diplomes, specialites, missions, entreprises, competences, langues, pseudos, ville, mobilite);
 
 		return candidats;
@@ -146,6 +151,93 @@ public class CandidatService
 			throw new Exception("Erreur CandidatService - addExperience(): " + exception);
 		}
 	}
+
+
+//Projet
+	@Transactional
+	public Set<Projet> findProjetsByCandidatId(int id)
+	{
+		return candidatRepository.findProjetsByCandidatId(id);
+	}
+
+	@Transactional
+	public Projet addProjet(int idCandidat, Projet prj) throws Exception
+	{
+		try
+		{
+			Candidat candidat = candidatRepository.findById(idCandidat).orElseThrow();
+			if(candidat != null)
+			{
+				Projet projet = projetService.createProjet(candidat, prj);
+				candidat.getProjets().add(projet);
+				candidatRepository.save(candidat);
+				return projet;
+			}
+			else return null;
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Erreur CandidatService - addProjet(): " + exception);
+		}
+	}
+
+//Entretien
+	@Transactional
+	public Set<Entretien> findEntretiensByCandidatId(int id)
+	{
+		return candidatRepository.findEntretiensByCandidatId(id);
+	}
+
+	@Transactional
+	public Entretien addEntretien(int idCandidat, Entretien etr) throws Exception
+	{
+		try
+		{
+			Candidat candidat = candidatRepository.findById(idCandidat).orElseThrow();
+			if(candidat != null)
+			{
+				Entretien entretien = entretienService.createEntretien(candidat, etr);
+				candidat.getEntretiens().add(entretien);
+				candidatRepository.save(candidat);
+				return entretien;
+			}
+			else return null;
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Erreur CandidatService - addEntretien(): " + exception);
+		}
+	}
+
+
+//Pseudo
+	@Transactional
+	public Set<Pseudo> findPseudosByCandidatId(int id)
+	{
+		return candidatRepository.findPseudosByCandidatId(id);
+	}
+
+	@Transactional
+	public Pseudo addPseudo(int idCandidat, Pseudo psd) throws Exception
+	{
+		try
+		{
+			Candidat candidat = candidatRepository.findById(idCandidat).orElseThrow();
+			if(candidat != null)
+			{
+				Pseudo pseudo = pseudoService.createPseudo(candidat, psd);
+				candidat.getPseudos().add(pseudo);
+				candidatRepository.save(candidat);
+				return pseudo;
+			}
+			else return null;
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Erreur CandidatService - addPseudo(): " + exception);
+		}
+	}
+
 
 //Document
 	public Set<Document> findDocumentsByCandidatId(int id)

@@ -11,8 +11,12 @@ import java.util.Optional;
 @Service
 public class MissionService
 {
-    @Autowired
-    MissionRepository missionRepository;
+    private MissionRepository missionRepository;
+
+    public MissionService(MissionRepository missionRepository)
+    {
+        this.missionRepository = missionRepository;
+    }
     
 
     @Transactional

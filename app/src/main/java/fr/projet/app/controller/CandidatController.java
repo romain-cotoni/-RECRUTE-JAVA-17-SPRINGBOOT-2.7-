@@ -113,6 +113,7 @@ public class CandidatController
 	}
 
 
+
 	//Experience
 	@GetMapping("/candidat/{id}/experiences")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
@@ -129,6 +130,52 @@ public class CandidatController
 	}
 
 
+	//Projet
+	@GetMapping("/candidat/{id}/projets")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public Set<Projet> getProjets(@PathVariable("id") int id)
+	{
+		return candidatService.findProjetsByCandidatId(id);
+	}
+
+	@PostMapping("candidat/{id}/projets")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public Projet addProjet(@PathVariable("id") int id, @RequestBody Projet projet) throws Exception
+	{
+		return candidatService.addProjet(id, projet);
+	}
+
+
+	//Entretien
+	@GetMapping("/candidat/{id}/entretiens")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public Set<Entretien> getEntretiens(@PathVariable("id") int id)
+	{
+		return candidatService.findEntretiensByCandidatId(id);
+	}
+
+	@PostMapping("candidat/{id}/entretiens")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public Entretien addEntretien(@PathVariable("id") int id, @RequestBody Entretien entretien) throws Exception
+	{
+		return candidatService.addEntretien(id, entretien);
+	}
+
+
+	//Pseudo
+	@GetMapping("/candidat/{id}/pseudos")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public Set<Pseudo> getPseudos(@PathVariable("id") int id)
+	{
+		return candidatService.findPseudosByCandidatId(id);
+	}
+
+	@PostMapping("candidat/{id}/pseudos")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public Pseudo addPseudo(@PathVariable("id") int id, @RequestBody Pseudo pseudo) throws Exception
+	{
+		return candidatService.addPseudo(id, pseudo);
+	}
 
 
 	//Document

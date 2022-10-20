@@ -1,20 +1,21 @@
 package fr.projet.app.service;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import fr.projet.app.model.Specialite;
+import fr.projet.app.repository.SpecialiteRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.projet.app.model.Specialite;
-import fr.projet.app.repository.SpecialiteRepository;
+import java.util.Optional;
 
 @Service
 public class SpecialiteService
 {
-	@Autowired
-	SpecialiteRepository specialiteRepository;
-	
+	private SpecialiteRepository specialiteRepository;
+
+	public SpecialiteService()
+	{
+		this.specialiteRepository = specialiteRepository;
+	}
 	
 	
 	@Transactional

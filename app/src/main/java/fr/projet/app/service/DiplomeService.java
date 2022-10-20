@@ -1,20 +1,21 @@
 package fr.projet.app.service;
 
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
+import fr.projet.app.model.Diplome;
+import fr.projet.app.repository.DiplomeRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import fr.projet.app.model.Diplome;
-import fr.projet.app.repository.DiplomeRepository;
+import java.util.Optional;
 
 @Service
 public class DiplomeService 
 {
-	@Autowired
-	DiplomeRepository diplomeRepository;
-	
+	private DiplomeRepository diplomeRepository;
+
+	public DiplomeService(DiplomeRepository diplomeRepository)
+	{
+		this.diplomeRepository = diplomeRepository;
+	}
 	
 	
 	@Transactional
@@ -32,7 +33,6 @@ public class DiplomeService
 			return diplomeRepository.save(diplome);			
 		}
 	}
-
 	
 	
 	@Transactional
@@ -50,7 +50,6 @@ public class DiplomeService
 		}
 		return diplomeRepository.save(newDpl);		
 	}
-
 	
 	
 	public void deleteDiplome(int idDiplome) 

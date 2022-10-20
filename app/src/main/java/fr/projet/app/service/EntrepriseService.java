@@ -2,7 +2,6 @@ package fr.projet.app.service;
 
 import fr.projet.app.model.Entreprise;
 import fr.projet.app.repository.EntrepriseRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,9 +10,12 @@ import java.util.Optional;
 @Service
 public class EntrepriseService
 {
-    @Autowired
-    EntrepriseRepository entrepriseRepository;
+    private EntrepriseRepository entrepriseRepository;
 
+    public EntrepriseService(EntrepriseRepository entrepriseRepository)
+    {
+        this.entrepriseRepository = entrepriseRepository;
+    }
 
     @Transactional
     public Entreprise createEntreprise(Entreprise entreprise)
