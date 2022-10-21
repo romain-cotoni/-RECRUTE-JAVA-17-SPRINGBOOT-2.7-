@@ -23,9 +23,11 @@ public class CandidatService
 	private EntretienService entretienService;
 	private PseudoService pseudoService;
 	private MobiliteService mobiliteService;
+	private VilleService villeService;
+	private PaysService paysService;
 	private DocumentRepository documentRepository;
 
-	public CandidatService(CandidatRepository candidatRepository, CandidatRepositoryCustom candidatRepositoryCustom, EducationService educationService, ExperienceService experienceService, CompetenceService competenceService, LangueService langueService, ProjetService projetService, EntretienService entretienService, PseudoService pseudoService, MobiliteService mobiliteService, DocumentRepository documentRepository)
+	public CandidatService(CandidatRepository candidatRepository, CandidatRepositoryCustom candidatRepositoryCustom, EducationService educationService, ExperienceService experienceService, CompetenceService competenceService, LangueService langueService, ProjetService projetService, EntretienService entretienService, PseudoService pseudoService, MobiliteService mobiliteService, VilleService villeService, PaysService paysService, DocumentRepository documentRepository)
 	{
 		this.candidatRepository = candidatRepository;
 		this.candidatRepositoryCustom = candidatRepositoryCustom;
@@ -37,6 +39,8 @@ public class CandidatService
 		this.entretienService = entretienService;
 		this.pseudoService = pseudoService;
 		this.mobiliteService = mobiliteService;
+		this.villeService = villeService;
+		this.paysService = paysService;
 		this.documentRepository = documentRepository;
 	}
 	
@@ -91,20 +95,6 @@ public class CandidatService
 		return findCandidatById(id);
 	}
 
-	/*public Candidat addCandidat(Candidat candidat)
-	{
-		try
-		{
-
-			return null;
-		}
-		catch(Exception exception)
-		{
-			System.out.println("Erreur addCandidat - CandidatService : " + exception);
-			return null;
-		}
-	}*/
-
 	@Transactional
 	public Candidat updateCandidat(int idCandidat, Candidat cdt) throws Exception
 	{
@@ -137,20 +127,56 @@ public class CandidatService
 				candidat.setSpecialite(newSpl);
 			}*/
 
-			Mobilite oldMbl = candidat.getMobilite();
-			Mobilite rqtMbl = cdt.getMobilite();
-			if(!rqtMbl.equals(oldMbl))
+			Ville rqtVille = villeService.findByVilleAndPostal(cdt.getVille().getVille(), cdt.getVille().getPostal()).orElseThrow();
+			if(rqtVille != null) //utiliser une ville existante dans la db
 			{
-				candidat.setMobilite(null);
-				Mobilite newMbl = mobiliteService.updateMobilite(oldMbl, rqtMbl);
-				candidat.setMobilite(newMbl);
+				Ville oldVille = candidat.getVille();
+				if(!rqtVille.equals(oldVille))
+				{
+					candidat.setVille(rqtVille);
+					if(oldVille != null && villeService.checkIfVilleIsNotUsed(oldVille)) //si la ville n'est plus utilisée on la supprime de la db
+					{
+						villeService.deleteVille(oldVille.getIdVille());
+					}
+				}
+			}
+			else //créer nouvelle ville
+			{
+				Ville newVille = villeService.createVille(rqtVille);
+				candidat.setVille(newVille);
+			}
+
+			Pays rqtPays = paysService.findByNationnalite(cdt.getPays().getNationnalite()).orElseThrow();
+			if(rqtPays != null) //utiliser une nationnalité existante dans la db
+			{
+				Pays oldPays = candidat.getPays();
+				if(!rqtPays.equals(oldPays))
+				{
+					candidat.setPays(rqtPays);
+					if(oldPays != null && paysService.checkIfPaysIsNotUsed(oldPays)) //si le pays n'est plus utilisée on la supprime de la db
+					{
+						paysService.deletePays(oldPays.getIdPays());
+					}
+				}
+			}
+			else //créer un nouveau pays
+			{
+				Pays newPays = paysService.createPays(rqtPays);
+				candidat.setPays(newPays);
+			}
+
+			Mobilite newMobilite = mobiliteService.findMobiliteByZone(cdt.getMobilite().getZone()).orElseThrow();
+			if(newMobilite != null)
+			{
+				candidat.setMobilite(newMobilite);
 			}
 
 			return candidatRepository.save(candidat);
 		}
 		catch(Exception exception)
 		{
-			throw new Exception("Erreur CandidatService - updateCandidat(): " + exception);
+			System.out.println("Erreur updateCandidat() - CandidatService : " + exception);
+			return null;
 		}
 	}
 
@@ -160,9 +186,15 @@ public class CandidatService
 		candidatRepository.deleteById(id);
 	}
 
-	public List<String> findAllCandidatsPrenoms() { return candidatRepository.findAllPrenoms(); }
+	public List<String> findAllCandidatsPrenoms()
+	{
+		return candidatRepository.findAllPrenoms();
+	}
 
-	public List<String> findAllCandidatsNoms() { return candidatRepository.findAllNoms(); }
+	public List<String> findAllCandidatsNoms()
+	{
+		return candidatRepository.findAllNoms();
+	}
 
 
 //Education
@@ -219,7 +251,7 @@ public class CandidatService
 		}
 		catch(Exception exception)
 		{
-			throw new Exception("Erreur CandidatService - addExperience(): " + exception);
+			throw new Exception("Erreur addExperience() - CandidatService : " + exception);
 		}
 	}
 

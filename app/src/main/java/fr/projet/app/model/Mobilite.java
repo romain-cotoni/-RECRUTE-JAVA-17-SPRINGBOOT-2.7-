@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -57,5 +58,18 @@ public class Mobilite {
 
     public void setCandidats(Set<Candidat> candidats) {
         this.candidats = candidats;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Mobilite mobilite = (Mobilite) o;
+        return Objects.equals(zone, mobilite.zone);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(zone);
     }
 }

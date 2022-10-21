@@ -58,7 +58,7 @@ public class CandidatController
 
 	/**
 	 * Method to create a candidat
-	 * @param Candidat
+	 * @param candidat object Candidat
 	 * @return List<Candidat>
 	 */
 	@PostMapping("/candidat")
@@ -68,16 +68,10 @@ public class CandidatController
 		return candidatService.createCandidat(candidat);
 	}
 
-	/*@PostMapping("/candidat")
-	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Candidat addCandidat(@Valid @RequestBody Candidat candidat)
-	{
-		return candidatService.addCandidat(candidat);
-	}*/
 
 	/**
 	 * Method to update a candidat
-	 * @param Candidat
+	 * @param candidat object Candidat
 	 * @return List<Candidat>
 	 */
 	@PutMapping("/candidat/{id}")

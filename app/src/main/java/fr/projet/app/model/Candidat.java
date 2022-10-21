@@ -100,7 +100,7 @@ public class Candidat
 	@JoinColumn(name = "id_cdt")
 	private Set<Entretien> entretiens = new HashSet<Entretien>();
 
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "id_vil")
 	private Ville ville;
 
