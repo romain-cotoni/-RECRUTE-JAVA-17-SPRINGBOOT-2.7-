@@ -55,16 +55,36 @@ public class CandidatController
 		return candidatService.findAllCandidatsNoms();
 	}
 
+
 	/**
-	 * method to fetch the whole list of candidats in the database
-	 * @param an object Candidat (Candidat candidat)
-	 * @return a list of candidats (List<Candidat>)
+	 * Method to create a candidat
+	 * @param Candidat
+	 * @return List<Candidat>
 	 */
 	@PostMapping("/candidat")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
 	public Candidat createCandidat(@Valid @RequestBody Candidat candidat)
 	{
 		return candidatService.createCandidat(candidat);
+	}
+
+	/*@PostMapping("/candidat")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public Candidat addCandidat(@Valid @RequestBody Candidat candidat)
+	{
+		return candidatService.addCandidat(candidat);
+	}*/
+
+	/**
+	 * Method to update a candidat
+	 * @param Candidat
+	 * @return List<Candidat>
+	 */
+	@PutMapping("/candidat/{id}")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public Candidat updateCandidat(@PathVariable("id") int id, @Valid @RequestBody Candidat candidat) throws Exception
+	{
+		return candidatService.updateCandidat(id, candidat);
 	}
 	
 	@GetMapping("candidat/{id}")
@@ -129,6 +149,35 @@ public class CandidatController
 		return candidatService.addExperience(id, experience);
 	}
 
+	//Competence
+	@GetMapping("/candidat/{id}/competences")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public Set<Competence> getCompetences(@PathVariable("id") int id)
+	{
+		return candidatService.findCompetencesByCandidatId(id);
+	}
+
+	@PostMapping("candidat/{id}/competences")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public Competence addCompetence(@PathVariable("id") int id, @RequestBody Competence competence) throws Exception
+	{
+		return candidatService.addCompetence(id, competence);
+	}
+
+	//Langue
+	@GetMapping("/candidat/{id}/langues")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public Set<Langue> getLangues(@PathVariable("id") int id)
+	{
+		return candidatService.findLanguesByCandidatId(id);
+	}
+
+	@PostMapping("candidat/{id}/langues")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public Langue addLangue(@PathVariable("id") int id, @RequestBody Langue langue) throws Exception
+	{
+		return candidatService.addLangue(id, langue);
+	}
 
 	//Projet
 	@GetMapping("/candidat/{id}/projets")

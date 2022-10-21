@@ -17,20 +17,26 @@ public class CandidatService
 	private CandidatRepositoryCustom candidatRepositoryCustom;
 	private EducationService educationService;
 	private ExperienceService experienceService;
+	private CompetenceService competenceService;
+	private LangueService langueService;
 	private ProjetService projetService;
 	private EntretienService entretienService;
 	private PseudoService pseudoService;
+	private MobiliteService mobiliteService;
 	private DocumentRepository documentRepository;
 
-	public CandidatService(CandidatRepository candidatRepository, CandidatRepositoryCustom candidatRepositoryCustom, EducationService educationService, ExperienceService experienceService, ProjetService projetService, EntretienService entretienService, PseudoService pseudoService, DocumentRepository documentRepository)
+	public CandidatService(CandidatRepository candidatRepository, CandidatRepositoryCustom candidatRepositoryCustom, EducationService educationService, ExperienceService experienceService, CompetenceService competenceService, LangueService langueService, ProjetService projetService, EntretienService entretienService, PseudoService pseudoService, MobiliteService mobiliteService, DocumentRepository documentRepository)
 	{
 		this.candidatRepository = candidatRepository;
 		this.candidatRepositoryCustom = candidatRepositoryCustom;
 		this.educationService = educationService;
 		this.experienceService = experienceService;
+		this.competenceService = competenceService;
+		this.langueService = langueService;
 		this.projetService = projetService;
 		this.entretienService = entretienService;
 		this.pseudoService = pseudoService;
+		this.mobiliteService = mobiliteService;
 		this.documentRepository = documentRepository;
 	}
 	
@@ -51,9 +57,9 @@ public class CandidatService
 	}
 
 	/**
-	 *
-	 * @param CandidatsearchQuery candidat
-	 * @return
+	 * method to search one or many candidat by multiple and optional parameters
+	 * @param candidat object CandidatSearchQuery
+	 * @return List of object Candidat
 	 */
 	public List<Candidat> findCandidatsByParams(CandidatSearchQuery candidat)
 	{
@@ -84,6 +90,70 @@ public class CandidatService
 		int id = candidatRepositoryCustom.createCandidat(candidat);
 		return findCandidatById(id);
 	}
+
+	/*public Candidat addCandidat(Candidat candidat)
+	{
+		try
+		{
+
+			return null;
+		}
+		catch(Exception exception)
+		{
+			System.out.println("Erreur addCandidat - CandidatService : " + exception);
+			return null;
+		}
+	}*/
+
+	@Transactional
+	public Candidat updateCandidat(int idCandidat, Candidat cdt) throws Exception
+	{
+		try
+		{
+			Candidat candidat = candidatRepository.findById(idCandidat).orElseThrow();
+			candidat.setNom(cdt.getNom());
+			candidat.setPrenom(cdt.getPrenom());
+			candidat.setNaissance(cdt.getNaissance());
+			candidat.setEmail(cdt.getEmail());
+			candidat.setFixe(cdt.getFixe());
+			candidat.setMob(cdt.getMob());
+			candidat.setAdresse(cdt.getAdresse());
+			candidat.setAdresse2(cdt.getAdresse2());
+			candidat.setSalaire(cdt.getSalaire());
+			candidat.setMarital(cdt.getMarital());
+			candidat.setHandicape(cdt.getHandicape());
+			candidat.setPermis(cdt.getPermis());
+			candidat.setVehicule(cdt.getVehicule());
+			candidat.setTeletravail(cdt.getTeletravail());
+			candidat.setDisponible(cdt.getDisponible());
+			candidat.setInfo(cdt.getInfo());
+
+			/*Pseudo oldPsd = candidat.getPseudos();
+			Specialite rqtSpl = edc.getSpecialite();
+			if(!rqtSpl.equals(oldSpl))
+			{
+				candidat.setSpecialite(null);
+				Specialite newSpl = specialiteService.updateSpecialite(oldSpl, rqtSpl);
+				candidat.setSpecialite(newSpl);
+			}*/
+
+			Mobilite oldMbl = candidat.getMobilite();
+			Mobilite rqtMbl = cdt.getMobilite();
+			if(!rqtMbl.equals(oldMbl))
+			{
+				candidat.setMobilite(null);
+				Mobilite newMbl = mobiliteService.updateMobilite(oldMbl, rqtMbl);
+				candidat.setMobilite(newMbl);
+			}
+
+			return candidatRepository.save(candidat);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Erreur CandidatService - updateCandidat(): " + exception);
+		}
+	}
+
 	
 	public void deleteCandidatById(int id) 
 	{
@@ -93,7 +163,8 @@ public class CandidatService
 	public List<String> findAllCandidatsPrenoms() { return candidatRepository.findAllPrenoms(); }
 
 	public List<String> findAllCandidatsNoms() { return candidatRepository.findAllNoms(); }
-	
+
+
 //Education
 	@Transactional
 	public Set<Education> findEducationsByCandidatId(int id) 
@@ -153,6 +224,66 @@ public class CandidatService
 	}
 
 
+//Competence
+	@Transactional
+	public Set<Competence> findCompetencesByCandidatId(int id)
+	{
+		return candidatRepository.findCompetencesByCandidatId(id);
+	}
+
+	@Transactional
+	public Competence addCompetence(int idCandidat, Competence cmp) throws Exception
+	{
+		try
+		{
+			System.out.println("candidatService-addCompetence : "+idCandidat+" - "+cmp);
+			Candidat candidat = candidatRepository.findById(idCandidat).orElseThrow();
+			if(candidat != null)
+			{
+				Competence competence = competenceService.createCompetence(candidat, cmp);
+				candidat.getCompetences().add(competence);
+				candidatRepository.save(candidat);
+				return competence;
+			}
+			else return null;
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Erreur CandidatService - addExperience(): " + exception);
+		}
+	}
+
+
+//Langue
+	@Transactional
+	public Set<Langue> findLanguesByCandidatId(int id)
+	{
+		return candidatRepository.findLanguesByCandidatId(id);
+	}
+
+	@Transactional
+	public Langue addLangue(int idCandidat, Langue lng) throws Exception
+	{
+		try
+		{
+			System.out.println("candidatService-addLangue : "+idCandidat+" - " + lng);
+			Candidat candidat = candidatRepository.findById(idCandidat).orElseThrow();
+			if(candidat != null)
+			{
+				Langue langue = langueService.createLangue(candidat, lng);
+				candidat.getLangues().add(langue);
+				candidatRepository.save(candidat);
+				return langue;
+			}
+			else return null;
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Erreur CandidatService - addLangue(): " + exception);
+		}
+	}
+
+
 //Projet
 	@Transactional
 	public Set<Projet> findProjetsByCandidatId(int id)
@@ -180,6 +311,7 @@ public class CandidatService
 			throw new Exception("Erreur CandidatService - addProjet(): " + exception);
 		}
 	}
+
 
 //Entretien
 	@Transactional

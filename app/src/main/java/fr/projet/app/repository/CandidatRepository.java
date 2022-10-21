@@ -86,6 +86,12 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 	@Query("SELECT c.experiences FROM Candidat c WHERE c.idCandidat=?1")
 	public Set<Experience> findExperiencesByCandidatId(int id);
 
+	@Query("SELECT c.competences FROM Candidat c WHERE c.idCandidat=?1")
+	public Set<Competence> findCompetencesByCandidatId(int id);
+
+	@Query("SELECT c.competences FROM Candidat c WHERE c.idCandidat=?1")
+	public Set<Langue> findLanguesByCandidatId(int id);
+
 	@Query("SELECT c.projets FROM Candidat c WHERE c.idCandidat=?1")
 	public Set<Projet> findProjetsByCandidatId(int id);
 
