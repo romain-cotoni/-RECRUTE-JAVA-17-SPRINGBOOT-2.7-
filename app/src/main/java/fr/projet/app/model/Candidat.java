@@ -90,7 +90,7 @@ public class Candidat
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
-	private Set<Pseudo> pseudos = new HashSet<Pseudo>();
+	private Set<Pseudo> pseudos = new HashSet<>();
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@JoinColumn(name = "id_cdt")
@@ -365,9 +365,6 @@ public class Candidat
 	public void setLangues(Set<Langue> langues) {
 		this.langues = langues;
 	}
-
-
-
 
 	public void addEducation(Education education)
 	{

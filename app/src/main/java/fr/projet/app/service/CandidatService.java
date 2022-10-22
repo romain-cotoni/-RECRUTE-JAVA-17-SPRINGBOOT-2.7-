@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -118,14 +119,37 @@ public class CandidatService
 			candidat.setDisponible(cdt.getDisponible());
 			candidat.setInfo(cdt.getInfo());
 
-			/*Pseudo oldPsd = candidat.getPseudos();
-			Specialite rqtSpl = edc.getSpecialite();
-			if(!rqtSpl.equals(oldSpl))
+
+			for (Pseudo pseudo : cdt.getPseudos())
 			{
-				candidat.setSpecialite(null);
-				Specialite newSpl = specialiteService.updateSpecialite(oldSpl, rqtSpl);
-				candidat.setSpecialite(newSpl);
-			}*/
+				Pseudo newPseudo;
+				newPseudo = pseudoService.findByPseudoAndReseau(pseudo.getPseudo(), pseudo.getReseau().getReseau());
+				if(newPseudo != null) //utiliser pseudo existant
+				{
+					for(Pseudo dbPseudo : candidat.getPseudos()) //retirer oldPseudo de candidat
+					{
+						if(dbPseudo.getReseau().getReseau() == newPseudo.getReseau().getReseau())
+						{
+							System.out.println(dbPseudo.getReseau().getReseau()+ " - " +newPseudo.getReseau().getReseau());
+							Optional<Pseudo> oldPseudo = pseudoService.findById(dbPseudo.getIdPseudo());   //PseudoAndReseau(dbPseudo.getPseudo(),dbPseudo.getReseau().getReseau());
+							if(oldPseudo.isPresent())
+							{
+								System.out.println(oldPseudo.get().getIdPseudo());
+								candidat.getPseudos().remove(oldPseudo.get());
+								pseudoService.deletePseudo(oldPseudo.get().getIdPseudo());
+							}
+						}
+					}
+
+					candidat.getPseudos().add(newPseudo); //ajouter newPseudo à candidat
+				}
+				else //créer un nouveau pseudo
+				{
+					newPseudo = pseudoService.createPseudo(candidat,pseudo);
+					candidat.getPseudos().add(newPseudo);
+				}
+			}
+
 
 			Ville rqtVille = villeService.findByVilleAndPostal(cdt.getVille().getVille(), cdt.getVille().getPostal()).orElseThrow();
 			if(rqtVille != null) //utiliser une ville existante dans la db
@@ -221,7 +245,8 @@ public class CandidatService
 		}
 		catch(Exception exception)
 		{
-			throw new Exception("Erreur CandidatService - addEducation(): " + exception);
+			System.out.println("Erreur addEducation - CandidatService : " + exception);
+			return null;
 		}
 	}
 
@@ -238,7 +263,6 @@ public class CandidatService
 	{
 		try
 		{
-			System.out.println("candidatService-addExperience : "+idCandidat+" - "+exp);
 			Candidat candidat = candidatRepository.findById(idCandidat).orElseThrow();
 			if(candidat != null)
 			{
@@ -251,7 +275,8 @@ public class CandidatService
 		}
 		catch(Exception exception)
 		{
-			throw new Exception("Erreur addExperience() - CandidatService : " + exception);
+			System.out.println("Erreur addExperience - CandidatService : " + exception);
+			return null;
 		}
 	}
 
@@ -268,11 +293,10 @@ public class CandidatService
 	{
 		try
 		{
-			System.out.println("candidatService-addCompetence : "+idCandidat+" - "+cmp);
 			Candidat candidat = candidatRepository.findById(idCandidat).orElseThrow();
 			if(candidat != null)
 			{
-				Competence competence = competenceService.createCompetence(candidat, cmp);
+				Competence competence = competenceService.createCompetence(cmp);
 				candidat.getCompetences().add(competence);
 				candidatRepository.save(candidat);
 				return competence;
@@ -281,7 +305,8 @@ public class CandidatService
 		}
 		catch(Exception exception)
 		{
-			throw new Exception("Erreur CandidatService - addExperience(): " + exception);
+			System.out.println("Erreur addCompetence - CandidatService : " + exception);
+			return null;
 		}
 	}
 
@@ -298,11 +323,10 @@ public class CandidatService
 	{
 		try
 		{
-			System.out.println("candidatService-addLangue : "+idCandidat+" - " + lng);
 			Candidat candidat = candidatRepository.findById(idCandidat).orElseThrow();
 			if(candidat != null)
 			{
-				Langue langue = langueService.createLangue(candidat, lng);
+				Langue langue = langueService.createLangue(lng);
 				candidat.getLangues().add(langue);
 				candidatRepository.save(candidat);
 				return langue;
@@ -311,7 +335,8 @@ public class CandidatService
 		}
 		catch(Exception exception)
 		{
-			throw new Exception("Erreur CandidatService - addLangue(): " + exception);
+			System.out.println("Erreur addLangue - CandidatService : " + exception);
+			return null;
 		}
 	}
 

@@ -3,6 +3,7 @@ package fr.projet.app.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "pseudo")
@@ -62,6 +63,5 @@ public class Pseudo {
     public void setReseau(Reseau reseau) {
         this.reseau = reseau;
     }
-
 
 }

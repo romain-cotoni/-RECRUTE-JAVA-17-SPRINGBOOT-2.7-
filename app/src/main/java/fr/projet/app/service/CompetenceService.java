@@ -33,16 +33,22 @@ public class CompetenceService
 
 
     @Transactional
-    public Competence createCompetence(Candidat cdt, Competence cmp) throws Exception
+    public Competence createCompetence(Competence cmp) throws Exception
     {
         try
         {
-            cmp.getCandidats().add(cdt);
+            Optional<Competence> optionalCmp = competenceRepository.findAll().stream().filter(d -> d.equals(cmp)).findFirst();
+            if(optionalCmp.isPresent())
+            {
+                Competence existCmp = optionalCmp.get();
+                if(existCmp != null) return existCmp;
+            }
             return competenceRepository.save(cmp);
         }
         catch(Exception exception)
         {
-            throw new Exception("Erreur CompetenceService - createCompetence() : " + exception);
+            System.out.println("Erreur CompetenceService - createCompetence() : " + exception);
+            return null;
         }
     }
 
@@ -57,12 +63,12 @@ public class CompetenceService
             competence.setNiveau(cmp.getNiveau());
             competence.setType(cmp.getType());
             competence.setInfo(cmp.getInfo());
-
             return competenceRepository.save(competence);
         }
         catch(Exception exception)
         {
-            throw new Exception("Erreur CompetenceService - updateCompetence(): " + exception);
+            System.out.println("Erreur updateCompetence - CompetenceService : " + exception);
+            return null;
         }
     }
 
@@ -76,7 +82,6 @@ public class CompetenceService
             if(optionalCmp.isPresent())
             {
                 competenceRepository.deleteById(idCompetence);
-                System.out.println("idCompetence : "+idCompetence);
             }
         }
         catch(Exception exception)

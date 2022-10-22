@@ -55,17 +55,15 @@ public class Reseau {
     }
 
     @Override
-    public boolean equals(Object o)
-    {
+    public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Reseau reseau1 = (Reseau) o;
-        return Objects.equals(idReseau, reseau1.idReseau) && Objects.equals(reseau, reseau1.reseau) && Objects.equals(pseudos, reseau1.pseudos);
+        return Objects.equals(reseau, reseau1.reseau);
     }
 
     @Override
-    public int hashCode()
-    {
+    public int hashCode() {
         return Objects.hash(reseau);
     }
 }

@@ -1,11 +1,9 @@
 package fr.projet.app.service;
 
-import fr.projet.app.model.Candidat;
 import fr.projet.app.model.Langue;
 import fr.projet.app.repository.LangueRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 import java.util.Optional;
 
@@ -19,33 +17,35 @@ public class LangueService
         this.langueRepository = langueRepository;
     }
 
-
     public List<Langue> findAllLangues()
     {
         return langueRepository.findAll();
     }
-
 
     public Langue getLangue(int idLangue)
     {
         return langueRepository.findById(idLangue).get();
     }
 
-
     @Transactional
-    public Langue createLangue(Candidat cdt, Langue lng) throws Exception
+    public Langue createLangue(Langue lng) throws Exception
     {
         try
         {
-            lng.getCandidats().add(cdt);
+            Optional<Langue> optionalLng = langueRepository.findAll().stream().filter(d -> d.equals(lng)).findFirst();
+            if(optionalLng.isPresent())
+            {
+                Langue existLng = optionalLng.get();
+                if(existLng != null) return existLng;
+            }
             return langueRepository.save(lng);
         }
         catch(Exception exception)
         {
-            throw new Exception("Erreur createLangue() - LangueService : " + exception);
+            System.out.println("Erreur createLangue - LangueService : " + exception);
+            return null;
         }
     }
-
 
     @Transactional
     public Langue updateLangue(int idLangue, Langue lng) throws Exception
@@ -57,15 +57,14 @@ public class LangueService
             langue.setNiveau(lng.getNiveau());
             langue.setCertification(lng.getCertification());
             langue.setInfo(lng.getInfo());
-
             return langueRepository.save(langue);
         }
         catch(Exception exception)
         {
-            throw new Exception("Erreur LangueService - updateLangue(): " + exception);
+            System.out.println("Erreur updateLangue - LangueService : " + exception);
+            return null;
         }
     }
-
 
     @Transactional
     public void deleteLangue(int idLangue)
@@ -76,7 +75,6 @@ public class LangueService
             if(optionalLng.isPresent())
             {
                 langueRepository.deleteById(idLangue);
-                System.out.println("idLangue : "+idLangue);
             }
         }
         catch(Exception exception)

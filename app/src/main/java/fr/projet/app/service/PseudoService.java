@@ -3,6 +3,7 @@ package fr.projet.app.service;
 import fr.projet.app.model.Candidat;
 import fr.projet.app.model.Pseudo;
 import fr.projet.app.model.Reseau;
+import fr.projet.app.model.Ville;
 import fr.projet.app.repository.PseudoRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,21 +22,14 @@ public class PseudoService
         this.pseudoRepository = pseudoRepository;
         this.reseauService = reseauService;
     }
-
-
-
     public List<Pseudo> findAllPseudos()
     {
         return pseudoRepository.findAll();
     }
-
-
     public Pseudo getPseudo(int idPseudo)
     {
         return pseudoRepository.findById(idPseudo).get();
     }
-
-
     @Transactional
     public Pseudo createPseudo(Candidat cdt, Pseudo psd) throws Exception
     {
@@ -49,7 +43,8 @@ public class PseudoService
         }
         catch(Exception exception)
         {
-            throw new Exception("Erreur PseudoService - createPseudo() : " + exception);
+            System.out.println("Erreur createPseudo -  PseudoService : " + exception);
+            return null;
         }
     }
 
@@ -79,30 +74,49 @@ public class PseudoService
         }
     }
 
-
-    @Transactional
+    /*@Transactional
     public void deletePseudo(int idPseudo)
     {
         Optional<Pseudo> optionalPsd = pseudoRepository.findById(idPseudo);
         if(optionalPsd.isPresent())
         {
             int idRes = optionalPsd.get().getReseau().getIdReseau();
-
             pseudoRepository.deleteById(idPseudo);
-            System.out.println("idPseudo : "+idPseudo);
-
-
             Optional<Reseau> optionalRes = reseauService.findReseauById(idRes);
             if(optionalRes.isPresent())
             {
-                System.out.println("res Size : "+optionalRes.get().getPseudos().size());
                 if(optionalRes.get().getPseudos().size() < 1)
                 {
-                    System.out.println("deleting : "+idRes);
                     reseauService.deleteReseau(idRes);
                 }
             }
-            System.out.println("resultat : "+idPseudo +" - "+idRes);
         }
+    }*/
+
+    public void deletePseudo(int idPseudo)
+    {
+        try
+        {
+            pseudoRepository.deleteById(idPseudo);
+        }
+        catch(Exception exception)
+        {
+            System.out.println("Erreur deletePseudo - PseudoService : " + exception);
+        }
+    }
+
+    public Pseudo findByPseudoAndReseau(String pseudo, String reseau)
+    {
+        return pseudoRepository.findByPseudoAndReseau(pseudo, reseau);
+    }
+
+    public Optional<Pseudo> findById(int id)
+    {
+        return pseudoRepository.findById(id);
+    }
+
+    public Pseudo findByReseau(String reseau)
+    {
+        return pseudoRepository.findByReseau(reseau);
     }
 }

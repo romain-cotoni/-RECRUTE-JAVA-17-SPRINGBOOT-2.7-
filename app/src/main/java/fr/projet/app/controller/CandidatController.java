@@ -55,7 +55,6 @@ public class CandidatController
 		return candidatService.findAllCandidatsNoms();
 	}
 
-
 	/**
 	 * Method to create a candidat
 	 * @param candidat object Candidat
@@ -125,8 +124,6 @@ public class CandidatController
 	{
 		return candidatService.addEducation(id, education);
 	}
-
-
 
 	//Experience
 	@GetMapping("/candidat/{id}/experiences")

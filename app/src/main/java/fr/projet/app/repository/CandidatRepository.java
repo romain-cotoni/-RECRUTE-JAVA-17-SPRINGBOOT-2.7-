@@ -22,7 +22,6 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 
 	/**
 	 * Method to fetch a list of candidats in the database by a list of optional parameters
-	 * @param CandidatSearchQuery candidat
 	 * @return List<Candidat>
 	 */
 	@Query( "SELECT DISTINCT cd FROM Candidat AS cd "                                                          +
@@ -75,7 +74,7 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 
 	/**
 	 * delete a candidat found by it's id given in parameter
-	 * @param int id
+	 * @param id int
 	 * @return void
 	*/
 	public void deleteById(int id);
@@ -89,7 +88,7 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 	@Query("SELECT c.competences FROM Candidat c WHERE c.idCandidat=?1")
 	public Set<Competence> findCompetencesByCandidatId(int id);
 
-	@Query("SELECT c.competences FROM Candidat c WHERE c.idCandidat=?1")
+	@Query("SELECT c.langues FROM Candidat c WHERE c.idCandidat=?1")
 	public Set<Langue> findLanguesByCandidatId(int id);
 
 	@Query("SELECT c.projets FROM Candidat c WHERE c.idCandidat=?1")
