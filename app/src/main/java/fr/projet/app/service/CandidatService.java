@@ -119,37 +119,19 @@ public class CandidatService
 			candidat.setDisponible(cdt.getDisponible());
 			candidat.setInfo(cdt.getInfo());
 
-
-			for (Pseudo pseudo : cdt.getPseudos())
+			for (Pseudo oldPseudo : candidat.getPseudos()) //supprimer les pseudos en bd
 			{
-				Pseudo newPseudo;
-				newPseudo = pseudoService.findByPseudoAndReseau(pseudo.getPseudo(), pseudo.getReseau().getReseau());
-				if(newPseudo != null) //utiliser pseudo existant
+				System.out.println(oldPseudo.getIdPseudo());
+				pseudoService.deletePseudo(oldPseudo.getIdPseudo());
+			}
+			for (Pseudo newPseudo : cdt.getPseudos()) //ajouter les pseudos en bd
+			{
+				if(newPseudo.getPseudo() != "")
 				{
-					for(Pseudo dbPseudo : candidat.getPseudos()) //retirer oldPseudo de candidat
-					{
-						if(dbPseudo.getReseau().getReseau() == newPseudo.getReseau().getReseau())
-						{
-							System.out.println(dbPseudo.getReseau().getReseau()+ " - " +newPseudo.getReseau().getReseau());
-							Optional<Pseudo> oldPseudo = pseudoService.findById(dbPseudo.getIdPseudo());   //PseudoAndReseau(dbPseudo.getPseudo(),dbPseudo.getReseau().getReseau());
-							if(oldPseudo.isPresent())
-							{
-								System.out.println(oldPseudo.get().getIdPseudo());
-								candidat.getPseudos().remove(oldPseudo.get());
-								pseudoService.deletePseudo(oldPseudo.get().getIdPseudo());
-							}
-						}
-					}
-
-					candidat.getPseudos().add(newPseudo); //ajouter newPseudo à candidat
-				}
-				else //créer un nouveau pseudo
-				{
-					newPseudo = pseudoService.createPseudo(candidat,pseudo);
-					candidat.getPseudos().add(newPseudo);
+					System.out.println(newPseudo.getPseudo()+" - "+newPseudo.getReseau().getReseau());
+					pseudoService.createPseudo(candidat,newPseudo);
 				}
 			}
-
 
 			Ville rqtVille = villeService.findByVilleAndPostal(cdt.getVille().getVille(), cdt.getVille().getPostal()).orElseThrow();
 			if(rqtVille != null) //utiliser une ville existante dans la db

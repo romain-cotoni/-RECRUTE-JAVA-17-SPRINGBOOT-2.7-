@@ -5,6 +5,7 @@ import fr.projet.app.model.Pseudo;
 import fr.projet.app.model.Reseau;
 import fr.projet.app.model.Ville;
 import fr.projet.app.repository.PseudoRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -93,16 +94,18 @@ public class PseudoService
         }
     }*/
 
+    @Transactional
     public void deletePseudo(int idPseudo)
     {
-        try
+        System.out.println("delete id : "+ idPseudo);
+        pseudoRepository.deletePseudoById(idPseudo);
+        /*try
         {
-            pseudoRepository.deleteById(idPseudo);
         }
         catch(Exception exception)
         {
             System.out.println("Erreur deletePseudo - PseudoService : " + exception);
-        }
+        }*/
     }
 
     public Pseudo findByPseudoAndReseau(String pseudo, String reseau)
