@@ -6,6 +6,7 @@ import fr.projet.app.repository.RoleRepository;
 import fr.projet.app.repository.UtilisateurRepository;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -61,20 +62,21 @@ public class UtilisateurService
 		}
 	}
 	
-	
+	@Transactional
 	public Utilisateur createUtilisateurWithRole(Utilisateur utilisateur, int idRole)
 	{  
 		try
 		{
 			Role role = roleRepository.findById(idRole);
+			utilisateur.setPassword(bcryptEncoder.encode(utilisateur.getPassword()));
 			utilisateur.addRole(role);
-		    return utilisateurRepository.save(utilisateur);		    
+			return utilisateurRepository.save(utilisateur);
 		}
 		catch(Exception exception)
 		{
 			System.out.println(exception);
+			return null;
 		}
-		return null;
 	}
 	
 	
