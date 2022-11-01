@@ -26,6 +26,13 @@ public class CandidatSearchQuery
 
     }
 
+    public CandidatSearchQuery(String prenom, String nom, String telephone, String email) {
+        this.prenom = prenom;
+        this.nom = nom;
+        this.telephone = telephone;
+        this.email = email;
+    }
+
     public String getPrenom() {
         return prenom;
     }

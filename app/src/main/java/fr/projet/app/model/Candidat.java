@@ -130,9 +130,23 @@ public class Candidat
 
 	}
 
+	public Candidat(String prenom, String nom)
+	{
+		this.prenom = prenom;
+		this.nom = nom;
+	}
+
+	public Candidat(String prenom, String nom, String email, String mob) {
+		this.prenom = prenom;
+		this.nom = nom;
+		this.email = email;
+		this.mob = mob;
+	}
+
 	public int getIdCandidat() {
 		 return idCandidat;
 	 }
+
 	public String getNom() {
 		return nom;
 	}

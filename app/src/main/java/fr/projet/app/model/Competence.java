@@ -35,6 +35,14 @@ public class Competence {
 
     }
 
+    public Competence(String nom, Integer niveau, Integer type, String info)
+    {
+        this.nom = nom;
+        this.niveau = niveau;
+        this.type = type;
+        this.info = info;
+    }
+
     public Competence(String nom, Integer niveau, Integer type, String info, Set<Candidat> candidats)
     {
         this.nom = nom;
