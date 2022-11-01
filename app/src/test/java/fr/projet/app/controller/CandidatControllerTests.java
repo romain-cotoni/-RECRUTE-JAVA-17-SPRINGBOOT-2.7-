@@ -6,6 +6,7 @@ import fr.projet.app.security.JwtUserDetailsService;
 import fr.projet.app.service.CandidatService;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
+import org.mockito.BDDMockito;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -23,7 +24,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WebMvcTest(CandidatController.class)
 public class CandidatControllerTests
 {
-    @MockBean
+    @MockBean //add mock to spring application context
     private CandidatService candidatService;
 
     @MockBean
@@ -32,19 +33,20 @@ public class CandidatControllerTests
     @MockBean
     private JwtTokenUtil jwtTokenUtil;
     @Autowired
-    private MockMvc mockMvc;
+    private MockMvc mockMvc; //Encapsulates all web application beans and makes them available for testing
 
     @Test
     @WithMockUser(username = "test", password = "test", roles = "admin")
     public void testGetCandidats() throws Exception
     {
         Candidat candidat = new Candidat("Bart",
-                "Simpson",
-                "bart.simpson@mail.com",
-                "06 52 84 45 07");
+                                           "Simpson",
+                                           "bart.simpson@mail.com",
+                                           "06 52 84 45 07");
         List<Candidat> candidats = Arrays.asList(candidat);
 
-        Mockito.when(candidatService.findAllCandidats()).thenReturn(candidats);
+        //Mockito.when(candidatService.findAllCandidats()).thenReturn(candidats);
+        BDDMockito.given(candidatService.findAllCandidats()).willReturn(candidats);// BDDMockito.given similar to Mockito.when
 
         mockMvc.perform(get("/candidats"))
                 .andExpect(status().isOk())

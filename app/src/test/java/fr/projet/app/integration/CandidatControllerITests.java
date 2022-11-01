@@ -8,6 +8,7 @@ import fr.projet.app.security.JwtTokenUtil;
 import fr.projet.app.security.JwtUserDetailsService;
 import fr.projet.app.service.CandidatService;
 import org.hamcrest.Matchers;
+import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
@@ -41,6 +42,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class CandidatControllerITests
 {
     private Candidat candidat;
+    private Candidat candidatSaved;
     private List<Candidat> candidats = new ArrayList<>();
 
     @Autowired
@@ -52,31 +54,42 @@ public class CandidatControllerITests
     private ObjectMapper objectMapper;
 
     @BeforeEach
-    public void setup() {
-        Candidat candidat = new Candidat("test", "test", "test@mail.com", "test");
+    public void setup()
+    {
+        Candidat candidat = new Candidat("test","test","test@mail.com","test");
         candidats.add(candidat);
-        //candidatRepository.saveAll(candidats);
+        candidatSaved = candidatRepository.save(candidat);
+    }
+
+    @AfterEach
+    public void wrapup()
+    {
+        candidatRepository.delete(candidatSaved);
     }
 
     @Test
     @WithMockUser(username = "test", password = "test", roles = "admin")
     public void givenCandidatObject_whenCreateCandidat_thenReturnSavedCandidat() throws Exception
     {
-        //given - precondition or setup
-
-
         //when - action or behaviour to test
-        /*ResultActions response = mockMvc.perform(get("/candidats"))
+        ResultActions response = mockMvc.perform(get("/candidats"))
                                         .andExpect(status().isOk())
-                                        .andDo(print());*/
+                                        .andDo(print());
 
         /*ResultActions response = mockMvc.perform(post("/candidat")
-                                          .contentType(MediaType.APPLICATION_JSON)
-                                          .content(objectMapper.writeValueAsString(candidat)));*/
+                .param("prenom", "test")
+                .param("nom", "test")
+                .param("email", "test@mail.com")
+                .param("mob", "test")
+        );
+            //.contentType(MediaType.APPLICATION_JSON)
+            //.content(objectMapper.writeValueAsString(candidat)));
+         */
 
         //then - verify the result or output using assert statements
-        /*response.andDo(print()).andExpect(status().isOk());
-                                 .andExpect(jsonPath("$.prenom", is(candidat.getPrenom())));*/
+        /*response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.prenom", is(candidat.getPrenom())));*/
 
         /*List<Candidat> candidats = candidatController.getCandidats();
         Assertions.assertThat(candidats).first().hasFieldOrPropertyWithValue("prenom", "bart");
