@@ -1,10 +1,15 @@
 package fr.projet.app.model;
 
 import org.hibernate.validator.constraints.Length;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.Max;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Past;
+import javax.validation.constraints.Pattern;
+
 //import javax.validation.constraints.Pattern;
 import java.sql.Date;
 import java.util.HashSet;
@@ -22,14 +27,17 @@ public class Candidat
 	@Column(name="nom_cdt", nullable=false, length=50)
 	@NotNull
 	@Length(min=1, max = 50)
-	//@Pattern(regexp = "^[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}\\.[0-9]{1,3}$")
+	@Pattern(regexp = "^[A-Za-zÀ-ÿ'\\-_ ]*$")
 	private String nom;
 	
 	@Column(name="prenom_cdt", length=50)
 	@Length(max = 50)
+	@Pattern(regexp = "^[A-Za-zÀ-ÿ'\\-_ ]*$")
 	private String prenom;
 	
 	@Column(name="ne_cdt")
+	@Past
+	@DateTimeFormat(pattern = "dd/MM/yyyy")
 	private Date naissance;
 	
 	@Column(name="email_cdt", length=350)
@@ -38,23 +46,28 @@ public class Candidat
 	
 	@Column(name="fixe_cdt", length=50)
 	@Length(max = 50)
+	@Pattern(regexp = "^[0-9\\/\\-_ ]*$")
 	private String fixe;
 	
 	@Column(name="mob_cdt", length=50)
 	@Length(max = 50)
+	@Pattern(regexp = "^[0-9\\/\\-_ ]*$")
 	private String mob;
 	
 	@Column(name="adrs_cdt", length=50)
 	@Length(max = 150)
+	@Pattern(regexp = "^[A-Za-zÀ-ÿ'\\-_ ]*$")
 	private String adresse;
 	
 	@Column(name="adrs2_cdt", length=50)
 	@Length(max = 150)
+	@Pattern(regexp = "^[A-Za-zÀ-ÿ'\\-_ ]*$")
 	private String adresse2;
 	
 	@Column(name="salaire_cdt")
 	private Integer salaire;
 	
+	@Max(15)
 	@Column(name="marital_cdt")
 	private Byte marital;
 	
@@ -74,6 +87,7 @@ public class Candidat
 	private Boolean disponible;
 	
 	@Column(name="info_cdt", length=500)
+	@Pattern(regexp = "^[A-Za-zÀ-ÿ'\\-_ ]*$")
 	private String info;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)

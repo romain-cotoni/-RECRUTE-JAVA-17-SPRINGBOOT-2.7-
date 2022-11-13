@@ -39,7 +39,8 @@ public class CandidatServiceTests
         Candidat candidatExpected = new Candidat("bart", "simpson","06 52 84 45 07","bart.simpson@mail.com");
         listCandidatsExpected.add(candidatExpected);
 
-        when(candidatRepository.findByParams(candidatSearch.getPrenom(),
+        when(candidatRepository.findByParams(
+        		candidatSearch.getPrenom(),
                 candidatSearch.getNom(),
                 candidatSearch.getTelephone(),
                 candidatSearch.getEmail(),

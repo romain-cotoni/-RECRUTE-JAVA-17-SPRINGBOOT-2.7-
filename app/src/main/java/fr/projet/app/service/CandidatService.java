@@ -50,6 +50,11 @@ public class CandidatService
 	{
 		return candidatRepository.findAll();
 	}
+	
+	public List<Candidat> findAllCandidatsShort() 
+	{
+		return candidatRepository.findAllShort();
+	}
 
 	public Candidat findCandidatById(int id) 
 	{
@@ -68,25 +73,23 @@ public class CandidatService
 	 */
 	public List<Candidat> findCandidatsByParams(CandidatSearchQuery candidat)
 	{
-		String prenom       = candidat.getPrenom();
-		String nom          = candidat.getNom();
-		String telephone    = candidat.getTelephone();
-		String email        = candidat.getEmail();
-		Boolean teletravail = candidat.getTeletravail();
-		Boolean handicape   = candidat.getHandicape();
-		Boolean disponible  = candidat.getDisponible();
-		String diplomes     = candidat.getDiplomes();
+		String prenom       = candidat.getPrenom();             
+		String nom          = candidat.getNom();          
+		String telephone    = candidat.getTelephone();    
+		String email        = candidat.getEmail();      
+		Boolean teletravail = candidat.getTeletravail();   
+		Boolean handicape   = candidat.getHandicape();    
+		Boolean disponible  = candidat.getDisponible();  
+		String diplomes     = candidat.getDiplomes();   
 		String specialites  = candidat.getSpecialites();
-		String missions     = candidat.getMissions();
+		String missions     = candidat.getMissions();   
 		String entreprises  = candidat.getEntreprises();
 		String competences  = candidat.getCompetences();
-		String  langues     = candidat.getLangues();
-		String pseudos      = candidat.getPseudos();
-		String ville        = candidat.getVille();
+		String langues      = candidat.getLangues();      
+		String pseudos      = candidat.getPseudos();       
+		String ville        = candidat.getVille();        
 		Integer mobilite    = candidat.getMobilite();
-		//System.out.println("prenom service in  : "+prenom+" - "+nom+" - "+telephone+" - "+email+" - "+teletravail+" - "+handicape+" - "+disponible+" - "+diplomes+" - "+specialites+" - "+missions+" - "+entreprises+" - "+competences+" - "+langues+" - "+ville+" - "+mobilite);
-		List<Candidat> candidats =	candidatRepository.findByParams(prenom, nom, telephone, email, teletravail, handicape, disponible, diplomes, specialites, missions, entreprises, competences, langues, pseudos, ville, mobilite);
-
+		List<Candidat> candidats = candidatRepository.findByParams(prenom, nom, telephone, email, teletravail, handicape, disponible, diplomes, specialites, missions, entreprises, competences, langues, pseudos, ville, mobilite);
 		return candidats;
 	}
 
@@ -121,54 +124,63 @@ public class CandidatService
 
 			for (Pseudo oldPseudo : candidat.getPseudos()) //supprimer les pseudos en bd
 			{
-				System.out.println(oldPseudo.getIdPseudo());
+				//System.out.println(oldPseudo.getIdPseudo());
 				pseudoService.deletePseudo(oldPseudo.getIdPseudo());
 			}
 			for (Pseudo newPseudo : cdt.getPseudos()) //ajouter les pseudos en bd
 			{
 				if(newPseudo.getPseudo() != "")
 				{
-					System.out.println(newPseudo.getPseudo()+" - "+newPseudo.getReseau().getReseau());
+					//System.out.println(newPseudo.getPseudo()+" - "+newPseudo.getReseau().getReseau());
 					pseudoService.createPseudo(candidat,newPseudo);
 				}
 			}
 
-			Ville rqtVille = villeService.findByVilleAndPostal(cdt.getVille().getVille(), cdt.getVille().getPostal()).orElseThrow();
-			if(rqtVille != null) //utiliser une ville existante dans la db
+			
+			try
 			{
-				Ville oldVille = candidat.getVille();
-				if(!rqtVille.equals(oldVille))
+				Ville rqtVille = villeService.findByVilleAndPostal(cdt.getVille().getVille(), cdt.getVille().getPostal()).orElseThrow();
+			
+				if(rqtVille != null) //utiliser une ville existante dans la db
 				{
-					candidat.setVille(rqtVille);
-					if(oldVille != null && villeService.checkIfVilleIsNotUsed(oldVille)) //si la ville n'est plus utilisée on la supprime de la db
+					Ville oldVille = candidat.getVille();
+					if(!rqtVille.equals(oldVille))
 					{
-						villeService.deleteVille(oldVille.getIdVille());
+						candidat.setVille(rqtVille);
+						if(oldVille != null && villeService.checkIfVilleIsNotUsed(oldVille)) //si la ville n'est plus utilisée on la supprime de la db
+						{
+							villeService.deleteVille(oldVille.getIdVille());
+						}
 					}
 				}
-			}
-			else //créer nouvelle ville
-			{
-				Ville newVille = villeService.createVille(rqtVille);
-				candidat.setVille(newVille);
-			}
-
-			Pays rqtPays = paysService.findByNationnalite(cdt.getPays().getNationnalite()).orElseThrow();
-			if(rqtPays != null) //utiliser une nationnalité existante dans la db
-			{
-				Pays oldPays = candidat.getPays();
-				if(!rqtPays.equals(oldPays))
+				else //créer nouvelle ville
 				{
-					candidat.setPays(rqtPays);
-					if(oldPays != null && paysService.checkIfPaysIsNotUsed(oldPays)) //si le pays n'est plus utilisée on la supprime de la db
+					Ville newVille = villeService.createVille(rqtVille);
+					candidat.setVille(newVille);
+				}
+	
+				Pays rqtPays = paysService.findByNationnalite(cdt.getPays().getNationnalite()).orElseThrow();
+				if(rqtPays != null) //utiliser une nationnalité existante dans la db
+				{
+					Pays oldPays = candidat.getPays();
+					if(!rqtPays.equals(oldPays))
 					{
-						paysService.deletePays(oldPays.getIdPays());
+						candidat.setPays(rqtPays);
+						if(oldPays != null && paysService.checkIfPaysIsNotUsed(oldPays)) //si le pays n'est plus utilisée on la supprime de la db
+						{
+							paysService.deletePays(oldPays.getIdPays());
+						}
 					}
 				}
+				else //créer un nouveau pays
+				{
+					Pays newPays = paysService.createPays(rqtPays);
+					candidat.setPays(newPays);
+				}
 			}
-			else //créer un nouveau pays
+			catch(Exception exception)
 			{
-				Pays newPays = paysService.createPays(rqtPays);
-				candidat.setPays(newPays);
+				System.out.println("Erreur updateCandidat() - CandidatService : ville + pays : " + exception);
 			}
 
 			Mobilite newMobilite = mobiliteService.findMobiliteByZone(cdt.getMobilite().getZone()).orElseThrow();

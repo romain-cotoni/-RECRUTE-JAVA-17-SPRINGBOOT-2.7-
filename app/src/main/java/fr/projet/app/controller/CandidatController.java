@@ -32,6 +32,17 @@ public class CandidatController
 	{
 		return candidatService.findAllCandidats();
 	}
+	
+	/**
+	 * method to fetch the whole list of candidats in the database
+	 * @return a list of candidats (List<Candidat>)
+	 */
+	@GetMapping("/candidatsShort")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public List<Candidat> getCandidatsShort()
+	{
+		return candidatService.findAllCandidatsShort();
+	}
 
 	/**
 	 * method to fetch  whole list of distinct prenom for candidats in the database
@@ -97,14 +108,14 @@ public class CandidatController
 	
 	@PostMapping("candidat/rechercher")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Candidat getCandidatByName(@RequestBody Candidat candidat)
+	public Candidat getCandidatByName(@Valid @RequestBody Candidat candidat)
 	{
 		return candidatService.findCandidatByName(candidat);
 	}
 
 	@PostMapping("candidats/rechercher/parametres")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public List<Candidat> getCandidatsByParams(@RequestBody CandidatSearchQuery candidat)
+	public List<Candidat> getCandidatsByParams(@Valid @RequestBody CandidatSearchQuery candidat)
 	{
 		return candidatService.findCandidatsByParams(candidat);
 	}
@@ -120,7 +131,7 @@ public class CandidatController
 	
 	@PostMapping("candidat/{id}/educations")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Education addEducation(@PathVariable("id") int id, @RequestBody Education education) throws Exception
+	public Education addEducation(@PathVariable("id") int id, @Valid  @RequestBody Education education) throws Exception
 	{
 		return candidatService.addEducation(id, education);
 	}
@@ -135,7 +146,7 @@ public class CandidatController
 
 	@PostMapping("candidat/{id}/experiences")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Experience addExperience(@PathVariable("id") int id, @RequestBody Experience experience) throws Exception
+	public Experience addExperience(@PathVariable("id") int id, @Valid @RequestBody Experience experience) throws Exception
 	{
 		return candidatService.addExperience(id, experience);
 	}
@@ -150,7 +161,7 @@ public class CandidatController
 
 	@PostMapping("candidat/{id}/competences")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Competence addCompetence(@PathVariable("id") int id, @RequestBody Competence competence) throws Exception
+	public Competence addCompetence(@PathVariable("id") int id, @Valid  @RequestBody Competence competence) throws Exception
 	{
 		return candidatService.addCompetence(id, competence);
 	}
@@ -165,7 +176,7 @@ public class CandidatController
 
 	@PostMapping("candidat/{id}/langues")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Langue addLangue(@PathVariable("id") int id, @RequestBody Langue langue) throws Exception
+	public Langue addLangue(@PathVariable("id") int id, @Valid @RequestBody Langue langue) throws Exception
 	{
 		return candidatService.addLangue(id, langue);
 	}
@@ -180,7 +191,7 @@ public class CandidatController
 
 	@PostMapping("candidat/{id}/projets")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Projet addProjet(@PathVariable("id") int id, @RequestBody Projet projet) throws Exception
+	public Projet addProjet(@PathVariable("id") int id, @Valid @RequestBody Projet projet) throws Exception
 	{
 		return candidatService.addProjet(id, projet);
 	}
@@ -196,7 +207,7 @@ public class CandidatController
 
 	@PostMapping("candidat/{id}/entretiens")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Entretien addEntretien(@PathVariable("id") int id, @RequestBody Entretien entretien) throws Exception
+	public Entretien addEntretien(@PathVariable("id") int id, @Valid @RequestBody Entretien entretien) throws Exception
 	{
 		return candidatService.addEntretien(id, entretien);
 	}
@@ -212,7 +223,7 @@ public class CandidatController
 
 	@PostMapping("candidat/{id}/pseudos")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Pseudo addPseudo(@PathVariable("id") int id, @RequestBody Pseudo pseudo) throws Exception
+	public Pseudo addPseudo(@PathVariable("id") int id, @Valid @RequestBody Pseudo pseudo) throws Exception
 	{
 		return candidatService.addPseudo(id, pseudo);
 	}
@@ -228,7 +239,7 @@ public class CandidatController
 
 	@PostMapping("candidat/{id}/documents")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Document addDocument(@PathVariable("id") int id, @RequestBody Document document)
+	public Document addDocument(@PathVariable("id") int id, @Valid @RequestBody Document document)
 	{
 		return candidatService.addDocument(id, document);
 	}
