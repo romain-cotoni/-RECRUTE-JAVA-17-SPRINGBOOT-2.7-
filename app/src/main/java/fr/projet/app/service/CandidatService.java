@@ -4,12 +4,21 @@ import fr.projet.app.model.*;
 import fr.projet.app.repository.CandidatRepository;
 import fr.projet.app.repository.CandidatRepositoryCustom;
 import fr.projet.app.repository.DocumentRepository;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.Set;
+
+import javax.persistence.EntityManager;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 @Service
 public class CandidatService 
@@ -73,6 +82,28 @@ public class CandidatService
 	 */
 	public List<Candidat> findCandidatsByParams(CandidatSearchQuery candidat)
 	{
+		return candidatRepository.findByParams( candidat.getPrenom(),
+												candidat.getNom(), 
+												candidat.getTelephone(), 
+												candidat.getEmail(), 
+												candidat.getTeletravail(), 
+												candidat.getHandicape(), 
+												candidat.getDisponible(), 
+												candidat.getDiplomes(),
+												candidat.getSpecialites(), 
+												candidat.getMissions(),
+												candidat.getEntreprises(), 
+												candidat.getCompetences(), 
+												candidat.getLangues(), 
+												candidat.getPseudos(), 
+												candidat.getVille(), 
+												candidat.getMobilite());		    
+	}
+
+	
+
+	/*public List<Candidat> findCandidatsByParams(CandidatSearchQuery candidat)
+	{
 		String prenom       = candidat.getPrenom();             
 		String nom          = candidat.getNom();          
 		String telephone    = candidat.getTelephone();    
@@ -91,6 +122,60 @@ public class CandidatService
 		Integer mobilite    = candidat.getMobilite();
 		List<Candidat> candidats = candidatRepository.findByParams(prenom, nom, telephone, email, teletravail, handicape, disponible, diplomes, specialites, missions, entreprises, competences, langues, pseudos, ville, mobilite);
 		return candidats;
+	}*/
+
+	public List<Candidat> findCandidatByParamsDynamicQuery2(CandidatSearchQuery candidat)
+	{
+		return candidatRepository.findByParams
+		( candidat.getPrenom(),
+			candidat.getNom(), 
+			candidat.getTelephone(), 
+			candidat.getEmail(), 
+			candidat.getTeletravail(), 
+			candidat.getHandicape(), 
+			candidat.getDisponible(), 
+			candidat.getDiplomes(),
+			candidat.getSpecialites(), 
+			candidat.getMissions(),
+			candidat.getEntreprises(), 
+			candidat.getCompetences(), 
+			candidat.getLangues(), 
+			candidat.getPseudos(), 
+			candidat.getVille(), 
+			candidat.getMobilite()
+		);                         
+	}
+
+	@Autowired
+	EntityManager em;
+	public List<Candidat> findCandidatByParamsDynamicQuery(CandidatSearchQuery csq)
+	{
+		CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Candidat> cq = cb.createQuery(Candidat.class);
+
+        Root<Candidat> candidat = cq.from(Candidat.class);
+        
+		String s = csq.getPrenom();
+        List<String> myList = new ArrayList<String>(Arrays.asList(s.split(",")));
+		List<Predicate> predicates = new ArrayList<>();
+        if(csq.getPrenom() != null || csq.getPrenom() != "") 
+		{
+            //predicates.add(cb.like(candidat.get("prenom"), "%" + csq.getPrenom() + "%"));
+			predicates.add(cb.like(candidat.get("prenom"), "%" + csq.getPrenom() + "%"));
+        }
+        if (csq.getNom() != null || csq.getNom() != "") 
+		{
+            predicates.add(cb.like(candidat.get("nom"), "%" + csq.getNom() + "%"));
+        }
+        cq.where(predicates.toArray(new Predicate[0]));
+		return em.createQuery(cq).getResultList();
+		
+		//Predicate prenomPredicate = cb.equal(candidat.get("prenom"), csq.getPrenom());
+		/*Predicate prenomPredicate = cb.like(candidat.get("prenom"), "%" + csq.getPrenom() + "%");
+        Predicate nomPredicate    = cb.like(candidat.get("nom"), "%" + csq.getNom() + "%");
+        cq.where(prenomPredicate, nomPredicate);
+        TypedQuery<Candidat> query = em.createQuery(cq);
+        return query.getResultList();*/
 	}
 
 	public Candidat createCandidat(Candidat candidat)

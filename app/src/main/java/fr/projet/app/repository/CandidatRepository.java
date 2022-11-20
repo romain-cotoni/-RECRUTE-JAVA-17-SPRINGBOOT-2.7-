@@ -5,13 +5,16 @@ import java.util.Set;
 
 import fr.projet.app.model.*;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CandidatRepository extends JpaRepository<Candidat,Integer>
+public interface CandidatRepository extends JpaRepository<Candidat,Integer>, JpaSpecificationExecutor<Candidat>
 {
+    public List<Candidat> findByEmailAndNom(String email, String nom);
+
 	@Query("SELECT c FROM Candidat c WHERE c.prenom=?1 AND c.nom=?2")
 	public Candidat findByName(String prenom, String nom);
 
@@ -23,8 +26,8 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 
 	/**
 	 * method to search one or many candidat by multiple and optional parameters
-	 * @param string type parameters from CandidatSearchQuery object
-	 * @return List of object Candidat
+	 * @param string
+	 * @return List<Candidat>
 	 */
 	@Query("SELECT DISTINCT cd FROM Candidat AS cd " +
 		   "LEFT JOIN Education      AS ed ON ed.candidat.idCandidat = cd.idCandidat " +	               
@@ -72,9 +75,9 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 										   @Param("langues") String langues,
 										   @Param("pseudos") String pseudos,
 										   @Param("ville") String ville,
-										   @Param("mobilite") Integer mobilite);		    
+										   @Param("mobilite") Integer mobilite);									   
 	
-	@Query(value =
+	/*@Query(value =
 			  "SELECT cd.id_cdt, cd.prenom_cdt, cd.nom_cdt "
 			+ "FROM      candidat            AS cd "
 			+ "LEFT JOIN education           AS ed ON ed.id_cdt = cd.id_cdt "
@@ -107,7 +110,7 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 			+ "  AND (:langues     LIKE '%' + ln.nom_lng    + '%' OR :langues     = '') "
 			+ "  AND (:pseudos     LIKE '%' + ps.pseudo_psd + '%' OR :pseudos     = '') "
 			+ "  AND (:ville       LIKE '%' + vl.ville_vil  + '%' OR :ville       = '') "
-			+ "  AND (:mobilite = :mobilite/*    LIKE '%' + mb.zone_mbl   + '%' OR :mobilite    = ''*/) "
+			+ "  AND (:mobilite = :mobilite    LIKE '%' + mb.zone_mbl   + '%' OR :mobilite    = '') "
 			+ "GROUP BY cd.id_cdt, cd.prenom_cdt, cd.nom_cdt "
 			+ "ORDER BY cd.nom_cdt, cd.prenom_cdt"
 			, nativeQuery=true)
@@ -129,7 +132,7 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 	   @Param("pseudos") String pseudos,
 	   @Param("ville") String ville,
 	   @Param("mobilite") Integer mobilite
-	);
+	);*/
 	
 	/**
 	 * delete a candidat found by it's id given in parameter
@@ -162,6 +165,6 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>
 	@Query("SELECT c.documents FROM Candidat c WHERE c.idCandidat=?1")
 	public Set<Document> findDocumentsByCandidatId(int id);
 
-	@Query(value = "SELECT TOP 50 * FROM candidat/*  ORDER BY nom_cdt, prenom_cdt*/", nativeQuery = true)
+	@Query(value = "SELECT TOP 30 * FROM candidat/*  ORDER BY nom_cdt, prenom_cdt*/", nativeQuery = true)
 	public List<Candidat> findAllShort();
 }

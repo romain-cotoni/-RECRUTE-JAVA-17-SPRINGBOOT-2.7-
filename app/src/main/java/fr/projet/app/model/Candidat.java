@@ -3,6 +3,11 @@ package fr.projet.app.model;
 import org.hibernate.validator.constraints.Length;
 import org.springframework.format.annotation.DateTimeFormat;
 
+/*import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;*/
+
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Max;
@@ -10,11 +15,14 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Past;
 import javax.validation.constraints.Pattern;
 
-//import javax.validation.constraints.Pattern;
 import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+/*@Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor*/
 @Entity
 @Table(name = "candidat")	
 public class Candidat 
@@ -46,22 +54,22 @@ public class Candidat
 	
 	@Column(name="fixe_cdt", length=50)
 	@Length(max = 50)
-	@Pattern(regexp = "^[0-9\\/\\-_ ]*$")
+	@Pattern(regexp = "^[0-9\\/\\-_ .+]*$")
 	private String fixe;
 	
 	@Column(name="mob_cdt", length=50)
 	@Length(max = 50)
-	@Pattern(regexp = "^[0-9\\/\\-_ ]*$")
+	@Pattern(regexp = "^[0-9\\/\\-_ .+]*$")
 	private String mob;
 	
 	@Column(name="adrs_cdt", length=50)
 	@Length(max = 150)
-	@Pattern(regexp = "^[A-Za-zÀ-ÿ'\\-_ ]*$")
+	@Pattern(regexp = "^[0-9A-Za-zÀ-ÿ'\\-_ .]*$")
 	private String adresse;
 	
 	@Column(name="adrs2_cdt", length=50)
 	@Length(max = 150)
-	@Pattern(regexp = "^[A-Za-zÀ-ÿ'\\-_ ]*$")
+	@Pattern(regexp = "^[0-9A-Za-zÀ-ÿ'\\-_ .]*$")
 	private String adresse2;
 	
 	@Column(name="salaire_cdt")
@@ -87,7 +95,7 @@ public class Candidat
 	private Boolean disponible;
 	
 	@Column(name="info_cdt", length=500)
-	@Pattern(regexp = "^[A-Za-zÀ-ÿ'\\-_ ]*$")
+	@Pattern(regexp = "^[0-9A-Za-zÀ-ÿ'\\-_ .!?]*$")
 	private String info;
 	
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
@@ -407,6 +415,5 @@ public class Candidat
 	public void addDocument(Document document)
 	{
 		this.documents.add(document);
-	}
-
+	}	
 }

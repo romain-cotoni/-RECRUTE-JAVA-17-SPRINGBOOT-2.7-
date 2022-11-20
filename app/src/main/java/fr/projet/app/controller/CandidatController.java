@@ -117,7 +117,8 @@ public class CandidatController
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
 	public List<Candidat> getCandidatsByParams(@Valid @RequestBody CandidatSearchQuery candidat)
 	{
-		return candidatService.findCandidatsByParams(candidat);
+		//return candidatService.findCandidatsByParams(candidat);
+		return candidatService.findCandidatByParamsDynamicQuery(candidat);
 	}
 
 
