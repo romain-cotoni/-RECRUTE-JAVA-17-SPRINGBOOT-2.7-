@@ -17,6 +17,7 @@ import java.util.Set;
 import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Expression;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -126,8 +127,8 @@ public class CandidatService
 
 	public List<Candidat> findCandidatByParamsDynamicQuery2(CandidatSearchQuery candidat)
 	{
-		return candidatRepository.findByParams
-		( candidat.getPrenom(),
+		return candidatRepository.findByParams(   
+			candidat.getPrenom(),
 			candidat.getNom(), 
 			candidat.getTelephone(), 
 			candidat.getEmail(), 
@@ -154,18 +155,27 @@ public class CandidatService
         CriteriaQuery<Candidat> cq = cb.createQuery(Candidat.class);
 
         Root<Candidat> candidat = cq.from(Candidat.class);
+        List<Predicate> predicates = new ArrayList<>();    
         
-		String s = csq.getPrenom();
-        List<String> myList = new ArrayList<String>(Arrays.asList(s.split(",")));
-		List<Predicate> predicates = new ArrayList<>();
         if(csq.getPrenom() != null || csq.getPrenom() != "") 
 		{
             //predicates.add(cb.like(candidat.get("prenom"), "%" + csq.getPrenom() + "%"));
-			predicates.add(cb.like(candidat.get("prenom"), "%" + csq.getPrenom() + "%"));
+            predicates.add(candidat.get("prenom").in(  new ArrayList<String>(Arrays.asList(csq.getPrenom().split(",")))  ));
         }
         if (csq.getNom() != null || csq.getNom() != "") 
 		{
             predicates.add(cb.like(candidat.get("nom"), "%" + csq.getNom() + "%"));
+        	//predicates.add(candidat.get("nom").in(new ArrayList<String>(Arrays.asList(csq.getNom().split(",")))));
+        }
+        if (csq.getTelephone() != null || csq.getTelephone() != "") 
+		{
+            predicates.add(cb.like(candidat.get("mob"), "%" + csq.getTelephone() + "%"));
+        	//predicates.add(candidat.get("mob").in(  new ArrayList<String>(Arrays.asList(csq.getTelephone().split(",")))  ));
+        }
+        if (csq.getEmail() != null || csq.getEmail() != "") 
+		{
+            predicates.add(cb.like(candidat.get("email"), "%" + csq.getEmail() + "%"));
+        	//predicates.add(candidat.get("email").in(  new ArrayList<String>(Arrays.asList(csq.getEmail().split(",")))  ));
         }
         cq.where(predicates.toArray(new Predicate[0]));
 		return em.createQuery(cq).getResultList();
