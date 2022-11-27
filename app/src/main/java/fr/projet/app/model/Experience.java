@@ -1,6 +1,8 @@
 package fr.projet.app.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.validator.constraints.Length;
 
 import javax.persistence.*;
@@ -34,11 +36,13 @@ public class Experience
 	@JsonIgnore
 	private Candidat candidat;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_msn", nullable = false)
 	private Mission mission;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_etp")
 	private Entreprise entreprise;
 

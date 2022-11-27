@@ -1,6 +1,7 @@
 package fr.projet.app.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -26,11 +27,12 @@ public class Ville
     @JsonIgnore
     private Set<Candidat> candidats = new HashSet<Candidat>();
 
-    @OneToMany(mappedBy = "ville", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "ville", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Entreprise> entreprises = new HashSet<Entreprise>();
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_pys")
     private Pays pays;
 

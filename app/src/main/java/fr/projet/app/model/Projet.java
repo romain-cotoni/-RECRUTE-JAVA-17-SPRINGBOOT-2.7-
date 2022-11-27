@@ -1,6 +1,7 @@
 package fr.projet.app.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -34,7 +35,8 @@ public class Projet {
     @JsonIgnore
     private Candidat candidat;
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_act")
     private Activite activite;
 

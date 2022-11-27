@@ -16,9 +16,9 @@ public class CandidatController
 {
 	private CandidatService candidatService;
 
-	public CandidatController(CandidatService candidatService)
+	public CandidatController(CandidatService candidatService) 
 	{
-		this.candidatService = candidatService;
+		this.candidatService = candidatService;		
 	}
 
 
@@ -28,9 +28,16 @@ public class CandidatController
 	 */
 	@GetMapping("/candidats")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public List<Candidat> getCandidats()
+	public List<Candidat> getCandidats() throws Exception
 	{
-		return candidatService.findAllCandidats();
+		try
+		{
+			return candidatService.findAllCandidats();
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - getCandidats() : " + exception.getMessage());
+		}
 	}
 	
 	/**
@@ -39,9 +46,16 @@ public class CandidatController
 	 */
 	@GetMapping("/candidatsShort")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public List<Candidat> getCandidatsShort()
+	public List<Candidat> getCandidatsShort() throws Exception
 	{
-		return candidatService.findAllCandidatsShort();
+		try
+		{
+			return candidatService.findAllCandidatsShort();
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - getCandidatShort() : " + exception.getMessage());
+		}
 	}
 
 	/**
@@ -50,9 +64,16 @@ public class CandidatController
 	 */
 	@GetMapping("/candidats/prenoms")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public List<String> getCandidatsPrenoms()
+	public List<String> getCandidatsPrenoms() throws Exception
 	{
-		return candidatService.findAllCandidatsPrenoms();
+		try
+		{
+			return candidatService.findAllCandidatsPrenoms();
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - getCandidatsPrenoms() : " + exception.getMessage());
+		}
 	}
 
 	/**
@@ -61,9 +82,16 @@ public class CandidatController
 	 */
 	@GetMapping("/candidats/noms")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public List<String> getCandidatsNoms()
+	public List<String> getCandidatsNoms() throws Exception
 	{
-		return candidatService.findAllCandidatsNoms();
+		try
+		{
+			return candidatService.findAllCandidatsNoms();
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - getCandidatsNoms() : " + exception.getMessage());
+		}
 	}
 
 	/**
@@ -73,9 +101,16 @@ public class CandidatController
 	 */
 	@PostMapping("/candidat")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Candidat createCandidat(@Valid @RequestBody Candidat candidat)
+	public Candidat createCandidat(@Valid @RequestBody Candidat candidat) throws Exception
 	{
-		return candidatService.createCandidat(candidat);
+		try
+		{
+			return candidatService.createCandidat(candidat);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - createCandidat() : " + exception.getMessage());
+		}
 	}
 
 
@@ -88,160 +123,307 @@ public class CandidatController
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
 	public Candidat updateCandidat(@PathVariable("id") int id, @Valid @RequestBody Candidat candidat) throws Exception
 	{
-		return candidatService.updateCandidat(id, candidat);
+		try
+		{
+			return candidatService.updateCandidat(id, candidat);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - updateCandidat() : " + exception.getMessage());
+		}
 	}
 	
 	@GetMapping("candidat/{id}")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Candidat getCandidatById(@PathVariable("id") int id)
+	public Candidat getCandidatById(@PathVariable("id") int id) throws Exception
 	{
-		return candidatService.findCandidatById(id);
+		try
+		{
+			return candidatService.findCandidatById(id);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - getCandidatById() : " + exception.getMessage());
+		}
 	}
 	
 	@DeleteMapping("candidat/{id}")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public int deleteCandidat(@PathVariable("id") int id)
+	public int deleteCandidat(@PathVariable("id") int id) throws Exception
 	{
-		candidatService.deleteCandidatById(id);
-		return id;
+		try
+		{
+			candidatService.deleteCandidatById(id);
+			return id;
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - deleteCandidat() : " + exception.getMessage());
+		}
 	}
 	
 	@PostMapping("candidat/rechercher")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Candidat getCandidatByName(@Valid @RequestBody Candidat candidat)
+	public Candidat getCandidatByName(@Valid @RequestBody Candidat candidat) throws Exception
 	{
-		return candidatService.findCandidatByName(candidat);
+		try
+		{
+			return candidatService.findCandidatByName(candidat);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - getCandidatByName() : " + exception.getMessage());
+		}
 	}
 
 	@PostMapping("candidats/rechercher/parametres")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public List<Candidat> getCandidatsByParams(@Valid @RequestBody CandidatSearchQuery candidat)
+	public List<Candidat> getCandidatsByParams(@Valid @RequestBody CandidatSearchQuery candidat) throws Exception
 	{
-		//return candidatService.findCandidatsByParams(candidat);
-		return candidatService.findCandidatByParamsDynamicQuery(candidat);
+		try
+		{
+			//return candidatService.findCandidatsByParams(candidat);
+			return candidatService.findCandidatByParamsDynamicQuery(candidat);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - getCandidatsByParams() : " + exception.getMessage());
+		}
 	}
 
 
 	//Education
 	@GetMapping("/candidat/{id}/educations")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Set<Education> getEducations(@PathVariable("id") int id)
+	public Set<Education> getEducations(@PathVariable("id") int id) throws Exception
 	{
-		return candidatService.findEducationsByCandidatId(id);
+		try
+		{
+			return candidatService.findEducationsByCandidatId(id);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - getEducations() : " + exception.getMessage());
+		}
 	}
 	
 	@PostMapping("candidat/{id}/educations")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
 	public Education addEducation(@PathVariable("id") int id, @Valid  @RequestBody Education education) throws Exception
 	{
-		return candidatService.addEducation(id, education);
+		try
+		{
+			return candidatService.addEducation(id, education);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - addEducation() : " + exception.getMessage());
+		}
 	}
 
 	//Experience
 	@GetMapping("/candidat/{id}/experiences")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Set<Experience> getExperiences(@PathVariable("id") int id)
+	public Set<Experience> getExperiences(@PathVariable("id") int id) throws Exception
 	{
-		return candidatService.findExperiencesByCandidatId(id);
+		try
+		{
+			return candidatService.findExperiencesByCandidatId(id);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - getExperiences() : " + exception.getMessage());
+		}
 	}
 
 	@PostMapping("candidat/{id}/experiences")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
 	public Experience addExperience(@PathVariable("id") int id, @Valid @RequestBody Experience experience) throws Exception
 	{
-		return candidatService.addExperience(id, experience);
+		try
+		{
+			return candidatService.addExperience(id, experience);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - addExperience() : " + exception.getMessage());
+		}
 	}
 
 	//Competence
 	@GetMapping("/candidat/{id}/competences")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Set<Competence> getCompetences(@PathVariable("id") int id)
+	public Set<Competence> getCompetences(@PathVariable("id") int id) throws Exception
 	{
-		return candidatService.findCompetencesByCandidatId(id);
+		try
+		{
+			return candidatService.findCompetencesByCandidatId(id);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - getCompetences() : " + exception.getMessage());
+		}
 	}
 
 	@PostMapping("candidat/{id}/competences")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
 	public Competence addCompetence(@PathVariable("id") int id, @Valid  @RequestBody Competence competence) throws Exception
 	{
-		return candidatService.addCompetence(id, competence);
+		try
+		{
+			return candidatService.addCompetence(id, competence);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - addCompetence() : " + exception.getMessage());
+		}
 	}
 
 	//Langue
 	@GetMapping("/candidat/{id}/langues")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Set<Langue> getLangues(@PathVariable("id") int id)
+	public Set<Langue> getLangues(@PathVariable("id") int id) throws Exception
 	{
-		return candidatService.findLanguesByCandidatId(id);
+		try
+		{
+			return candidatService.findLanguesByCandidatId(id);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - getLangues() : " + exception.getMessage());
+		}
 	}
 
 	@PostMapping("candidat/{id}/langues")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
 	public Langue addLangue(@PathVariable("id") int id, @Valid @RequestBody Langue langue) throws Exception
 	{
-		return candidatService.addLangue(id, langue);
+		try
+		{
+			return candidatService.addLangue(id, langue);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - addLangue() : " + exception.getMessage());
+		}
 	}
 
 	//Projet
 	@GetMapping("/candidat/{id}/projets")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Set<Projet> getProjets(@PathVariable("id") int id)
+	public Set<Projet> getProjets(@PathVariable("id") int id) throws Exception
 	{
-		return candidatService.findProjetsByCandidatId(id);
+		try
+		{
+			return candidatService.findProjetsByCandidatId(id);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - getProjets() : " + exception.getMessage());
+		}
 	}
 
 	@PostMapping("candidat/{id}/projets")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
 	public Projet addProjet(@PathVariable("id") int id, @Valid @RequestBody Projet projet) throws Exception
 	{
-		return candidatService.addProjet(id, projet);
+		try
+		{
+			return candidatService.addProjet(id, projet);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - addProjet() : " + exception.getMessage());
+		}
 	}
 
 
 	//Entretien
 	@GetMapping("/candidat/{id}/entretiens")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Set<Entretien> getEntretiens(@PathVariable("id") int id)
+	public Set<Entretien> getEntretiens(@PathVariable("id") int id) throws Exception
 	{
-		return candidatService.findEntretiensByCandidatId(id);
+		try
+		{
+			return candidatService.findEntretiensByCandidatId(id);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - getEntretiens() : " + exception.getMessage());
+		}
 	}
 
 	@PostMapping("candidat/{id}/entretiens")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
 	public Entretien addEntretien(@PathVariable("id") int id, @Valid @RequestBody Entretien entretien) throws Exception
 	{
-		return candidatService.addEntretien(id, entretien);
+		try
+		{
+			return candidatService.addEntretien(id, entretien);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - addEntretien() : " + exception.getMessage());
+		}
 	}
 
 
 	//Pseudo
 	@GetMapping("/candidat/{id}/pseudos")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Set<Pseudo> getPseudos(@PathVariable("id") int id)
+	public Set<Pseudo> getPseudos(@PathVariable("id") int id) throws Exception
 	{
-		return candidatService.findPseudosByCandidatId(id);
+		try
+		{
+			return candidatService.findPseudosByCandidatId(id);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - getPseudos() : " + exception.getMessage());
+		}
 	}
 
 	@PostMapping("candidat/{id}/pseudos")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
 	public Pseudo addPseudo(@PathVariable("id") int id, @Valid @RequestBody Pseudo pseudo) throws Exception
 	{
-		return candidatService.addPseudo(id, pseudo);
+		try
+		{
+			return candidatService.addPseudo(id, pseudo);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - addPseudo() : " + exception.getMessage());
+		}
 	}
 
 
 	//Document
 	@GetMapping("/candidat/{id}/documents")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Set<Document> getDocuments(@PathVariable("id") int id)
+	public Set<Document> getDocuments(@PathVariable("id") int id) throws Exception
 	{
-		return candidatService.findDocumentsByCandidatId(id);
+		try
+		{
+			return candidatService.findDocumentsByCandidatId(id);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - getDocuments() : " + exception.getMessage());
+		}
 	}
 
 	@PostMapping("candidat/{id}/documents")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Document addDocument(@PathVariable("id") int id, @Valid @RequestBody Document document)
+	public Document addDocument(@PathVariable("id") int id, @Valid @RequestBody Document document) throws Exception
 	{
-		return candidatService.addDocument(id, document);
+		try
+		{
+			return candidatService.addDocument(id, document);
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Error CandidatController - addDocument() : " + exception.getMessage());
+		}
 	}
 }

@@ -37,7 +37,8 @@ public class Mission
 
 	}
 
-	public Mission(String profession, Set<Profil> profils, Set<Experience> experiences) {
+	public Mission(String profession, Set<Profil> profils, Set<Experience> experiences) 
+	{
 		this.profession = profession;
 		this.profils = profils;
 		this.experiences = experiences;

@@ -1,14 +1,5 @@
 package fr.projet.app.model;
 
-/*import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor*/
 public class CandidatSearchQuery
 {
     private String prenom;
@@ -33,7 +24,8 @@ public class CandidatSearchQuery
 
     }
 
-    public CandidatSearchQuery(String prenom, String nom, String telephone, String email) {
+    public CandidatSearchQuery(String prenom, String nom, String telephone, String email) 
+    {
         this.prenom = prenom;
         this.nom = nom;
         this.telephone = telephone;

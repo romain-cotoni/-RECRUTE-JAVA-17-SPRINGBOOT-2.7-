@@ -4,6 +4,8 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import org.hibernate.validator.constraints.Length;
 
 import java.util.HashSet;
@@ -57,7 +59,8 @@ public class Entreprise
 	@JsonIgnore
 	private Set<Document> documents = new HashSet<Document>();
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_vil")
 	private Ville ville;
 

@@ -14,6 +14,7 @@ import javax.persistence.Table;
 import org.hibernate.validator.constraints.Length;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 
 @Entity
@@ -51,11 +52,13 @@ public class Education
 	@JsonIgnore
 	private Candidat candidat;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_spl")
 	private Specialite specialite;
 	
-	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_dpl")
 	private Diplome diplome;
 

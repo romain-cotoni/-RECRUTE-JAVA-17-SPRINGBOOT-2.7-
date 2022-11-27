@@ -1,6 +1,7 @@
 package fr.projet.app.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -18,6 +19,7 @@ public class Reseau {
     @Column(name="reseau_res", length=50)
     private String reseau;
 
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @OneToMany(mappedBy = "reseau", fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Pseudo> pseudos = new HashSet<Pseudo>();

@@ -165,6 +165,6 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>, Jpa
 	@Query("SELECT c.documents FROM Candidat c WHERE c.idCandidat=?1")
 	public Set<Document> findDocumentsByCandidatId(int id);
 
-	@Query(value = "SELECT TOP 30 * FROM candidat/*  ORDER BY nom_cdt, prenom_cdt*/", nativeQuery = true)
-	public List<Candidat> findAllShort();
+	@Query("SELECT new Candidat(c.idCandidat, c.nom, c.prenom) FROM Candidat c")
+    List<Candidat> findAllShort();
 }

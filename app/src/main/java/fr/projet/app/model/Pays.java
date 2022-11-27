@@ -25,7 +25,7 @@ public class Pays
     @Length(min=2, max=50)
     private String nationnalite;
 
-    @OneToMany(mappedBy="pays",fetch = FetchType.EAGER)
+    @OneToMany(mappedBy="pays",fetch = FetchType.LAZY)
     @JsonIgnore
     private Set<Ville> villes = new HashSet<Ville>();
 

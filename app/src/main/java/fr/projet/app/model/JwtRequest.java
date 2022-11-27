@@ -11,7 +11,7 @@ public class JwtRequest
 	
 	public JwtRequest()
 	{
-		//default constructor for JSON Parsing
+		
 	}
 	
 	

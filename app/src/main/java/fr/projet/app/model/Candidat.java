@@ -4,6 +4,8 @@ import org.hibernate.validator.constraints.Length;
 
 import org.springframework.format.annotation.DateTimeFormat;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /*import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -123,15 +125,18 @@ public class Candidat
 	@JoinColumn(name = "id_cdt")
 	private Set<Entretien> entretiens = new HashSet<Entretien>();
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_vil")
 	private Ville ville;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_pys")
 	private Pays pays;
 
-	@ManyToOne(fetch = FetchType.EAGER)
+	@JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "id_mbl")
 	private Mobilite mobilite;
 
@@ -157,6 +162,13 @@ public class Candidat
 	{
 		this.prenom = prenom;
 		this.nom = nom;
+	}
+	
+	public Candidat(int idCandidat, String nom, String prenom) 
+	{
+		this.idCandidat = idCandidat;
+		this.nom = nom;
+		this.prenom = prenom;
 	}
 
 	public Candidat(String prenom, String nom, String email, String mob) {

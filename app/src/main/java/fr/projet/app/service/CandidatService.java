@@ -37,8 +37,11 @@ public class CandidatService
 	private VilleService villeService;
 	private PaysService paysService;
 	private DocumentRepository documentRepository;
+	private EntityManager entityManager;
+	
+	
 
-	public CandidatService(CandidatRepository candidatRepository, CandidatRepositoryCustom candidatRepositoryCustom, EducationService educationService, ExperienceService experienceService, CompetenceService competenceService, LangueService langueService, ProjetService projetService, EntretienService entretienService, PseudoService pseudoService, MobiliteService mobiliteService, VilleService villeService, PaysService paysService, DocumentRepository documentRepository)
+	public CandidatService(CandidatRepository candidatRepository, CandidatRepositoryCustom candidatRepositoryCustom, EducationService educationService, ExperienceService experienceService, CompetenceService competenceService, LangueService langueService, ProjetService projetService, EntretienService entretienService, PseudoService pseudoService, MobiliteService mobiliteService, VilleService villeService, PaysService paysService, DocumentRepository documentRepository, EntityManager entityManager)
 	{
 		this.candidatRepository = candidatRepository;
 		this.candidatRepositoryCustom = candidatRepositoryCustom;
@@ -53,6 +56,7 @@ public class CandidatService
 		this.villeService = villeService;
 		this.paysService = paysService;
 		this.documentRepository = documentRepository;
+		this.entityManager = entityManager;
 	}
 	
 //Candidat
@@ -101,29 +105,6 @@ public class CandidatService
 												candidat.getMobilite());		    
 	}
 
-	
-
-	/*public List<Candidat> findCandidatsByParams(CandidatSearchQuery candidat)
-	{
-		String prenom       = candidat.getPrenom();             
-		String nom          = candidat.getNom();          
-		String telephone    = candidat.getTelephone();    
-		String email        = candidat.getEmail();      
-		Boolean teletravail = candidat.getTeletravail();   
-		Boolean handicape   = candidat.getHandicape();    
-		Boolean disponible  = candidat.getDisponible();  
-		String diplomes     = candidat.getDiplomes();   
-		String specialites  = candidat.getSpecialites();
-		String missions     = candidat.getMissions();   
-		String entreprises  = candidat.getEntreprises();
-		String competences  = candidat.getCompetences();
-		String langues      = candidat.getLangues();      
-		String pseudos      = candidat.getPseudos();       
-		String ville        = candidat.getVille();        
-		Integer mobilite    = candidat.getMobilite();
-		List<Candidat> candidats = candidatRepository.findByParams(prenom, nom, telephone, email, teletravail, handicape, disponible, diplomes, specialites, missions, entreprises, competences, langues, pseudos, ville, mobilite);
-		return candidats;
-	}*/
 
 	public List<Candidat> findCandidatByParamsDynamicQuery2(CandidatSearchQuery candidat)
 	{
@@ -147,46 +128,36 @@ public class CandidatService
 		);                         
 	}
 
-	@Autowired
-	EntityManager em;
+	
 	public List<Candidat> findCandidatByParamsDynamicQuery(CandidatSearchQuery csq)
 	{
-		CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery<Candidat> cq = cb.createQuery(Candidat.class);
-
-        Root<Candidat> candidat = cq.from(Candidat.class);
-        List<Predicate> predicates = new ArrayList<>();    
+		CriteriaBuilder cb         = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Candidat> cq = cb.createQuery(Candidat.class);		
+        Root<Candidat> candidat    = cq.from(Candidat.class);
         
-        if(csq.getPrenom() != null || csq.getPrenom() != "") 
+        
+        List<String> listPrenom = new ArrayList<String>(Arrays.asList(csq.getPrenom().split(",")));
+        List<String> listNom    = new ArrayList<String>(Arrays.asList(csq.getNom().split(",")));
+		List<String> listTel    = new ArrayList<String>(Arrays.asList(csq.getTelephone().split(",")));
+
+		List<Predicate> predicates = new ArrayList<>();
+		if(!csq.getNom().isEmpty() || !csq.getNom().isBlank()) 
 		{
-            //predicates.add(cb.like(candidat.get("prenom"), "%" + csq.getPrenom() + "%"));
-            predicates.add(candidat.get("prenom").in(  new ArrayList<String>(Arrays.asList(csq.getPrenom().split(",")))  ));
+			predicates.add(candidat.get("nom").in(listNom));
         }
-        if (csq.getNom() != null || csq.getNom() != "") 
-		{
-            predicates.add(cb.like(candidat.get("nom"), "%" + csq.getNom() + "%"));
-        	//predicates.add(candidat.get("nom").in(new ArrayList<String>(Arrays.asList(csq.getNom().split(",")))));
-        }
-        if (csq.getTelephone() != null || csq.getTelephone() != "") 
-		{
-            predicates.add(cb.like(candidat.get("mob"), "%" + csq.getTelephone() + "%"));
-        	//predicates.add(candidat.get("mob").in(  new ArrayList<String>(Arrays.asList(csq.getTelephone().split(",")))  ));
-        }
-        if (csq.getEmail() != null || csq.getEmail() != "") 
-		{
-            predicates.add(cb.like(candidat.get("email"), "%" + csq.getEmail() + "%"));
-        	//predicates.add(candidat.get("email").in(  new ArrayList<String>(Arrays.asList(csq.getEmail().split(",")))  ));
-        }
-        cq.where(predicates.toArray(new Predicate[0]));
-		return em.createQuery(cq).getResultList();
+		if(!csq.getPrenom().isEmpty() || !csq.getPrenom().isBlank()) 
+		{   
+			predicates.add(candidat.get("prenom").in(listPrenom));		
+		}
+		if(!csq.getTelephone().isEmpty() || !csq.getTelephone().isBlank()) 
+		{   
+			predicates.add(candidat.get("mob").in(listTel));	
+		}
 		
-		//Predicate prenomPredicate = cb.equal(candidat.get("prenom"), csq.getPrenom());
-		/*Predicate prenomPredicate = cb.like(candidat.get("prenom"), "%" + csq.getPrenom() + "%");
-        Predicate nomPredicate    = cb.like(candidat.get("nom"), "%" + csq.getNom() + "%");
-        cq.where(prenomPredicate, nomPredicate);
-        TypedQuery<Candidat> query = em.createQuery(cq);
-        return query.getResultList();*/
+        cq.where(predicates.toArray(new Predicate[0]));
+		return entityManager.createQuery(cq).getResultList();
 	}
+	
 
 	public Candidat createCandidat(Candidat candidat)
 	{
@@ -219,14 +190,12 @@ public class CandidatService
 
 			for (Pseudo oldPseudo : candidat.getPseudos()) //supprimer les pseudos en bd
 			{
-				//System.out.println(oldPseudo.getIdPseudo());
 				pseudoService.deletePseudo(oldPseudo.getIdPseudo());
 			}
 			for (Pseudo newPseudo : cdt.getPseudos()) //ajouter les pseudos en bd
 			{
 				if(newPseudo.getPseudo() != "")
 				{
-					//System.out.println(newPseudo.getPseudo()+" - "+newPseudo.getReseau().getReseau());
 					pseudoService.createPseudo(candidat,newPseudo);
 				}
 			}
@@ -288,8 +257,7 @@ public class CandidatService
 		}
 		catch(Exception exception)
 		{
-			System.out.println("Erreur updateCandidat() - CandidatService : " + exception);
-			return null;
+			throw new Exception("Erreur updateCandidat() - CandidatService : " + exception.getMessage());
 		}
 	}
 
@@ -317,6 +285,7 @@ public class CandidatService
 		return candidatRepository.findEducationsByCandidatId(id);
 	}
 	
+	
 	@Transactional
 	public Education addEducation(int idCandidat, Education edc) throws Exception
 	{
@@ -334,8 +303,7 @@ public class CandidatService
 		}
 		catch(Exception exception)
 		{
-			System.out.println("Erreur addEducation - CandidatService : " + exception);
-			return null;
+			throw new Exception("Erreur addEducation - CandidatService : " + exception.getMessage());
 		}
 	}
 
@@ -364,8 +332,7 @@ public class CandidatService
 		}
 		catch(Exception exception)
 		{
-			System.out.println("Erreur addExperience - CandidatService : " + exception);
-			return null;
+			throw new Exception("Erreur addExperience - CandidatService : " + exception.getMessage());
 		}
 	}
 
@@ -394,8 +361,7 @@ public class CandidatService
 		}
 		catch(Exception exception)
 		{
-			System.out.println("Erreur addCompetence - CandidatService : " + exception);
-			return null;
+			throw new Exception("Erreur addCompetence - CandidatService : " + exception.getMessage());
 		}
 	}
 
@@ -424,8 +390,7 @@ public class CandidatService
 		}
 		catch(Exception exception)
 		{
-			System.out.println("Erreur addLangue - CandidatService : " + exception);
-			return null;
+			throw new Exception("Erreur addLangue - CandidatService : " + exception.getMessage());
 		}
 	}
 
@@ -437,6 +402,7 @@ public class CandidatService
 		return candidatRepository.findProjetsByCandidatId(id);
 	}
 
+	
 	@Transactional
 	public Projet addProjet(int idCandidat, Projet prj) throws Exception
 	{
@@ -454,7 +420,7 @@ public class CandidatService
 		}
 		catch(Exception exception)
 		{
-			throw new Exception("Erreur CandidatService - addProjet(): " + exception);
+			throw new Exception("Erreur CandidatService - addProjet(): " + exception.getMessage());
 		}
 	}
 
@@ -466,6 +432,7 @@ public class CandidatService
 		return candidatRepository.findEntretiensByCandidatId(id);
 	}
 
+	
 	@Transactional
 	public Entretien addEntretien(int idCandidat, Entretien etr) throws Exception
 	{
@@ -483,7 +450,7 @@ public class CandidatService
 		}
 		catch(Exception exception)
 		{
-			throw new Exception("Erreur CandidatService - addEntretien(): " + exception);
+			throw new Exception("Erreur CandidatService - addEntretien(): " + exception.getMessage());
 		}
 	}
 
@@ -512,7 +479,7 @@ public class CandidatService
 		}
 		catch(Exception exception)
 		{
-			throw new Exception("Erreur CandidatService - addPseudo(): " + exception);
+			throw new Exception("Erreur CandidatService - addPseudo(): " + exception.getMessage());
 		}
 	}
 
