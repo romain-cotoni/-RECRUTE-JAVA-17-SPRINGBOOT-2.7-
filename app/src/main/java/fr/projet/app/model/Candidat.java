@@ -22,10 +22,6 @@ import java.sql.Date;
 import java.util.HashSet;
 import java.util.Set;
 
-/*@Data
-@Builder
-@NoArgsConstructor
-@AllArgsConstructor*/
 @Entity
 @Table(name = "candidat")	
 public class Candidat 
@@ -65,12 +61,12 @@ public class Candidat
 	@Pattern(regexp = "^[0-9\\/\\-_ .+]*$")
 	private String mob;
 	
-	@Column(name="adrs_cdt", length=50)
+	@Column(name="adrs_cdt", length=150)
 	@Length(max = 150)
 	@Pattern(regexp = "^[0-9A-Za-zÀ-ÿ'\\-_ .]*$")
 	private String adresse;
 	
-	@Column(name="adrs2_cdt", length=50)
+	@Column(name="adrs2_cdt", length=150)
 	@Length(max = 150)
 	@Pattern(regexp = "^[0-9A-Za-zÀ-ÿ'\\-_ .]*$")
 	private String adresse2;
