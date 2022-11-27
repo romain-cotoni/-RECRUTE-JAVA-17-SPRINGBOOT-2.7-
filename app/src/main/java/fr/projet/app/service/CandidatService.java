@@ -18,6 +18,8 @@ import javax.persistence.EntityManager;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Expression;
+import javax.persistence.criteria.Join;
+import javax.persistence.criteria.JoinType;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
@@ -131,15 +133,19 @@ public class CandidatService
 	
 	public List<Candidat> findCandidatByParamsDynamicQuery(CandidatSearchQuery csq)
 	{
-		CriteriaBuilder cb         = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Candidat> cq = cb.createQuery(Candidat.class);		
-        Root<Candidat> candidat    = cq.from(Candidat.class);
-        
-        
-        List<String> listPrenom = new ArrayList<String>(Arrays.asList(csq.getPrenom().split(",")));
-        List<String> listNom    = new ArrayList<String>(Arrays.asList(csq.getNom().split(",")));
-		List<String> listTel    = new ArrayList<String>(Arrays.asList(csq.getTelephone().split(",")));
-
+		CriteriaBuilder cb          = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Candidat> cq  = cb.createQuery(Candidat.class);		
+        Root<Candidat> candidat     = cq.from(Candidat.class);
+		
+		Join<Candidat,Ville> ville           = candidat.join("ville",JoinType.LEFT);
+		Join<Candidat,Competence> competence = candidat.join("competences",JoinType.LEFT);
+		
+        List<String> listPrenom     = new ArrayList<String>(Arrays.asList(csq.getPrenom().split(",")));
+        List<String> listNom        = new ArrayList<String>(Arrays.asList(csq.getNom().split(",")));
+		List<String> listTel        = new ArrayList<String>(Arrays.asList(csq.getTelephone().split(",")));
+		List<String> listVille      = new ArrayList<String>(Arrays.asList(csq.getVille().split(",")));
+		List<String> listCompetence = new ArrayList<String>(Arrays.asList(csq.getCompetences().split(",")));
+		
 		List<Predicate> predicates = new ArrayList<>();
 		if(!csq.getNom().isEmpty() || !csq.getNom().isBlank()) 
 		{
@@ -152,6 +158,14 @@ public class CandidatService
 		if(!csq.getTelephone().isEmpty() || !csq.getTelephone().isBlank()) 
 		{   
 			predicates.add(candidat.get("mob").in(listTel));	
+		}
+		if(!csq.getVille().isEmpty() || !csq.getVille().isBlank()) 
+		{   
+			predicates.add(ville.get("ville").in(listVille));	
+		}
+		if(!csq.getCompetences().isEmpty() || !csq.getCompetences().isBlank()) 
+		{   
+			predicates.add(competence.get("nom").in(listCompetence));	
 		}
 		
         cq.where(predicates.toArray(new Predicate[0]));
