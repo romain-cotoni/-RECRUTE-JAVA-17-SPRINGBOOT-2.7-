@@ -3,9 +3,7 @@ package fr.projet.app.service;
 import fr.projet.app.model.Candidat;
 import fr.projet.app.model.Pseudo;
 import fr.projet.app.model.Reseau;
-import fr.projet.app.model.Ville;
 import fr.projet.app.repository.PseudoRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

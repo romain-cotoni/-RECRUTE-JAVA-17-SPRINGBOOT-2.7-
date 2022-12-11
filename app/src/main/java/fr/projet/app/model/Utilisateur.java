@@ -16,6 +16,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -32,9 +33,11 @@ public class Utilisateur
 	@Column(name="user_utl", unique=true, nullable=false, length=50)
 	@NotNull
 	@Length(min = 4, max = 50)
+	//@Pattern(regexp = "^[A-Za-z'\\-_ ]*$")
 	private String username;
 	
 	@Column(name="pass_utl", nullable = false, length=250)
+	//@Pattern(regexp = "^[A-Za-z'\\-_ ]*$")
 	private String password;
 	
 	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE }, fetch = FetchType.EAGER)

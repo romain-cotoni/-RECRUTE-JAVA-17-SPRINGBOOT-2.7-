@@ -1,8 +1,6 @@
 package fr.projet.app.controller;
 
-import fr.projet.app.model.Education;
 import fr.projet.app.model.Pays;
-import fr.projet.app.service.EducationService;
 import fr.projet.app.service.PaysService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;

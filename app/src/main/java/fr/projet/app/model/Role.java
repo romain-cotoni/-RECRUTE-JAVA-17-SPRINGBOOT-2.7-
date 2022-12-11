@@ -7,6 +7,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 import org.hibernate.validator.constraints.Length;
 
@@ -22,6 +23,7 @@ public class Role
 	@Column(name="role_rle", nullable = false, length = 50)
 	@NotNull
 	@Length(min = 4, max = 50)
+	//@Pattern(regexp = "^[A-Za-z'\\-_ ]*$")
 	private String rolename;
 	
 	

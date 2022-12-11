@@ -2,7 +2,6 @@ package fr.projet.app.service;
 
 import fr.projet.app.model.Mission;
 import fr.projet.app.repository.MissionRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

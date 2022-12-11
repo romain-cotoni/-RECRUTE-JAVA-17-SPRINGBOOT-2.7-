@@ -1,6 +1,5 @@
 package fr.projet.app.service;
 
-import fr.projet.app.model.Candidat;
 import fr.projet.app.model.Competence;
 import fr.projet.app.repository.CompetenceRepository;
 import org.springframework.stereotype.Service;
