@@ -25,7 +25,7 @@ public class Role
 	private String rolename;
 	
 	
-	public String getRolename() 
+	public String getRolename()
 	{
 		return rolename;
 	}
