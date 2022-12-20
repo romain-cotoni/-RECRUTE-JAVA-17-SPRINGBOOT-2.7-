@@ -62,4 +62,9 @@ public class ReseauService
     {
         return reseauRepository.findById(idReseau);
     }
+    
+    public Optional<Reseau> findReseauByName(String name)
+    {
+        return reseauRepository.findByReseau(name);
+    }
 }

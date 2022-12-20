@@ -17,8 +17,20 @@ public class VilleService
         this.villeRepository = villeRepository;
     }
 
-    @Transactional
-    public Ville createVille(Ville ville)
+    public Ville createVille(Ville ville) throws Exception
+    {
+        try
+        {
+        	return villeRepository.save(ville);
+        }
+        catch(Exception exception)
+        {
+        	throw new Exception("Erreur createVille - VilleService : " + exception.getMessage());
+        }
+    }
+    
+    /*@Transactional
+    public Ville createVille(Ville ville) throws Exception
     {
         try
         {
@@ -36,14 +48,13 @@ public class VilleService
         }
         catch(Exception exception)
         {
-            System.out.println("Erreur createVille - VilleService : " + exception);
-            return null;
+            throw new Exception("Erreur createVille - VilleService : " + exception.getMessage());
         }
-    }
+    }*/
 
 
     @Transactional
-    public Ville updateVille(Ville oldVille, Ville newVille)
+    public Ville updateVille(Ville oldVille, Ville newVille) throws Exception
     {
         try
         {
@@ -61,13 +72,12 @@ public class VilleService
         }
         catch(Exception exception)
         {
-            System.out.println("Erreur updateVille - VilleService : " + exception);
-            return null;
+        	throw new Exception("Erreur updateVille - VilleService : " + exception.getMessage());
         }
     }
 
 
-    public void deleteVille(int idVille)
+    public void deleteVille(int idVille) throws Exception
     {
         try
         {
@@ -75,11 +85,11 @@ public class VilleService
         }
         catch(Exception exception)
         {
-            System.out.println("Erreur deleteVille - VilleService : " + exception);
+        	throw new Exception("Erreur deleteVille - VilleService : " + exception.getMessage());
         }
     }
 
-    public Boolean checkIfVilleIsNotUsed(Ville ville)
+    public Boolean checkIfVilleIsNotUsed(Ville ville) throws Exception
     {
         try
         {
@@ -94,13 +104,12 @@ public class VilleService
         }
         catch(Exception exception)
         {
-            System.out.println("Erreur checkIfVilleIsNotUsed - VilleService : " + exception);
-            return false;
+        	throw new Exception("Erreur checkIfVilleIsNotUsed - VilleService : " + exception.getMessage());
         }
     }
 
 
-    public Optional<Ville> findVilleById(int idVille)
+    public Optional<Ville> findVilleById(int idVille) throws Exception
     {
         try
         {
@@ -108,13 +117,12 @@ public class VilleService
         }
         catch(Exception exception)
         {
-            System.out.println("Erreur findVilleById - VilleService : " + exception);
-            return null;
+        	throw new Exception("Erreur findVilleById - VilleService : " + exception.getMessage());
         }
     }
 
 
-    public Optional<Ville> findByVilleAndPostal(String ville, String postal)
+    public Optional<Ville> findByVilleAndPostal(String ville, String postal) throws Exception
     {
         try
         {
@@ -122,8 +130,7 @@ public class VilleService
         }
         catch(Exception exception)
         {
-            System.out.println("Erreur findByVilleAndPostal - VilleService : " + exception);
-            return null;
+        	throw new Exception("Erreur findByVilleAndPostal - VilleService : " + exception.getMessage());
         }
     }
 }

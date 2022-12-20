@@ -1,6 +1,9 @@
 package fr.projet.app.repository;
 
 import fr.projet.app.model.Pseudo;
+
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -12,7 +15,7 @@ public interface PseudoRepository extends JpaRepository<Pseudo, Integer>
     @Query("SELECT p FROM Pseudo p "                                   +
            "INNER JOIN Reseau AS r ON r.idReseau = p.reseau.idReseau " +
            "WHERE p.pseudo=?1 AND p.reseau.reseau=?2")
-    public Pseudo findByPseudoAndReseau(String pseudo, String reseau);
+    public Optional<Pseudo> findByPseudoAndReseau(String pseudo, String reseau);
 
     @Query("SELECT p FROM Pseudo p "                                   +
             "INNER JOIN Reseau AS r ON r.idReseau = p.reseau.idReseau " +

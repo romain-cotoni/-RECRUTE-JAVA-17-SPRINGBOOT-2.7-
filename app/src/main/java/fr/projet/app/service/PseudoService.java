@@ -93,20 +93,19 @@ public class PseudoService
     }*/
 
     @Transactional
-    public void deletePseudo(int idPseudo)
+    public void deletePseudo(int idPseudo) throws Exception
     {
-        System.out.println("delete id : "+ idPseudo);
-        pseudoRepository.deletePseudoById(idPseudo);
-        /*try
+        try
         {
+        	pseudoRepository.deletePseudoById(idPseudo);
         }
         catch(Exception exception)
         {
-            System.out.println("Erreur deletePseudo - PseudoService : " + exception);
-        }*/
+            throw new Exception("Erreur deletePseudo - PseudoService : " + exception.getMessage());
+        }
     }
 
-    public Pseudo findByPseudoAndReseau(String pseudo, String reseau)
+    public Optional<Pseudo> findByPseudoAndReseau(String pseudo, String reseau)
     {
         return pseudoRepository.findByPseudoAndReseau(pseudo, reseau);
     }

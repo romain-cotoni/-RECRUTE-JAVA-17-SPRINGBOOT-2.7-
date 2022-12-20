@@ -17,11 +17,11 @@ public class Pays
     @Column(name = "id_pys", nullable = false)
     private Integer idPays;
 
-    @Column(name = "pays_pys", nullable = false, length=50)
+    @Column(name = "pays_pys", length=50)
     @Length(min=2, max=50)
     private String pays;
 
-    @Column(name = "national_pys", nullable = false, length=50)
+    @Column(name = "national_pys", length=50)
     @Length(min=2, max=50)
     private String nationnalite;
 
@@ -39,6 +39,11 @@ public class Pays
 
     }
 
+    public Pays(String nationnalite)
+    {
+        this.nationnalite = nationnalite;
+    }
+    
     public Pays(String pays, String nationnalite, Set<Ville> villes, Set<Candidat> candidats)
     {
         this.pays = pays;

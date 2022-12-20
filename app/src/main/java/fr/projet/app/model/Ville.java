@@ -41,6 +41,12 @@ public class Ville
 
     }
 
+    public Ville(String ville, String postal)
+    {
+    	this.ville = ville;
+        this.postal = postal;
+    }
+    
     public Ville(String ville, String postal, Set<Candidat> candidats, Set<Entreprise> entreprises, Pays pays) {
         this.ville = ville;
         this.postal = postal;

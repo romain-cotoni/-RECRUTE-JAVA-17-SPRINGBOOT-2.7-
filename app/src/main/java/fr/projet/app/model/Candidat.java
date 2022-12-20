@@ -68,7 +68,7 @@ public class Candidat
 	
 	@Column(name="adrs2_cdt", length=150)
 	@Length(max = 150)
-	@Pattern(regexp = "^[0-9A-Za-zÀ-ÿ'\\-_ .]*$")
+	@Pattern(regexp = "^[0-9A-Za-zÀ-ÿ'\\-_# .]*$")
 	private String adresse2;
 	
 	@Column(name="salaire_cdt")

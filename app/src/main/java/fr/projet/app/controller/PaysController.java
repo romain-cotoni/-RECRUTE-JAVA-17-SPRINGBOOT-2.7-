@@ -22,7 +22,7 @@ public class PaysController
 
     @GetMapping("/pays")
     @RolesAllowed({ "admin", "recruteur", "candidat" })
-    public List<Pays> getAllPays()
+    public List<Pays> getAllPays() throws Exception
     {
         return paysService.findAllPays();
     }

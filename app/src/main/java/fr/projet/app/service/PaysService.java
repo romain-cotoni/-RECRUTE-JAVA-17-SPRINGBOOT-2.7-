@@ -18,8 +18,20 @@ public class PaysService
         this.paysRepository = paysRepository;
     }
 
-    @Transactional
-    public Pays createPays(Pays pays)
+    public Pays createPays(Pays pays) throws Exception
+    {
+        try
+        {
+        	return paysRepository.save(pays);
+        }
+        catch(Exception exception)
+        {
+            throw new Exception("Erreur createPays - PaysService : " + exception.getMessage());
+        }
+    }
+    
+    /*@Transactional
+    public Pays createPays(Pays pays) throws Exception
     {
         try
         {
@@ -37,14 +49,13 @@ public class PaysService
         }
         catch(Exception exception)
         {
-            System.out.println("Erreur createPays - PaysService : " + exception);
-            return null;
+            throw new Exception("Erreur createPays - PaysService : " + exception.getMessage());
         }
-    }
+    }*/
 
 
     @Transactional
-    public Pays updatePays(Pays oldPays, Pays newPays)
+    public Pays updatePays(Pays oldPays, Pays newPays) throws Exception
     {
         try
         {
@@ -62,13 +73,12 @@ public class PaysService
         }
         catch(Exception exception)
         {
-            System.out.println("Erreur updatePays - PaysService : " + exception);
-            return null;
+        	throw new Exception("Erreur updatePays - PaysService : " + exception.getMessage());
         }
     }
 
 
-    public void deletePays(int idPays)
+    public void deletePays(int idPays) throws Exception
     {
         try
         {
@@ -76,11 +86,11 @@ public class PaysService
         }
         catch(Exception exception)
         {
-            System.out.println("Erreur deletePays - PaysService : " + exception);
+        	throw new Exception("Erreur deletePays - PaysService : " + exception.getMessage());
         }
     }
 
-    public Boolean checkIfPaysIsNotUsed(Pays pays)
+    public Boolean checkIfPaysIsNotUsed(Pays pays) throws Exception
     {
         try
         {
@@ -95,13 +105,12 @@ public class PaysService
         }
         catch(Exception exception)
         {
-            System.out.println("Erreur checkIfPaysIsNotUsed - PaysService : " + exception);
-            return false;
+        	throw new Exception("Erreur checkIfPaysIsNotUsed - PaysService : " + exception.getMessage());
         }
     }
 
 
-    public Optional<Pays> findPaysById(int idPays)
+    public Optional<Pays> findPaysById(int idPays) throws Exception
     {
         try
         {
@@ -109,13 +118,12 @@ public class PaysService
         }
         catch(Exception exception)
         {
-            System.out.println("Erreur findPaysById - PaysService : " + exception);
-            return null;
+        	throw new Exception("Erreur findPaysById - PaysService : " + exception.getMessage());
         }
     }
 
 
-    public Optional<Pays> findByPays(String pays)
+    public Optional<Pays> findByPays(String pays) throws Exception
     {
         try
         {
@@ -123,26 +131,31 @@ public class PaysService
         }
         catch(Exception exception)
         {
-            System.out.println("Erreur findByPays - PaysService : " + exception);
-            return null;
+        	throw new Exception("Erreur findByPays - PaysService : " + exception.getMessage());
         }
     }
 
-    public Optional<Pays> findByNationnalite(String nationnalite)
+    public Optional<Pays> findByNationalite(String nationalite) throws Exception
     {
         try
         {
-            return paysRepository.findByNationnalite(nationnalite);
+            return paysRepository.findByNationnalite(nationalite);
         }
         catch(Exception exception)
         {
-            System.out.println("Erreur findByNationnalite - PaysService : " + exception);
-            return null;
+        	throw new Exception("Erreur findByNationalite - PaysService : " + exception.getMessage());
         }
     }
 
-    public List<Pays> findAllPays()
+    public List<Pays> findAllPays() throws Exception
     {
-        return paysRepository.findAllPays();
+    	try
+    	{
+    		return paysRepository.findAllPays();
+    	}
+        catch(Exception exception)
+        {
+        	throw new Exception("Erreur findAllPays - PaysService : " + exception.getMessage());
+        }
     }
 }

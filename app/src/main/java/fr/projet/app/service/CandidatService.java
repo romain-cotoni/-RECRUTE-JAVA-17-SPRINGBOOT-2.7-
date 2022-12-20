@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.EntityManager;
@@ -36,12 +37,13 @@ public class CandidatService
 	private MobiliteService mobiliteService;
 	private VilleService villeService;
 	private PaysService paysService;
+	private ReseauService reseauService;
 	private DocumentRepository documentRepository;
 	private EntityManager entityManager;
 	
 	
 
-	public CandidatService(CandidatRepository candidatRepository, CandidatRepositoryCustom candidatRepositoryCustom, EducationService educationService, ExperienceService experienceService, CompetenceService competenceService, LangueService langueService, ProjetService projetService, EntretienService entretienService, PseudoService pseudoService, MobiliteService mobiliteService, VilleService villeService, PaysService paysService, DocumentRepository documentRepository, EntityManager entityManager)
+	public CandidatService(CandidatRepository candidatRepository, CandidatRepositoryCustom candidatRepositoryCustom, EducationService educationService, ExperienceService experienceService, CompetenceService competenceService, LangueService langueService, ProjetService projetService, EntretienService entretienService, PseudoService pseudoService, MobiliteService mobiliteService, VilleService villeService, PaysService paysService, DocumentRepository documentRepository, ReseauService reseauService, EntityManager entityManager)
 	{
 		this.candidatRepository = candidatRepository;
 		this.candidatRepositoryCustom = candidatRepositoryCustom;
@@ -55,6 +57,7 @@ public class CandidatService
 		this.mobiliteService = mobiliteService;
 		this.villeService = villeService;
 		this.paysService = paysService;
+		this.reseauService = reseauService;
 		this.documentRepository = documentRepository;
 		this.entityManager = entityManager;
 	}
@@ -225,7 +228,189 @@ public class CandidatService
 		return findCandidatById(id);
 	}
 
+	String pseudo;
 	@Transactional
+	public Candidat updateCandidat(int idCandidat, Candidat cdt) throws Exception
+	{
+		try
+		{
+			Candidat candidat = candidatRepository.findById(idCandidat).orElseThrow();
+			candidat.setNom(cdt.getNom());
+			candidat.setPrenom(cdt.getPrenom());
+			candidat.setNaissance(cdt.getNaissance());
+			candidat.setEmail(cdt.getEmail());
+			candidat.setFixe(cdt.getFixe());
+			candidat.setMob(cdt.getMob());
+			candidat.setAdresse(cdt.getAdresse());
+			candidat.setAdresse2(cdt.getAdresse2());
+			candidat.setSalaire(cdt.getSalaire());
+			candidat.setMarital(cdt.getMarital());
+			candidat.setHandicape(cdt.getHandicape());
+			candidat.setPermis(cdt.getPermis());
+			candidat.setVehicule(cdt.getVehicule());
+			candidat.setTeletravail(cdt.getTeletravail());
+			candidat.setDisponible(cdt.getDisponible());
+			candidat.setInfo(cdt.getInfo());
+			
+			candidat = this.updatePseudo(candidat, cdt.getPseudos(), "Linkedin");
+			
+			candidat = this.updatePseudo(candidat, cdt.getPseudos(), "Github");
+			
+			candidat = this.updateVille(candidat, cdt.getVille().getVille(),cdt.getVille().getPostal());
+			
+			candidat = this.updateNationalite(candidat, cdt.getPays().getNationnalite());
+			
+			candidat = this.updateMobilite(candidat, cdt.getMobilite().getZone());
+			
+			return candidatRepository.save(candidat);
+		}
+	    catch(Exception exception)
+		{
+			throw new Exception("Erreur updateCandidat - CandidatService : " + exception.getMessage());
+		}
+	}
+	
+	
+	public Candidat updatePseudo(Candidat candidatToUpdate, Set<Pseudo> pseudos, String reseau) throws Exception
+	{
+		try
+		{
+			for(Pseudo oldPseudo : candidatToUpdate.getPseudos()) //effacer l'ancien pseudo Linkedin 
+			{
+				if(oldPseudo.getReseau().getReseau().contains(reseau))
+				{
+					pseudoService.deletePseudo(oldPseudo.getIdPseudo());
+				}
+			}
+			
+			for(Pseudo pseudo : pseudos)
+			{
+				if(pseudo.getReseau().getReseau().contains(reseau))
+				{
+					this.pseudo = pseudo.getPseudo();
+				}
+			}
+
+			Pseudo pseudoToCreate = new Pseudo(this.pseudo, reseauService.findReseauByName(reseau).get());
+			candidatToUpdate.getPseudos().add(pseudoToCreate); //ajouter le nouveau pseudo
+			return candidatToUpdate;
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Erreur updatePseudo - CandidatService : " + exception.getMessage());
+		}
+	}
+	
+	
+	/*public Candidat updatePseudoLinkedin(Candidat candidatToUpdate, String pseudo) throws Exception
+	{
+		try
+		{
+			Optional<Pseudo> pseudoOptional = pseudoService.findByPseudoAndReseau(pseudo, "Linkedin");
+			if(pseudoOptional.isPresent())
+			{
+				Pseudo pseudoRequest = pseudoOptional.get();
+				for(Pseudo oldPseudo : candidatToUpdate.getPseudos()) //effacer l'ancien pseudo Linkedin 
+				{
+					if(oldPseudo.getReseau().getReseau() == "Linkedin")
+					{
+						candidatToUpdate.getPseudos().remove(oldPseudo);
+						pseudoService.deletePseudo(oldPseudo.getIdPseudo());
+					}
+				}
+				candidatToUpdate.getPseudos().add(pseudoRequest); 
+				
+			}
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Erreur updatePseudo - CandidatService : " + exception.getMessage());
+		}
+	}*/
+	
+	
+	public Candidat updateVille(Candidat candidatToUpdate, String ville, String postal) throws Exception 
+	{
+		try
+		{		
+			Optional<Ville> villeOptional = villeService.findByVilleAndPostal(ville, postal);
+			if(villeOptional.isPresent()) //utiliser une ville existante dans la db
+			{
+				Ville villeRequest = villeOptional.get();
+				Ville oldVille = candidatToUpdate.getVille();
+				if(!villeRequest.equals(oldVille))
+				{
+					candidatToUpdate.setVille(villeRequest);
+					if(oldVille != null && villeService.checkIfVilleIsNotUsed(oldVille)) //si la ville n'est plus utilisée on la supprime de la db
+					{
+						villeService.deleteVille(oldVille.getIdVille());
+					}
+				}
+			}
+			else //créer nouvelle ville
+			{
+				Ville newVille = villeService.createVille(new Ville(ville, postal));
+				candidatToUpdate.setVille(newVille);
+			}
+			return candidatToUpdate;
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Erreur updateVille - CandidatService : " + exception.getMessage());
+		}
+	}
+	
+	
+	public Candidat updateNationalite(Candidat candidatToUpdate, String nationalite) throws Exception
+	{
+		try
+		{
+			Optional<Pays> paysOptional = paysService.findByNationalite(nationalite);
+			if(paysOptional.isPresent()) //utiliser une nationalité existante dans la db
+			{
+				Pays paysRequest = paysOptional.get();
+				Pays oldPays = candidatToUpdate.getPays();
+				if(!paysRequest.equals(oldPays))
+				{
+					candidatToUpdate.setPays(paysRequest);
+					if(oldPays != null && paysService.checkIfPaysIsNotUsed(oldPays)) //si le pays n'est plus utilisée on la supprime de la db
+					{
+						paysService.deletePays(oldPays.getIdPays());
+					}
+				}
+			}
+			else //créer un nouveau pays
+			{
+				Pays newPays = paysService.createPays(new Pays(nationalite));
+				candidatToUpdate.setPays(newPays);
+			}
+			return candidatToUpdate;
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Erreur updateNationalite() - CandidatService : " + exception.getMessage());
+		}
+	}
+	
+	
+	public Candidat updateMobilite(Candidat candidatToUpdate, Integer zone) throws Exception
+	{
+		try
+		{
+			Optional<Mobilite> mobiliteOptional = mobiliteService.findMobiliteByZone(zone);
+			if(mobiliteOptional.isPresent())
+			{
+				candidatToUpdate.setMobilite(mobiliteOptional.get());
+			}
+			return candidatToUpdate;
+		}
+		catch(Exception exception)
+		{
+			throw new Exception("Erreur updateMobilite() - CandidatService : " + exception.getMessage());
+		}
+	}
+	
+	/*@Transactional
 	public Candidat updateCandidat(int idCandidat, Candidat cdt) throws Exception
 	{
 		try
@@ -319,7 +504,7 @@ public class CandidatService
 		{
 			throw new Exception("Erreur updateCandidat() - CandidatService : " + exception.getMessage());
 		}
-	}
+	}*/
 
 	
 	public void deleteCandidatById(int id) 

@@ -31,6 +31,11 @@ public class Pseudo {
 
     }
 
+    public Pseudo(String pseudo, Reseau reseau) {
+        this.pseudo = pseudo;
+        this.reseau = reseau;
+    }
+    
     public Pseudo(String pseudo, Candidat candidat, Reseau reseau) {
         this.pseudo = pseudo;
         this.candidat = candidat;
