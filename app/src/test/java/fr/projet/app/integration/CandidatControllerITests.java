@@ -87,9 +87,9 @@ public class CandidatControllerITests
          */
 
         //then - verify the result or output using assert statements
-        /*response.andDo(print())
+        response.andDo(print())
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.prenom", is(candidat.getPrenom())));*/
+                .andExpect(jsonPath("$.prenom", is(candidat.getPrenom())));
 
         /*List<Candidat> candidats = candidatController.getCandidats();
         Assertions.assertThat(candidats).first().hasFieldOrPropertyWithValue("prenom", "bart");
