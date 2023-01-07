@@ -141,6 +141,7 @@ public class CandidatService
         List<String> listPrenom     = new ArrayList<String>(Arrays.asList(csq.getPrenom().split("[,;:| ]")));
         List<String> listNom        = new ArrayList<String>(Arrays.asList(csq.getNom().split("[,;:| ]")));
 		List<String> listTel        = new ArrayList<String>(Arrays.asList(csq.getTelephone().split("[,;:| ]")));
+		List<String> listEmail      = new ArrayList<String>(Arrays.asList(csq.getEmail().split("[,;:| ]")));
 		List<String> listVille      = new ArrayList<String>(Arrays.asList(csq.getVille().split("[,;:| ]")));
 		List<String> listCompetence = new ArrayList<String>(Arrays.asList(csq.getCompetences().split("[,;:| ]")));
 		List<String> listDiplome    = new ArrayList<String>(Arrays.asList(csq.getDiplomes().split("[,;:| ]")));
@@ -164,6 +165,10 @@ public class CandidatService
 		if(!csq.getTelephone().isEmpty() || !csq.getTelephone().isBlank()) 
 		{   
 			predicates.add(candidat.get("mob").in(listTel));	
+		}
+		if(!csq.getEmail().isEmpty() || !csq.getEmail().isBlank()) 
+		{   
+			predicates.add(candidat.get("email").in(listEmail));	
 		}
 		if(!csq.getVille().isEmpty() || !csq.getVille().isBlank()) 
 		{   

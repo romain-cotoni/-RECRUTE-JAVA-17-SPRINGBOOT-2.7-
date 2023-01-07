@@ -41,7 +41,7 @@ public class PseudoController
 
     @DeleteMapping("pseudo/{id}")
     @RolesAllowed({ "admin", "recruteur", "candidat" })
-    public void deletePseudo(@PathVariable("id") int id)
+    public void deletePseudo(@PathVariable("id") int id)  throws Exception
     {
         pseudoService.deletePseudo(id);
     }
