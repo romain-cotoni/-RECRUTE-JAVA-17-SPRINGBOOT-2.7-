@@ -1,38 +1,24 @@
 package fr.projet.app.integration;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import fr.projet.app.controller.CandidatController;
+//import com.fasterxml.jackson.databind.ObjectMapper;
 import fr.projet.app.model.Candidat;
 import fr.projet.app.repository.CandidatRepository;
-import fr.projet.app.security.JwtTokenUtil;
-import fr.projet.app.security.JwtUserDetailsService;
-import fr.projet.app.service.CandidatService;
-import org.hamcrest.Matchers;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
-import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.is;
 
-import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -50,8 +36,8 @@ public class CandidatControllerITests
     @Autowired
     private CandidatRepository candidatRepository;
 
-    @Autowired
-    private ObjectMapper objectMapper;
+    //@Autowired
+    //private ObjectMapper objectMapper;
 
     @BeforeEach
     public void setup()

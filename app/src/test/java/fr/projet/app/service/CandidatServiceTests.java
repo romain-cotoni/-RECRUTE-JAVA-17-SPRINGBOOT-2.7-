@@ -12,7 +12,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import fr.projet.app.repository.CandidatRepository;
-import fr.projet.app.service.CandidatService;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
