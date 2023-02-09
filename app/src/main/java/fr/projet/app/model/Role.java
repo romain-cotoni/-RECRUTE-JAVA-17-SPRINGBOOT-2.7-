@@ -21,7 +21,6 @@ public class Role
 	@Column(name="role_rle", nullable = false, length = 50)
 	@NotNull
 	@Length(min = 4, max = 50)
-	//@Pattern(regexp = "^[A-Za-z'\\-_ ]*$")
 	private String rolename;
 	
 	

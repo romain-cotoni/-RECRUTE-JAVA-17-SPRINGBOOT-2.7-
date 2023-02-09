@@ -24,8 +24,7 @@ import java.util.Set;
 
 @Entity
 @Table(name = "candidat")	
-public class Candidat 
-{
+public class Candidat {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	@Column(name="id_cdt")
@@ -149,19 +148,14 @@ public class Candidat
 	private Set<Langue> langues = new HashSet<Langue>();
 
 
-	public Candidat()
-	{
+	public Candidat(){}
 
-	}
-
-	public Candidat(String prenom, String nom)
-	{
+	public Candidat(String prenom, String nom){
 		this.prenom = prenom;
 		this.nom = nom;
 	}
 	
-	public Candidat(int idCandidat, String nom, String prenom) 
-	{
+	public Candidat(int idCandidat, String nom, String prenom) {
 		this.idCandidat = idCandidat;
 		this.nom = nom;
 		this.prenom = prenom;

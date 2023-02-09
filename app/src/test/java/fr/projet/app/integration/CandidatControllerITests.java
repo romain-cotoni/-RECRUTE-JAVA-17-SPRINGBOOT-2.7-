@@ -36,9 +36,6 @@ public class CandidatControllerITests
     @Autowired
     private CandidatRepository candidatRepository;
 
-    //@Autowired
-    //private ObjectMapper objectMapper;
-
     @BeforeEach
     public void setup()
     {
@@ -62,6 +59,11 @@ public class CandidatControllerITests
                                         .andExpect(status().isOk())
                                         .andDo(print());
 
+        //then - verify the result or output using assert statements
+        response.andDo(print())
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.prenom", is(candidat.getPrenom())));
+
         /*ResultActions response = mockMvc.perform(post("/candidat")
                 .param("prenom", "test")
                 .param("nom", "test")
@@ -71,12 +73,6 @@ public class CandidatControllerITests
             //.contentType(MediaType.APPLICATION_JSON)
             //.content(objectMapper.writeValueAsString(candidat)));
          */
-
-        //then - verify the result or output using assert statements
-        response.andDo(print())
-                .andExpect(status().isOk())
-                .andExpect(jsonPath("$.prenom", is(candidat.getPrenom())));
-
         /*List<Candidat> candidats = candidatController.getCandidats();
         Assertions.assertThat(candidats).first().hasFieldOrPropertyWithValue("prenom", "bart");
 

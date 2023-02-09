@@ -11,13 +11,48 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface CandidatRepository extends JpaRepository<Candidat,Integer>, JpaSpecificationExecutor<Candidat>
-{
+public interface CandidatRepository extends JpaRepository<Candidat,Integer>, 
+                                            JpaSpecificationExecutor<Candidat> {
+	
     public List<Candidat> findByEmailAndNom(String email, String nom);
 
 	@Query("SELECT c FROM Candidat c WHERE c.prenom=?1 AND c.nom=?2")
 	public Candidat findByName(String prenom, String nom);
 
+	@Query("SELECT c.educations FROM Candidat c WHERE c.idCandidat=?1")
+	public Set<Education> findEducationsByCandidatId(int id);
+
+	@Query("SELECT c.experiences FROM Candidat c WHERE c.idCandidat=?1")
+	public Set<Experience> findExperiencesByCandidatId(int id);
+
+	@Query("SELECT c.competences FROM Candidat c WHERE c.idCandidat=?1")
+	public Set<Competence> findCompetencesByCandidatId(int id);
+
+	@Query("SELECT c.langues FROM Candidat c WHERE c.idCandidat=?1")
+	public Set<Langue> findLanguesByCandidatId(int id);
+
+	@Query("SELECT c.projets FROM Candidat c WHERE c.idCandidat=?1")
+	public Set<Projet> findProjetsByCandidatId(int id);
+
+	@Query("SELECT c.entretiens FROM Candidat c WHERE c.idCandidat=?1")
+	public Set<Entretien> findEntretiensByCandidatId(int id);
+
+	@Query("SELECT c.pseudos FROM Candidat c WHERE c.idCandidat=?1")
+	public Set<Pseudo> findPseudosByCandidatId(int id);
+
+	@Query("SELECT c.documents FROM Candidat c WHERE c.idCandidat=?1")
+	public Set<Document> findDocumentsByCandidatId(int id);
+	
+	/**
+	 * delete a candidat found by it's id given in parameter
+	 * @param id int
+	 * @return void
+	*/
+	public void deleteById(int id);
+
+	@Query("SELECT new Candidat(c.idCandidat, c.nom, c.prenom) FROM Candidat c")
+    List<Candidat> findAllShort();
+	
 	@Query("SELECT DISTINCT c.prenom FROM Candidat c")
 	public List<String> findAllPrenoms();
 
@@ -134,37 +169,5 @@ public interface CandidatRepository extends JpaRepository<Candidat,Integer>, Jpa
 	   @Param("mobilite") Integer mobilite
 	);*/
 	
-	/**
-	 * delete a candidat found by it's id given in parameter
-	 * @param id int
-	 * @return void
-	*/
-	public void deleteById(int id);
-
-	@Query("SELECT c.educations FROM Candidat c WHERE c.idCandidat=?1")
-	public Set<Education> findEducationsByCandidatId(int id);
-
-	@Query("SELECT c.experiences FROM Candidat c WHERE c.idCandidat=?1")
-	public Set<Experience> findExperiencesByCandidatId(int id);
-
-	@Query("SELECT c.competences FROM Candidat c WHERE c.idCandidat=?1")
-	public Set<Competence> findCompetencesByCandidatId(int id);
-
-	@Query("SELECT c.langues FROM Candidat c WHERE c.idCandidat=?1")
-	public Set<Langue> findLanguesByCandidatId(int id);
-
-	@Query("SELECT c.projets FROM Candidat c WHERE c.idCandidat=?1")
-	public Set<Projet> findProjetsByCandidatId(int id);
-
-	@Query("SELECT c.entretiens FROM Candidat c WHERE c.idCandidat=?1")
-	public Set<Entretien> findEntretiensByCandidatId(int id);
-
-	@Query("SELECT c.pseudos FROM Candidat c WHERE c.idCandidat=?1")
-	public Set<Pseudo> findPseudosByCandidatId(int id);
-
-	@Query("SELECT c.documents FROM Candidat c WHERE c.idCandidat=?1")
-	public Set<Document> findDocumentsByCandidatId(int id);
-
-	@Query("SELECT new Candidat(c.idCandidat, c.nom, c.prenom) FROM Candidat c")
-    List<Candidat> findAllShort();
+	
 }

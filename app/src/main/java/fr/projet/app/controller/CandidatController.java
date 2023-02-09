@@ -9,34 +9,78 @@ import javax.validation.Valid;
 import java.util.List;
 import java.util.Set;
 
-
 @CrossOrigin(origins = "http://localhost:4200/", allowCredentials = "true", maxAge=3600)
 @RestController
-public class CandidatController
-{
+public class CandidatController {
+	
 	private CandidatService candidatService;
 
-	public CandidatController(CandidatService candidatService) 
-	{
+	public CandidatController(CandidatService candidatService) {
 		this.candidatService = candidatService;		
 	}
 
+	/**
+	 * @param id
+	 * @return Candidat
+	 * @throws Exception
+	 */
+	@GetMapping("candidat/{id}")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public Candidat getCandidatById(@PathVariable("id") int id) throws Exception {
+		try {
+			return candidatService.findCandidatById(id);
+		}
+		catch(Exception exception) {
+			throw new Exception("Error CandidatController - getCandidatById() : " + exception.getMessage());
+		}
+	}
 
 	/**
-	 * method to fetch the whole list of candidats in the database
-	 * @return a list of candidats (List<Candidat>)
+	 * Method to update a candidat
+	 * @param candidat object Candidat
+	 * @return List<Candidat>
 	 */
-	@GetMapping("/candidats")
+	@PutMapping("/candidat/{id}")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public List<Candidat> getCandidats() throws Exception
+	public Candidat updateCandidat(@PathVariable("id") int id, @Valid @RequestBody Candidat candidat) throws Exception
 	{
-		try
-		{
-			return candidatService.findAllCandidats();
+		try {
+			return candidatService.updateCandidat(id, candidat);
 		}
 		catch(Exception exception)
 		{
-			throw new Exception("Error CandidatController - getCandidats() : " + exception.getMessage());
+			throw new Exception("Error CandidatController - updateCandidat() : " + exception.getMessage());
+		}
+	}
+	
+	/**
+	 * Method to create a candidat
+	 * @param candidat object Candidat
+	 * @return List<Candidat>
+	 */
+	@PostMapping("/candidat")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public Candidat createCandidat(@Valid @RequestBody Candidat candidat) throws Exception
+	{
+		try {
+			return candidatService.createCandidat(candidat);
+		}
+		catch(Exception exception) {
+			throw new Exception("Error CandidatController - createCandidat() : " + exception.getMessage());
+		}
+	}
+
+	
+	
+	@DeleteMapping("candidat/{id}")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public int deleteCandidat(@PathVariable("id") int id) throws Exception {
+		try {
+			candidatService.deleteCandidatById(id);
+			return id;
+		}
+		catch(Exception exception) {
+			throw new Exception("Error CandidatController - deleteCandidat() : " + exception.getMessage());
 		}
 	}
 	
@@ -44,6 +88,43 @@ public class CandidatController
 	 * method to fetch the whole list of candidats in the database
 	 * @return a list of candidats (List<Candidat>)
 	 */
+	@GetMapping("/candidats")
+	@RolesAllowed({ "admin", "recruteur"})
+	public List<Candidat> getCandidats() throws Exception {
+		try {
+			return candidatService.findAllCandidats();
+		}
+		catch(Exception exception) {
+			throw new Exception("Error CandidatController - getCandidats() : " + exception.getMessage());
+		}
+	}
+	
+	@PostMapping("candidat/rechercher")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public Candidat getCandidatByName(@Valid @RequestBody Candidat candidat) throws Exception {
+		try {
+			return candidatService.findCandidatByName(candidat);
+		}
+		catch(Exception exception) {
+			throw new Exception("Error CandidatController - getCandidatByName() : " + exception.getMessage());
+		}
+	}
+
+	@PostMapping("candidats/rechercher/parametres")
+	@RolesAllowed({ "admin", "recruteur", "candidat" })
+	public List<Candidat> getCandidatsByParams(@Valid @RequestBody CandidatSearchQuery candidat) throws Exception{
+		try {
+			return candidatService.findCandidatByParamsDynamicQuery(candidat);
+		}
+		catch(Exception exception) {
+			throw new Exception("Error CandidatController - getCandidatsByParams() : " + exception.getMessage());
+		}
+	}
+
+	/**
+	 * method to fetch the whole list of candidats in the database
+	 * @return a list of candidats (List<Candidat>)
+	 */ 
 	@GetMapping("/candidatsShort")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })
 	public List<Candidat> getCandidatsShort() throws Exception
@@ -93,105 +174,7 @@ public class CandidatController
 			throw new Exception("Error CandidatController - getCandidatsNoms() : " + exception.getMessage());
 		}
 	}
-
-	/**
-	 * Method to create a candidat
-	 * @param candidat object Candidat
-	 * @return List<Candidat>
-	 */
-	@PostMapping("/candidat")
-	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Candidat createCandidat(@Valid @RequestBody Candidat candidat) throws Exception
-	{
-		try
-		{
-			return candidatService.createCandidat(candidat);
-		}
-		catch(Exception exception)
-		{
-			throw new Exception("Error CandidatController - createCandidat() : " + exception.getMessage());
-		}
-	}
-
-
-	/**
-	 * Method to update a candidat
-	 * @param candidat object Candidat
-	 * @return List<Candidat>
-	 */
-	@PutMapping("/candidat/{id}")
-	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Candidat updateCandidat(@PathVariable("id") int id, @Valid @RequestBody Candidat candidat) throws Exception
-	{
-		try
-		{
-			return candidatService.updateCandidat(id, candidat);
-		}
-		catch(Exception exception)
-		{
-			throw new Exception("Error CandidatController - updateCandidat() : " + exception.getMessage());
-		}
-	}
 	
-	@GetMapping("candidat/{id}")
-	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Candidat getCandidatById(@PathVariable("id") int id) throws Exception
-	{
-		try
-		{
-			return candidatService.findCandidatById(id);
-		}
-		catch(Exception exception)
-		{
-			throw new Exception("Error CandidatController - getCandidatById() : " + exception.getMessage());
-		}
-	}
-	
-	@DeleteMapping("candidat/{id}")
-	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public int deleteCandidat(@PathVariable("id") int id) throws Exception
-	{
-		try
-		{
-			candidatService.deleteCandidatById(id);
-			return id;
-		}
-		catch(Exception exception)
-		{
-			throw new Exception("Error CandidatController - deleteCandidat() : " + exception.getMessage());
-		}
-	}
-	
-	@PostMapping("candidat/rechercher")
-	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public Candidat getCandidatByName(@Valid @RequestBody Candidat candidat) throws Exception
-	{
-		try
-		{
-			return candidatService.findCandidatByName(candidat);
-		}
-		catch(Exception exception)
-		{
-			throw new Exception("Error CandidatController - getCandidatByName() : " + exception.getMessage());
-		}
-	}
-
-	@PostMapping("candidats/rechercher/parametres")
-	@RolesAllowed({ "admin", "recruteur", "candidat" })
-	public List<Candidat> getCandidatsByParams(@Valid @RequestBody CandidatSearchQuery candidat) throws Exception
-	{
-		try
-		{
-			//return candidatService.findCandidatsByParams(candidat);
-			return candidatService.findCandidatByParamsDynamicQuery(candidat);
-		}
-		catch(Exception exception)
-		{
-			throw new Exception("Error CandidatController - getCandidatsByParams() : " + exception.getMessage());
-		}
-	}
-
-
 	//Education
 	@GetMapping("/candidat/{id}/educations")
 	@RolesAllowed({ "admin", "recruteur", "candidat" })

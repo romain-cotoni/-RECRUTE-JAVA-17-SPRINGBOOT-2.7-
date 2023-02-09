@@ -23,8 +23,7 @@ import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 
 @Service
-public class CandidatService 
-{
+public class CandidatService {
 	private CandidatRepository candidatRepository;
 	private CandidatRepositoryCustom candidatRepositoryCustom;
 	private EducationService educationService;
@@ -41,8 +40,6 @@ public class CandidatService
 	private DocumentRepository documentRepository;
 	private EntityManager entityManager;
 	
-	
-
 	public CandidatService(CandidatRepository candidatRepository, CandidatRepositoryCustom candidatRepositoryCustom, EducationService educationService, ExperienceService experienceService, CompetenceService competenceService, LangueService langueService, ProjetService projetService, EntretienService entretienService, PseudoService pseudoService, MobiliteService mobiliteService, VilleService villeService, PaysService paysService, DocumentRepository documentRepository, ReseauService reseauService, EntityManager entityManager)
 	{
 		this.candidatRepository = candidatRepository;
@@ -62,26 +59,114 @@ public class CandidatService
 		this.entityManager = entityManager;
 	}
 	
-//Candidat
-	public List<Candidat> findAllCandidats() 
-	{
-		return candidatRepository.findAll();
-	}
-	
-	public List<Candidat> findAllCandidatsShort() 
-	{
-		return candidatRepository.findAllShort();
-	}
-
-	public Candidat findCandidatById(int id) 
-	{
+	/**
+	 * Find a candidat by it's id
+	 * @param id
+	 * @return Candidat
+	 */
+	public Candidat findCandidatById(int id) {
 		return candidatRepository.findById(id).orElseThrow();
 	}
 	
-	public Candidat findCandidatByName(Candidat candidat) 
-	{
-		return candidatRepository.findByName(candidat.getPrenom(),candidat.getNom());
+	/**
+	 * Find all candidats
+	 * @return list of Candidat
+	 */
+	public List<Candidat> findAllCandidats() {
+		return candidatRepository.findAll();
 	}
+
+	/**
+	 * Create a new candidat
+	 * @param candidat
+	 * @return Candidat created
+	 */
+	public Candidat createCandidat(Candidat candidat) {
+		int id = candidatRepositoryCustom.createCandidat(candidat);
+		return findCandidatById(id);
+	}
+
+	/**
+	 * method to search one or many candidat by multiple and optional parameters
+	 * @param dto object CandidatSearchQuery
+	 * @return List of object Candidat
+	 */
+	public List<Candidat> findCandidatByParamsDynamicQuery(CandidatSearchQuery csq) {
+		CriteriaBuilder cb         = entityManager.getCriteriaBuilder();
+        CriteriaQuery<Candidat> cq = cb.createQuery(Candidat.class);		
+        Root<Candidat> candidat    = cq.from(Candidat.class);
+        List<String> listPrenom     = new ArrayList<String>(Arrays.asList(csq.getPrenom().split("[,;:| ]")));
+        List<String> listNom        = new ArrayList<String>(Arrays.asList(csq.getNom().split("[,;:| ]")));
+		List<String> listTel        = new ArrayList<String>(Arrays.asList(csq.getTelephone().split("[,;:| ]")));
+		List<String> listEmail      = new ArrayList<String>(Arrays.asList(csq.getEmail().split("[,;:| ]")));
+		List<String> listVille      = new ArrayList<String>(Arrays.asList(csq.getVille().split("[,;:| ]")));
+		List<String> listCompetence = new ArrayList<String>(Arrays.asList(csq.getCompetences().split("[,;:| ]")));
+		List<String> listDiplome    = new ArrayList<String>(Arrays.asList(csq.getDiplomes().split("[,;:| ]")));
+		List<String> listSpecialite = new ArrayList<String>(Arrays.asList(csq.getSpecialites().split("[,;:| ]")));
+		List<String> listLangue     = new ArrayList<String>(Arrays.asList(csq.getLangues().split("[,;:| ]")));
+        List<String> listMission    = new ArrayList<String>(Arrays.asList(csq.getMissions().split("[,;:| ]")));
+        List<String> listEntreprise = new ArrayList<String>(Arrays.asList(csq.getEntreprises().split("[,;:| ]")));
+        Boolean      handicape      = csq.getHandicape();
+		Boolean      teletravail    = csq.getTeletravail();
+		Boolean      disponible     = csq.getDisponible();
+		List<Predicate> predicates = new ArrayList<>();
+		if(!csq.getNom().isEmpty() || !csq.getNom().isBlank()) {
+			predicates.add(candidat.get("nom").in(listNom));
+        }
+		if(!csq.getPrenom().isEmpty() || !csq.getPrenom().isBlank()) {   
+			predicates.add(candidat.get("prenom").in(listPrenom));		
+		} 
+		if(!csq.getTelephone().isEmpty() || !csq.getTelephone().isBlank()) {   
+			predicates.add(candidat.get("mob").in(listTel));	
+		}
+		if(!csq.getEmail().isEmpty() || !csq.getEmail().isBlank()) {   
+			predicates.add(candidat.get("email").in(listEmail));	
+		}
+		if(!csq.getVille().isEmpty() || !csq.getVille().isBlank()) {   
+			Join<Candidat,Ville> ville = candidat.join("ville",JoinType.LEFT);
+			predicates.add(ville.get("ville").in(listVille));	
+		}
+		if(!csq.getCompetences().isEmpty() || !csq.getCompetences().isBlank()) {   
+			Join<Candidat,Competence> competence  = candidat.join("competences",JoinType.LEFT);
+			predicates.add(competence.get("nom").in(listCompetence));	
+		}
+		if(!csq.getDiplomes().isEmpty() || !csq.getDiplomes().isBlank()) {   
+			Join<Candidat,Education> education = candidat.join("educations",JoinType.LEFT);
+			Join<Education,Diplome> diplome = education.join("diplome",JoinType.LEFT);
+			predicates.add(diplome.get("label").in(listDiplome));	
+		}
+		if(!csq.getSpecialites().isEmpty() || !csq.getSpecialites().isBlank()) {
+			Join<Candidat,Education> education = candidat.join("educations",JoinType.LEFT);
+		    Join<Education,Specialite> specialite = education.join("specialite",JoinType.LEFT);
+			predicates.add(specialite.get("label").in(listSpecialite));
+		}
+		if(!csq.getLangues().isEmpty() || !csq.getLangues().isBlank()) {   
+			Join<Candidat,Langue> langue  = candidat.join("langues",JoinType.LEFT);
+			predicates.add(langue.get("nom").in(listLangue));	
+		}
+		if(!csq.getMissions().isEmpty() || !csq.getMissions().isBlank()) {   
+			Join<Candidat,Experience> experience  = candidat.join("experiences",JoinType.LEFT);
+			Join<Experience,Mission> mission  = experience.join("mission",JoinType.LEFT);
+			predicates.add(mission.get("profession").in(listMission));	
+		}
+		if(!csq.getEntreprises().isEmpty() || !csq.getEntreprises().isBlank()) {   
+			Join<Candidat,Experience> experience  = candidat.join("experiences",JoinType.LEFT);
+			Join<Experience,Entreprise> entreprise  = experience.join("entreprise",JoinType.LEFT);
+			predicates.add(entreprise.get("raisonSociale").in(listEntreprise));	
+		}
+		if(handicape != null) {   
+			predicates.add(cb.equal(candidat.get("handicape"), handicape));	
+		}
+		if(teletravail != null) {   
+			predicates.add(cb.equal(candidat.get("teletravail"), teletravail));	
+		}
+		if(disponible != null) {   
+			predicates.add(cb.equal(candidat.get("disponible"), disponible));	
+		}
+        cq.where(predicates.toArray(new Predicate[0]));
+		return entityManager.createQuery(cq.distinct(true)).getResultList();
+	}
+	
 
 	/**
 	 * method to search one or many candidat by multiple and optional parameters
@@ -130,115 +215,22 @@ public class CandidatService
 			candidat.getMobilite()
 		);                         
 	}
-
 	
-	public List<Candidat> findCandidatByParamsDynamicQuery(CandidatSearchQuery csq)
+	public List<Candidat> findAllCandidatsShort() 
 	{
-		CriteriaBuilder cb         = entityManager.getCriteriaBuilder();
-        CriteriaQuery<Candidat> cq = cb.createQuery(Candidat.class);		
-        Root<Candidat> candidat    = cq.from(Candidat.class);
-		
-        List<String> listPrenom     = new ArrayList<String>(Arrays.asList(csq.getPrenom().split("[,;:| ]")));
-        List<String> listNom        = new ArrayList<String>(Arrays.asList(csq.getNom().split("[,;:| ]")));
-		List<String> listTel        = new ArrayList<String>(Arrays.asList(csq.getTelephone().split("[,;:| ]")));
-		List<String> listEmail      = new ArrayList<String>(Arrays.asList(csq.getEmail().split("[,;:| ]")));
-		List<String> listVille      = new ArrayList<String>(Arrays.asList(csq.getVille().split("[,;:| ]")));
-		List<String> listCompetence = new ArrayList<String>(Arrays.asList(csq.getCompetences().split("[,;:| ]")));
-		List<String> listDiplome    = new ArrayList<String>(Arrays.asList(csq.getDiplomes().split("[,;:| ]")));
-		List<String> listSpecialite = new ArrayList<String>(Arrays.asList(csq.getSpecialites().split("[,;:| ]")));
-		List<String> listLangue     = new ArrayList<String>(Arrays.asList(csq.getLangues().split("[,;:| ]")));
-        List<String> listMission    = new ArrayList<String>(Arrays.asList(csq.getMissions().split("[,;:| ]")));
-        List<String> listEntreprise = new ArrayList<String>(Arrays.asList(csq.getEntreprises().split("[,;:| ]")));
-        Boolean      handicape      = csq.getHandicape();
-		Boolean      teletravail    = csq.getTeletravail();
-		Boolean      disponible     = csq.getDisponible();
-
-		List<Predicate> predicates = new ArrayList<>();
-		if(!csq.getNom().isEmpty() || !csq.getNom().isBlank()) 
-		{
-			predicates.add(candidat.get("nom").in(listNom));
-        }
-		if(!csq.getPrenom().isEmpty() || !csq.getPrenom().isBlank())
-		{   
-			predicates.add(candidat.get("prenom").in(listPrenom));		
-		}
-		if(!csq.getTelephone().isEmpty() || !csq.getTelephone().isBlank()) 
-		{   
-			predicates.add(candidat.get("mob").in(listTel));	
-		}
-		if(!csq.getEmail().isEmpty() || !csq.getEmail().isBlank()) 
-		{   
-			predicates.add(candidat.get("email").in(listEmail));	
-		}
-		if(!csq.getVille().isEmpty() || !csq.getVille().isBlank()) 
-		{   
-			Join<Candidat,Ville> ville = candidat.join("ville",JoinType.LEFT);
-			predicates.add(ville.get("ville").in(listVille));	
-		}
-		if(!csq.getCompetences().isEmpty() || !csq.getCompetences().isBlank()) 
-		{   
-			Join<Candidat,Competence> competence  = candidat.join("competences",JoinType.LEFT);
-			predicates.add(competence.get("nom").in(listCompetence));	
-		}
-		if(!csq.getDiplomes().isEmpty() || !csq.getDiplomes().isBlank()) 
-		{   
-			Join<Candidat,Education> education = candidat.join("educations",JoinType.LEFT);
-			Join<Education,Diplome> diplome = education.join("diplome",JoinType.LEFT);
-			predicates.add(diplome.get("label").in(listDiplome));	
-		}
-		if(!csq.getSpecialites().isEmpty() || !csq.getSpecialites().isBlank()) 
-		{
-			Join<Candidat,Education> education = candidat.join("educations",JoinType.LEFT);
-		    Join<Education,Specialite> specialite = education.join("specialite",JoinType.LEFT);
-			predicates.add(specialite.get("label").in(listSpecialite));
-		}
-		if(!csq.getLangues().isEmpty() || !csq.getLangues().isBlank()) 
-		{   
-			Join<Candidat,Langue> langue  = candidat.join("langues",JoinType.LEFT);
-			predicates.add(langue.get("nom").in(listLangue));	
-		}
-		if(!csq.getMissions().isEmpty() || !csq.getMissions().isBlank()) 
-		{   
-			Join<Candidat,Experience> experience  = candidat.join("experiences",JoinType.LEFT);
-			Join<Experience,Mission> mission  = experience.join("mission",JoinType.LEFT);
-			predicates.add(mission.get("profession").in(listMission));	
-		}
-		if(!csq.getEntreprises().isEmpty() || !csq.getEntreprises().isBlank()) 
-		{   
-			Join<Candidat,Experience> experience  = candidat.join("experiences",JoinType.LEFT);
-			Join<Experience,Entreprise> entreprise  = experience.join("entreprise",JoinType.LEFT);
-			predicates.add(entreprise.get("raisonSociale").in(listEntreprise));	
-		}
-		if(handicape != null) 
-		{   
-			predicates.add(cb.equal(candidat.get("handicape"), handicape));	
-		}
-		if(teletravail != null) 
-		{   
-			predicates.add(cb.equal(candidat.get("teletravail"), teletravail));	
-		}
-		if(disponible != null) 
-		{   
-			predicates.add(cb.equal(candidat.get("disponible"), disponible));	
-		}
-		
-        cq.where(predicates.toArray(new Predicate[0]));
-		return entityManager.createQuery(cq.distinct(true)).getResultList();
+		return candidatRepository.findAllShort();
 	}
 	
-
-	public Candidat createCandidat(Candidat candidat)
+	public Candidat findCandidatByName(Candidat candidat) 
 	{
-		int id = candidatRepositoryCustom.createCandidat(candidat);
-		return findCandidatById(id);
+		return candidatRepository.findByName(candidat.getPrenom(),candidat.getNom());
 	}
+	
 
 	String pseudo;
 	@Transactional
-	public Candidat updateCandidat(int idCandidat, Candidat cdt) throws Exception
-	{
-		try
-		{
+	public Candidat updateCandidat(int idCandidat, Candidat cdt) throws Exception {
+		try	{
 			Candidat candidat = candidatRepository.findById(idCandidat).orElseThrow();
 			candidat.setNom(cdt.getNom());
 			candidat.setPrenom(cdt.getPrenom());
@@ -269,29 +261,22 @@ public class CandidatService
 			
 			return candidatRepository.save(candidat);
 		}
-	    catch(Exception exception)
-		{
+	    catch(Exception exception) {
 			throw new Exception("Erreur updateCandidat - CandidatService : " + exception.getMessage());
 		}
 	}
 	
 	
-	public Candidat updatePseudo(Candidat candidatToUpdate, Set<Pseudo> pseudos, String reseau) throws Exception
-	{
-		try
-		{
-			for(Pseudo oldPseudo : candidatToUpdate.getPseudos()) //effacer l'ancien pseudo Linkedin 
-			{
-				if(oldPseudo.getReseau().getReseau().contains(reseau))
-				{
+	public Candidat updatePseudo(Candidat candidatToUpdate, Set<Pseudo> pseudos, String reseau) throws Exception {
+		try	{
+			for(Pseudo oldPseudo : candidatToUpdate.getPseudos()) {
+				if(oldPseudo.getReseau().getReseau().contains(reseau)) {
 					pseudoService.deletePseudo(oldPseudo.getIdPseudo());
 				}
 			}
 			
-			for(Pseudo pseudo : pseudos)
-			{
-				if(pseudo.getReseau().getReseau().contains(reseau))
-				{
+			for(Pseudo pseudo : pseudos) {
+				if(pseudo.getReseau().getReseau().contains(reseau)) {
 					this.pseudo = pseudo.getPseudo();
 				}
 			}
@@ -300,8 +285,7 @@ public class CandidatService
 			candidatToUpdate.getPseudos().add(pseudoToCreate); //ajouter le nouveau pseudo
 			return candidatToUpdate;
 		}
-		catch(Exception exception)
-		{
+		catch(Exception exception) {
 			throw new Exception("Erreur updatePseudo - CandidatService : " + exception.getMessage());
 		}
 	}
